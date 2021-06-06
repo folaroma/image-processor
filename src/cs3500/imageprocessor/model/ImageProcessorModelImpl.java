@@ -10,7 +10,10 @@ import java.util.List;
 public class ImageProcessorModelImpl implements ImageProcessorModel {
   private ImageInterface image;
 
-  ImageProcessorModelImpl(ImageInterface image) {
+  ImageProcessorModelImpl(ImageInterface image) throws IllegalArgumentException{
+    if (image == null) {
+      throw new IllegalArgumentException("Image cannot be null.");
+    }
     this.image = image;
   }
 
@@ -45,5 +48,10 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   @Override
   public ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors) {
     return null;
+  }
+
+  @Override
+  public void exportImage() {
+
   }
 }

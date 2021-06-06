@@ -17,4 +17,6 @@ void colorSepia();
 
 ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors);
 
+void exportImage();
+
 }

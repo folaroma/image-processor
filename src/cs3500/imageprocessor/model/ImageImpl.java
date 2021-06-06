@@ -11,7 +11,10 @@ public class ImageImpl implements ImageInterface {
 
   private final List<ArrayList<IPixel>> pixels;
 
-  public ImageImpl(List<ArrayList<IPixel>> pixels) {
+  public ImageImpl(List<ArrayList<IPixel>> pixels) throws IllegalArgumentException{
+    if (pixels == null) {
+      throw new IllegalArgumentException("List of pixels cannot be null.");
+    }
     this.pixels = pixels;
   }
 

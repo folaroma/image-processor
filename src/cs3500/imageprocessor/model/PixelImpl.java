@@ -7,7 +7,10 @@ public class PixelImpl implements IPixel{
   private Position2D position;
   private IColor color;
 
-  PixelImpl(Position2D position, IColor color) {
+  PixelImpl(Position2D position, IColor color) throws IllegalArgumentException{
+    if (position == null || color == null) {
+      throw new IllegalArgumentException("Argument cannot be null.");
+    }
     this.position = position;
     this.color = color;
   }
