@@ -8,6 +8,9 @@ import java.util.List;
  */
 public interface ImageInterface {
 
-List<ArrayList<IPixel>> getPixels();
+  List<ArrayList<IPixel>> getPixels();
+
+  void filter(IPixel pixel, double[][] matrix);
+
 
 }

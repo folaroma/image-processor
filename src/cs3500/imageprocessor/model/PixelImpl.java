@@ -1,5 +1,7 @@
 package cs3500.imageprocessor.model;
 
+import java.util.List;
+
 /**
  * Class representing a simple implementation of a pixel with a position and color.
  */
@@ -24,4 +26,5 @@ public class PixelImpl implements IPixel{
   public IColor getColor() {
     return color;
   }
+
 }

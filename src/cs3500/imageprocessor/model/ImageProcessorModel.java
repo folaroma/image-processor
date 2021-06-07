@@ -8,16 +8,18 @@ import java.util.List;
  */
 public interface ImageProcessorModel {
 
-void filterBlur();
+  ImageInterface getImage();
 
-void filterSharpen();
+  void filterBlur();
 
-void colorMonochrome();
+  void filterSharpen();
 
-void colorSepia();
+  void colorMonochrome();
 
-ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors);
+  void colorSepia();
 
-void exportImage(String filename) throws IOException;
+  ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors);
+
+  void exportImage(String filename) throws IOException;
 
 }

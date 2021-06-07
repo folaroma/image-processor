@@ -29,6 +29,11 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   }
 
   @Override
+  public ImageInterface getImage() {
+    return this.image;
+  }
+
+  @Override
   public void filterBlur() {
 
   }

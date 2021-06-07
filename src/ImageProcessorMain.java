@@ -5,7 +5,7 @@ import java.io.IOException;
 public class ImageProcessorMain {
 
   public static void main(String[] args) throws IOException {
-    ImageProcessorModel testModel = new ImageProcessorModelImpl("res\\Koala.ppm");
-    testModel.exportImage("res\\Koala2.ppm");
+    ImageProcessorModel testModel = new ImageProcessorModelImpl("res/Koala.ppm");
+    testModel.exportImage("res/Koala2.ppm");
   }
 }
