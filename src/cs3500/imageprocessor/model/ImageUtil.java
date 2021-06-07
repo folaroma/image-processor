@@ -1,5 +1,11 @@
 package cs3500.imageprocessor.model;
 
+import cs3500.imageprocessor.model.images.ColorImpl;
+import cs3500.imageprocessor.model.images.IPixel;
+import cs3500.imageprocessor.model.images.ImageImpl;
+import cs3500.imageprocessor.model.images.ImageInterface;
+import cs3500.imageprocessor.model.images.PixelImpl;
+import cs3500.imageprocessor.model.images.Position2D;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
@@ -19,6 +25,10 @@ public class ImageUtil {
    */
   public static ImageInterface readPPM(String filename) throws IllegalArgumentException{
     Scanner sc;
+
+    if (filename == null) {
+      throw new IllegalArgumentException("Name cannot be null");
+    }
     
     try {
         sc = new Scanner(new FileInputStream(filename));

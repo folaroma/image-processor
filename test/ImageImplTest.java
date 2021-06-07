@@ -1,8 +1,8 @@
 import static org.junit.Assert.assertEquals;
 
-import cs3500.imageprocessor.model.ImageInterface;
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
+import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
 import org.junit.Test;
 
@@ -11,9 +11,10 @@ public class ImageImplTest {
   @Test
   public void getNeighbors() {
     ImageProcessorModel model = new ImageProcessorModelImpl("res/Koala.ppm");
-    model.filterBlur();
+    ImageInterface blurKoala = model.filterBlur("res/Koala.ppm");
+    model.addImage("blurKoala", blurKoala);
     try {
-      model.exportImage("res/KoalaBlur.ppm");
+      model.exportImage("res/KoalaBlur.ppm", "blurKoala");
     }
     catch(IOException io) {
       throw new IllegalStateException();

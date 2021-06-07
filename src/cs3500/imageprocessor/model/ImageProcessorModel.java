@@ -1,5 +1,7 @@
 package cs3500.imageprocessor.model;
 
+import cs3500.imageprocessor.model.images.IColor;
+import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
 import java.util.List;
 
@@ -8,18 +10,22 @@ import java.util.List;
  */
 public interface ImageProcessorModel {
 
-  ImageInterface getImage();
+  void replaceImage(String id, ImageInterface image) throws IllegalArgumentException;
 
-  ImageInterface filterBlur();
+  void addImage(String id, ImageInterface image) throws IllegalArgumentException;
 
-  ImageInterface filterSharpen();
+  ImageInterface getImage(String id) throws IllegalArgumentException;
 
-  void colorMonochrome();
+  ImageInterface filterBlur(String id);
 
-  void colorSepia();
+  ImageInterface filterSharpen(String id);
+
+  ImageInterface colorMonochrome(String id);
+
+  ImageInterface colorSepia(String id);
 
   ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors);
 
-  void exportImage(String filename) throws IOException;
+  void exportImage(String filename, String id) throws IOException, IllegalArgumentException;
 
 }
