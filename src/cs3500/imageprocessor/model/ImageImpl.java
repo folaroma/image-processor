@@ -25,31 +25,45 @@ public class ImageImpl implements ImageInterface {
   }
 
   @Override
-  public void filter(IPixel pixel, double[][] matrix) {
-    List<List<IPixel>> imagePixels = new ArrayList<>(this.pixels);
+  public IPixel filter(IPixel pixel, double[][] matrix) {
+    List<ArrayList<IPixel>> imagePixels = new ArrayList<>(this.pixels);
     int pixelX = pixel.getPosition().getX();
     int pixelY = pixel.getPosition().getY();
 
     int neighborRange = matrix.length / 2;
+
+    int red = 0;
+    int green = 0;
+    int blue = 0;
 
     for (int i = -1 * neighborRange; i <= neighborRange; i++) {
       for (int j = -1 * neighborRange; j <= neighborRange; j++) {
         try {
           double matrixValue = (double)Array.get(Array.get(matrix, i + neighborRange), j + neighborRange);
 
-          int red = imagePixels.get(pixelX + i).get(pixelY + j).getColor().getRed();
-          int green = imagePixels.get(pixelX + i).get(pixelY + j).getColor().getGreen();
-          int blue = imagePixels.get(pixelX + i).get(pixelY + j).getColor().getBlue();
+          int pixelR = imagePixels.get(pixelY + i).get(pixelX + j).getColor().getRed();
+          int pixelG = imagePixels.get(pixelY + i).get(pixelX + j).getColor().getGreen();
+          int pixelB = imagePixels.get(pixelY + i).get(pixelX + j).getColor().getBlue();
 
-          red *= matrixValue;
-          green *= matrixValue;
-          blue *= matrixValue;
+          pixelR *= matrixValue;
+          pixelG *= matrixValue;
+          pixelB *= matrixValue;
+
+          red += pixelR;
+          green += pixelG;
+          blue += pixelB;
+
         }
-        catch (IndexOutOfBoundsException ie) {
-          ie.printStackTrace();
+        catch (IndexOutOfBoundsException ignored) {
+          red += 0;
+          green += 0;
+          blue += 0;
         }
       }
     }
+
+    return new PixelImpl(new Position2D(pixelX, pixelY), new ColorImpl(red, green, blue));
+
 
   }
 

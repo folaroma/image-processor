@@ -10,7 +10,7 @@ public interface ImageInterface {
 
   List<ArrayList<IPixel>> getPixels();
 
-  void filter(IPixel pixel, double[][] matrix);
+  IPixel filter(IPixel pixel, double[][] matrix);
 
 
 }

@@ -10,7 +10,7 @@ public interface ImageProcessorModel {
 
   ImageInterface getImage();
 
-  void filterBlur();
+  ImageInterface filterBlur();
 
   void filterSharpen();
 
