@@ -1,5 +1,6 @@
 package cs3500.imageprocessor.model;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -17,6 +18,6 @@ void colorSepia();
 
 ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors);
 
-void exportImage();
+void exportImage(String filename) throws IOException;
 
 }

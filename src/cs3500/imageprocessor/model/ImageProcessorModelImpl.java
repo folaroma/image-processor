@@ -1,5 +1,7 @@
 package cs3500.imageprocessor.model;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -8,20 +10,21 @@ import java.util.List;
  * through PPM format.
  */
 public class ImageProcessorModelImpl implements ImageProcessorModel {
+
   private ImageInterface image;
 
-  ImageProcessorModelImpl(ImageInterface image) throws IllegalArgumentException{
+  public ImageProcessorModelImpl(ImageInterface image) throws IllegalArgumentException {
     if (image == null) {
       throw new IllegalArgumentException("Image cannot be null.");
     }
     this.image = image;
   }
 
-  ImageProcessorModelImpl(String filename) {
+  public ImageProcessorModelImpl(String filename) {
     this.image = ImageUtil.readPPM(filename);
   }
 
-  ImageProcessorModelImpl(int size, int numPiles, List<IColor> colors) {
+  public ImageProcessorModelImpl(int size, int numPiles, List<IColor> colors) {
     this.image = this.createCheckerboard(size, numPiles, colors);
   }
 
@@ -51,7 +54,26 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   }
 
   @Override
-  public void exportImage() {
+  public void exportImage(String filename) throws IOException {
+    String ppmString = this.generatePPM();
+    FileOutputStream file = new FileOutputStream(filename);
+    file.write(ppmString.getBytes());
+    file.close();
+  }
 
+  private String generatePPM() {
+    StringBuilder ppmString = new StringBuilder().append("P3\n")
+        .append(this.image.getPixels().get(0).size()).append(" ")
+        .append(this.image.getPixels().size()).append("\n255\n");
+    for (int i = 0; i < this.image.getPixels().size(); i++) {
+      for (int j = 0; j < this.image.getPixels().get(0).size(); j++) {
+        IPixel currentPixel = this.image.getPixels().get(i).get(j);
+        ppmString.append(currentPixel.getColor().getRed()).append(" ")
+            .append(currentPixel.getColor().getGreen()).append(" ")
+            .append(currentPixel.getColor().getBlue()).append(" ");
+      }
+      ppmString.append("\n");
+    }
+    return ppmString.toString();
   }
 }

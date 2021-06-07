@@ -20,6 +20,6 @@ public class ImageImpl implements ImageInterface {
 
   @Override
   public List<ArrayList<IPixel>> getPixels() {
-    return null;
+    return new ArrayList<>(pixels);
   }
 }
