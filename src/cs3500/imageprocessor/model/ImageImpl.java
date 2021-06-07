@@ -62,9 +62,26 @@ public class ImageImpl implements ImageInterface {
       }
     }
 
+    red = bounds(red);
+    blue = bounds(blue);
+    green = bounds(green);
+
     return new PixelImpl(new Position2D(pixelX, pixelY), new ColorImpl(red, green, blue));
 
 
   }
+
+  private int bounds(int rgb) {
+    if (rgb > 255) {
+      return 255;
+    }
+    else if (rgb < 0) {
+      return 0;
+    }
+
+    return rgb;
+
+  }
+
 
 }

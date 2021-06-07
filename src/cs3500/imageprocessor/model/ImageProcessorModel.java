@@ -12,7 +12,7 @@ public interface ImageProcessorModel {
 
   ImageInterface filterBlur();
 
-  void filterSharpen();
+  ImageInterface filterSharpen();
 
   void colorMonochrome();
 

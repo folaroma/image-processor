@@ -37,16 +37,8 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   @Override
   public ImageInterface filterBlur() {
     List<List<IPixel>> imagePixels = new ArrayList<>(this.image.getPixels());
-    List<ArrayList<IPixel>> filteredPixels = new ArrayList<>();
     double[][] blur = {{0.0625, 0.125, 0.0625}, {0.125, 0.25, 0.125}, {0.0625, 0.125, 0.0625}};
-
-    for (int i = 0; i < imagePixels.size(); i++) {
-      ArrayList<IPixel> row = new ArrayList<>();
-      for (int j = 0; j < imagePixels.get(0).size(); j++) {
-        row.add(this.image.filter(imagePixels.get(i).get(j), blur));
-      }
-      filteredPixels.add(row);
-    }
+    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, blur);
 
     this.image = new ImageImpl(filteredPixels);
     return new ImageImpl(filteredPixels);
@@ -54,7 +46,31 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   }
 
   @Override
-  public void filterSharpen() {
+  public ImageInterface filterSharpen() {
+    List<List<IPixel>> imagePixels = new ArrayList<>(this.image.getPixels());
+    double[][] sharpen = {{-0.125, -0.125, -0.125, -0.125, -0.125},
+        {-0.125, 0.25, 0.25, 0.25, -0.125},
+        {-0.125, 0.25, 1, 0.25, -0.12},
+        {-0.125, 0.25, 0.25, 0.25, -0.125},
+        {-0.125, -0.125, -0.125, -0.125, -0.125}};
+    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, sharpen);
+
+    this.image = new ImageImpl(filteredPixels);
+    return new ImageImpl(filteredPixels);
+
+  }
+
+  private List<ArrayList<IPixel>> filtered(List<List<IPixel>> pixels, double[][] matrix) {
+    List<ArrayList<IPixel>> filteredPixels = new ArrayList<>();
+    for (int i = 0; i < pixels.size(); i++) {
+      ArrayList<IPixel> row = new ArrayList<>();
+      for (int j = 0; j < pixels.get(0).size(); j++) {
+        row.add(this.image.filter(pixels.get(i).get(j), matrix));
+      }
+      filteredPixels.add(row);
+    }
+
+    return filteredPixels;
 
   }
 

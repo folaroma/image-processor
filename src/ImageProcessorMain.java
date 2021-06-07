@@ -6,7 +6,7 @@ public class ImageProcessorMain {
 
   public static void main(String[] args) throws IOException {
     ImageProcessorModel testModel = new ImageProcessorModelImpl("res/Koala.ppm");
-    testModel.filterBlur();
-    testModel.exportImage("res/Koala3.ppm");
+    testModel.filterSharpen();
+    testModel.exportImage("res/KoalaSharpen.ppm");
   }
 }
