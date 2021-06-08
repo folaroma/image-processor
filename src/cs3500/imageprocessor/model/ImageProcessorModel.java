@@ -16,13 +16,13 @@ public interface ImageProcessorModel {
 
   ImageInterface getImage(String id) throws IllegalArgumentException;
 
-  ImageInterface filterBlur(String id);
+  ImageInterface filterBlur(ImageInterface image);
 
-  ImageInterface filterSharpen(String id);
+  ImageInterface filterSharpen(ImageInterface image);
 
-  ImageInterface colorMonochrome(String id);
+  ImageInterface colorMonochrome(ImageInterface image);
 
-  ImageInterface colorSepia(String id);
+  ImageInterface colorSepia(ImageInterface image);
 
   ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors);
 

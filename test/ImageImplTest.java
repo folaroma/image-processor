@@ -11,7 +11,7 @@ public class ImageImplTest {
   @Test
   public void getNeighbors() {
     ImageProcessorModel model = new ImageProcessorModelImpl("res/Koala.ppm");
-    ImageInterface blurKoala = model.filterBlur("res/Koala.ppm");
+    ImageInterface blurKoala = model.filterBlur(model.getImage("res/Koala.ppm"));
     model.addImage("blurKoala", blurKoala);
     try {
       model.exportImage("res/KoalaBlur.ppm", "blurKoala");

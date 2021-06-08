@@ -76,36 +76,42 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   }
 
   @Override
-  public ImageInterface filterBlur(String id) throws IllegalArgumentException {
-    List<List<IPixel>> imagePixels = new ArrayList<>(this.getImage(id).getPixels());
+  public ImageInterface filterBlur(ImageInterface image) throws IllegalArgumentException {
+    if (image == null) {
+      throw new IllegalArgumentException("Image cannot be null.");
+    }
+    List<List<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
     double[][] blur = {{0.0625, 0.125, 0.0625}, {0.125, 0.25, 0.125}, {0.0625, 0.125, 0.0625}};
-    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, blur, id);
+    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, blur, image);
 
     return new ImageImpl(filteredPixels);
 
   }
 
   @Override
-  public ImageInterface filterSharpen(String id) throws IllegalArgumentException {
-    List<List<IPixel>> imagePixels = new ArrayList<>(this.getImage(id).getPixels());
+  public ImageInterface filterSharpen(ImageInterface image) throws IllegalArgumentException {
+    if (image == null) {
+      throw new IllegalArgumentException("Image cannot be null.");
+    }
+    List<List<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
     double[][] sharpen = {{-0.125, -0.125, -0.125, -0.125, -0.125},
         {-0.125, 0.25, 0.25, 0.25, -0.125},
         {-0.125, 0.25, 1, 0.25, -0.12},
         {-0.125, 0.25, 0.25, 0.25, -0.125},
         {-0.125, -0.125, -0.125, -0.125, -0.125}};
-    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, sharpen, id);
+    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, sharpen, image);
 
     return new ImageImpl(filteredPixels);
 
   }
 
   private List<ArrayList<IPixel>> filtered(List<List<IPixel>> pixels, double[][] matrix,
-      String id) {
+      ImageInterface image) {
     List<ArrayList<IPixel>> filteredPixels = new ArrayList<>();
     for (int i = 0; i < pixels.size(); i++) {
       ArrayList<IPixel> row = new ArrayList<>();
       for (int j = 0; j < pixels.get(0).size(); j++) {
-        row.add(this.getImage(id).filter(pixels.get(i).get(j), matrix));
+        row.add(image.filter(pixels.get(i).get(j), matrix));
       }
       filteredPixels.add(row);
     }
@@ -115,12 +121,12 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   }
 
   @Override
-  public ImageInterface colorMonochrome(String id) {
+  public ImageInterface colorMonochrome(ImageInterface image) {
     return null;
   }
 
   @Override
-  public ImageInterface colorSepia(String id) {
+  public ImageInterface colorSepia(ImageInterface image) {
     return null;
   }
 
