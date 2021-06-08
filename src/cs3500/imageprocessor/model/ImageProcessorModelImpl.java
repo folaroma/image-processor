@@ -1,5 +1,9 @@
 package cs3500.imageprocessor.model;
 
+import cs3500.imageprocessor.model.fileReading.IFileReader;
+import cs3500.imageprocessor.model.fileWriting.IImageFileWriter;
+import cs3500.imageprocessor.model.filters.IFilter;
+import cs3500.imageprocessor.model.imageGenerating.IImageGenerator;
 import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.IPixel;
 import cs3500.imageprocessor.model.images.ImageImpl;
@@ -27,14 +31,22 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
     this.images = new HashMap<>();
   }
 
-  public ImageProcessorModelImpl(String filename) throws IllegalArgumentException {
+  public ImageProcessorModelImpl(String filename, IFileReader reader)
+      throws IllegalArgumentException {
     this();
-    images.putIfAbsent(filename, ImageUtil.readPPM(filename));
+    if (filename == null || reader == null) {
+      throw new IllegalArgumentException("Arguments cannot be null.");
+    }
+    images.putIfAbsent(filename, reader.readImageFromFile(filename));
   }
 
-  public ImageProcessorModelImpl(int size, int numPiles, List<IColor> colors) {
+  public ImageProcessorModelImpl(String id, IImageGenerator generator)
+      throws IllegalArgumentException {
     this();
-    images.putIfAbsent("Checkerboard", this.createCheckerboard(size, numPiles, colors));
+    if (id == null || generator == null) {
+      throw new IllegalArgumentException("Arguments cannot be null.");
+    }
+    images.putIfAbsent(id, generator.generateImage());
   }
 
   @Override
@@ -79,49 +91,13 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   }
 
   @Override
-  public ImageInterface filterBlur(ImageInterface image) throws IllegalArgumentException {
-    if (image == null) {
-      throw new IllegalArgumentException("Image cannot be null.");
+  public ImageInterface filterImage(String id, IFilter filter) throws IllegalArgumentException {
+    if (id == null || filter == null) {
+      throw new IllegalArgumentException("Arguments cannot be null.");
     }
-    List<List<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
-    double[][] blur = {{0.0625, 0.125, 0.0625}, {0.125, 0.25, 0.125}, {0.0625, 0.125, 0.0625}};
-    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, blur, image);
-
-    return new ImageImpl(filteredPixels);
-
+    return filter.applyFilter(this.getImage(id));
   }
 
-  @Override
-  public ImageInterface filterSharpen(ImageInterface image) throws IllegalArgumentException {
-    if (image == null) {
-      throw new IllegalArgumentException("Image cannot be null.");
-    }
-    List<List<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
-    double[][] sharpen = {{-0.125, -0.125, -0.125, -0.125, -0.125},
-        {-0.125, 0.25, 0.25, 0.25, -0.125},
-        {-0.125, 0.25, 1, 0.25, -0.12},
-        {-0.125, 0.25, 0.25, 0.25, -0.125},
-        {-0.125, -0.125, -0.125, -0.125, -0.125}};
-    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, sharpen, image);
-
-    return new ImageImpl(filteredPixels);
-
-  }
-
-  private List<ArrayList<IPixel>> filtered(List<List<IPixel>> pixels, double[][] matrix,
-      ImageInterface image) {
-    List<ArrayList<IPixel>> filteredPixels = new ArrayList<>();
-    for (int i = 0; i < pixels.size(); i++) {
-      ArrayList<IPixel> row = new ArrayList<>();
-      for (int j = 0; j < pixels.get(0).size(); j++) {
-        row.add(image.filter(pixels.get(i).get(j), matrix));
-      }
-      filteredPixels.add(row);
-    }
-
-    return filteredPixels;
-
-  }
 
   @Override
   public ImageInterface colorMonochrome(ImageInterface image) {
@@ -134,7 +110,8 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
 
   }
 
-  private List<ArrayList<IPixel>> transform(ImageInterface image, List<ArrayList<IPixel>> imagePixels, double[][] matrix) {
+  private List<ArrayList<IPixel>> transform(ImageInterface image,
+      List<ArrayList<IPixel>> imagePixels, double[][] matrix) {
     List<ArrayList<IPixel>> updatedPixels = new ArrayList<>();
 
     for (List<IPixel> l : imagePixels) {
@@ -160,56 +137,15 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
 
   }
 
-  @Override
-  public ImageInterface createCheckerboard(int width, int height, List<IColor> colors) {
-    List<ArrayList<IPixel>> pixels = new ArrayList<>();
-
-    for (int i = 0; i < height; i++) {
-      ArrayList<IPixel> row = new ArrayList<>();
-      for (int j = 0; j < width; j++) {
-        row.add(new PixelImpl(new Position2D(j, i), alternateColors(colors, i, j)));
-      }
-      pixels.add(row);
-    }
-
-    return new ImageImpl(pixels);
-
-  }
 
   @Override
-  public void exportImage(String filename, String id) throws IOException, IllegalArgumentException {
-    if (id == null || filename == null) {
+  public void exportImage(String filename, String id, IImageFileWriter writer)
+      throws IOException, IllegalArgumentException {
+    if (id == null || filename == null || writer == null) {
       throw new IllegalArgumentException("Argument cannot be null.");
     }
-    String ppmString = this.generatePPM(id);
-    FileOutputStream file = new FileOutputStream(filename);
-    file.write(ppmString.getBytes());
-    file.close();
+    writer.writeFile(filename, this.getImage(id));
   }
 
-  private String generatePPM(String id) {
-    StringBuilder ppmString = new StringBuilder().append("P3\n")
-        .append(this.getImage(id).getPixels().get(0).size()).append(" ")
-        .append(this.getImage(id).getPixels().size()).append("\n255\n");
-    for (int i = 0; i < this.getImage(id).getPixels().size(); i++) {
-      for (int j = 0; j < this.getImage(id).getPixels().get(0).size(); j++) {
-        IPixel currentPixel = this.getImage(id).getPixels().get(i).get(j);
-        ppmString.append(currentPixel.getColor().getRed()).append(" ")
-            .append(currentPixel.getColor().getGreen()).append(" ")
-            .append(currentPixel.getColor().getBlue()).append(" ");
-      }
-      ppmString.append("\n");
-    }
-    return ppmString.toString();
-  }
-
-  private IColor alternateColors(List<IColor> colors, int rows, int columns) {
-    int i = columns % colors.size() + rows % colors.size();
-    if (i > 1) {
-      i = 0;
-    }
-
-    return colors.get(i);
-  }
 
 }

@@ -1,5 +1,7 @@
 package cs3500.imageprocessor.model;
 
+import cs3500.imageprocessor.model.fileWriting.IImageFileWriter;
+import cs3500.imageprocessor.model.filters.IFilter;
 import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
@@ -16,16 +18,13 @@ public interface ImageProcessorModel {
 
   ImageInterface getImage(String id) throws IllegalArgumentException;
 
-  ImageInterface filterBlur(ImageInterface image);
-
-  ImageInterface filterSharpen(ImageInterface image);
+  ImageInterface filterImage(String id, IFilter filter) throws IllegalArgumentException;
 
   ImageInterface colorMonochrome(ImageInterface image);
 
   ImageInterface colorSepia(ImageInterface image);
 
-  ImageInterface createCheckerboard(int width, int height, List<IColor> colors);
-
-  void exportImage(String filename, String id) throws IOException, IllegalArgumentException;
+  void exportImage(String filename, String id, IImageFileWriter writer)
+      throws IOException, IllegalArgumentException;
 
 }

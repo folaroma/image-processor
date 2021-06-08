@@ -1,19 +1,23 @@
 package cs3500.imageprocessor.model.images;
 
+import java.util.Objects;
+
 /**
  * Represents a simple implementation of a color, which has 3 8-bit channels for red, green, and
  * blue values as ints. Values go from 0-255.
  */
 public class ColorImpl implements IColor {
+
   private final int red;
   private final int green;
   private final int blue;
 
   /**
    * Creates and instance of a color with RGB values.
-   * @param red Red value for the color.
+   *
+   * @param red   Red value for the color.
    * @param green Green value for the color.
-   * @param blue Blue value for the color.
+   * @param blue  Blue value for the color.
    * @throws IllegalArgumentException If the color value provided in not in the range of 0-255.
    */
   public ColorImpl(int red, int green, int blue) throws IllegalArgumentException {
@@ -39,5 +43,23 @@ public class ColorImpl implements IColor {
   @Override
   public int getBlue() {
     return blue;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof ColorImpl)) {
+      return false;
+    }
+
+    ColorImpl other = (ColorImpl) o;
+    return this.red == other.red && this.green == other.green && this.blue == other.blue;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(red, green, blue);
   }
 }

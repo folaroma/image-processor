@@ -3,6 +3,7 @@ package cs3500.imageprocessor.model.images;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class representing a simple implementation of an Image, which is a 2D array of pixels. This array
@@ -12,7 +13,7 @@ public class ImageImpl implements ImageInterface {
 
   private final List<ArrayList<IPixel>> pixels;
 
-  public ImageImpl(List<ArrayList<IPixel>> pixels) throws IllegalArgumentException{
+  public ImageImpl(List<ArrayList<IPixel>> pixels) throws IllegalArgumentException {
     if (pixels == null) {
       throw new IllegalArgumentException("List of pixels cannot be null.");
     }
@@ -25,7 +26,13 @@ public class ImageImpl implements ImageInterface {
   }
 
   @Override
-  public IPixel filter(IPixel pixel, double[][] matrix) {
+  public IPixel filter(IPixel pixel, double[][] matrix) throws IllegalArgumentException {
+    if (matrix.length % 2 == 0) {
+      throw new IllegalArgumentException("Dimensions of kernel must be odd");
+    }
+    if (matrix.length != matrix[0].length) {
+      throw new IllegalArgumentException("Kernel must be square.");
+    }
     List<ArrayList<IPixel>> imagePixels = new ArrayList<>(this.pixels);
     int pixelX = pixel.getPosition().getX();
     int pixelY = pixel.getPosition().getY();
@@ -39,7 +46,8 @@ public class ImageImpl implements ImageInterface {
     for (int i = -1 * neighborRange; i <= neighborRange; i++) {
       for (int j = -1 * neighborRange; j <= neighborRange; j++) {
         try {
-          double matrixValue = (double)Array.get(Array.get(matrix, i + neighborRange), j + neighborRange);
+          double matrixValue = (double) Array
+              .get(Array.get(matrix, i + neighborRange), j + neighborRange);
 
           int pixelR = imagePixels.get(pixelY + i).get(pixelX + j).getColor().getRed();
           int pixelG = imagePixels.get(pixelY + i).get(pixelX + j).getColor().getGreen();
@@ -53,8 +61,7 @@ public class ImageImpl implements ImageInterface {
           green += pixelG;
           blue += pixelB;
 
-        }
-        catch (IndexOutOfBoundsException ignored) {
+        } catch (IndexOutOfBoundsException ignored) {
           red += 0;
           green += 0;
           blue += 0;
@@ -62,9 +69,9 @@ public class ImageImpl implements ImageInterface {
       }
     }
 
-    red = bounds(red);
-    blue = bounds(blue);
-    green = bounds(green);
+    red = clampValues(red);
+    blue = clampValues(blue);
+    green = clampValues(green);
 
     return new PixelImpl(new Position2D(pixelX, pixelY), new ColorImpl(red, green, blue));
 
@@ -85,9 +92,9 @@ public class ImageImpl implements ImageInterface {
     int alteredBlue = 0;
 
     for (int j = 0; j < matrix[0].length; j++) {
-      alteredRed += (int) (red * matrix[j][0]);
-      alteredGreen += (int) (green * matrix[j][1]);
-      alteredBlue += (int) (blue * matrix[j][2]);
+      alteredRed += (int) (red * matrix[0][j]);
+      alteredGreen += (int) (green * matrix[1][j]);
+      alteredBlue += (int) (blue * matrix[2][j]);
     }
 
     return new PixelImpl(new Position2D(positionX, positionY), new ColorImpl(alteredRed,
@@ -95,16 +102,31 @@ public class ImageImpl implements ImageInterface {
 
   }
 
-  private int bounds(int rgb) {
+  private int clampValues(int rgb) {
     if (rgb > 255) {
       return 255;
-    }
-    else if (rgb < 0) {
+    } else if (rgb < 0) {
       return 0;
     }
-
     return rgb;
+  }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof ImageImpl)) {
+      return false;
+    }
+
+    ImageImpl other = (ImageImpl) o;
+    return this.pixels.equals(other.pixels);
+  }
+
+  @Override
+  public int hashCode(){
+    return Objects.hash(this.pixels);
   }
 
 

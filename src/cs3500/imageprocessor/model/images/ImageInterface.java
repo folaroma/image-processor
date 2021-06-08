@@ -10,7 +10,7 @@ public interface ImageInterface {
 
   List<ArrayList<IPixel>> getPixels();
 
-  IPixel filter(IPixel pixel, double[][] matrix);
+  IPixel filter(IPixel pixel, double[][] matrix) throws IllegalArgumentException;
 
   IPixel colorTransform(IPixel pixel, double[][] matrix);
 
