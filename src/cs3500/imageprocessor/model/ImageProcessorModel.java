@@ -24,7 +24,7 @@ public interface ImageProcessorModel {
 
   ImageInterface colorSepia(ImageInterface image);
 
-  ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors);
+  ImageInterface createCheckerboard(int width, int height, List<IColor> colors);
 
   void exportImage(String filename, String id) throws IOException, IllegalArgumentException;
 

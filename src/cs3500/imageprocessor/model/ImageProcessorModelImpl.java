@@ -4,12 +4,15 @@ import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.IPixel;
 import cs3500.imageprocessor.model.images.ImageImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
+import cs3500.imageprocessor.model.images.PixelImpl;
+import cs3500.imageprocessor.model.images.Position2D;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Class representing a simple image processing program model. Images are represented using the
@@ -131,8 +134,19 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   }
 
   @Override
-  public ImageInterface createCheckerboard(int size, int numTiles, List<IColor> colors) {
-    return null;
+  public ImageInterface createCheckerboard(int width, int height, List<IColor> colors) {
+    List<ArrayList<IPixel>> pixels = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      ArrayList<IPixel> row = new ArrayList<>();
+      for (int j = 0; j < width; j++) {
+        row.add(new PixelImpl(new Position2D(j, i), colors.get(new Random().nextInt(colors.size()))));
+      }
+      pixels.add(row);
+    }
+
+    return new ImageImpl(pixels);
+
   }
 
   @Override
