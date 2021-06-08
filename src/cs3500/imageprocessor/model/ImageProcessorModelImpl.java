@@ -125,12 +125,39 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
 
   @Override
   public ImageInterface colorMonochrome(ImageInterface image) {
-    return null;
+    List<ArrayList<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
+    double[][] monochrome = {{0.2126, 0.7152, 0.0722},
+        {0.2126, 0.7152, 0.0722},
+        {0.2126, 0.7152, 0.0722}};
+
+    return new ImageImpl(transform(image, imagePixels, monochrome));
+
+  }
+
+  private List<ArrayList<IPixel>> transform(ImageInterface image, List<ArrayList<IPixel>> imagePixels, double[][] matrix) {
+    List<ArrayList<IPixel>> updatedPixels = new ArrayList<>();
+
+    for (List<IPixel> l : imagePixels) {
+      ArrayList<IPixel> row = new ArrayList<>();
+      for (IPixel p : l) {
+        row.add(image.colorTransform(p, matrix));
+      }
+      updatedPixels.add(row);
+    }
+
+    return updatedPixels;
+
   }
 
   @Override
   public ImageInterface colorSepia(ImageInterface image) {
-    return null;
+    List<ArrayList<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
+    double[][] sepia = {{0.393, 0.769, 0.189},
+        {0.349, 0.686, 0.168},
+        {0.272, 0.534, 0.131}};
+
+    return new ImageImpl(transform(image, imagePixels, sepia));
+
   }
 
   @Override
@@ -140,7 +167,7 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
     for (int i = 0; i < height; i++) {
       ArrayList<IPixel> row = new ArrayList<>();
       for (int j = 0; j < width; j++) {
-        row.add(new PixelImpl(new Position2D(j, i), colors.get(new Random().nextInt(colors.size()))));
+        row.add(new PixelImpl(new Position2D(j, i), alternateColors(colors, i, j)));
       }
       pixels.add(row);
     }
@@ -175,4 +202,14 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
     }
     return ppmString.toString();
   }
+
+  private IColor alternateColors(List<IColor> colors, int rows, int columns) {
+    int i = columns % colors.size() + rows % colors.size();
+    if (i > 1) {
+      i = 0;
+    }
+
+    return colors.get(i);
+  }
+
 }

@@ -71,6 +71,30 @@ public class ImageImpl implements ImageInterface {
 
   }
 
+  @Override
+  public IPixel colorTransform(IPixel pixel, double[][] matrix) {
+    int red = pixel.getColor().getRed();
+    int green = pixel.getColor().getGreen();
+    int blue = pixel.getColor().getBlue();
+
+    int positionX = pixel.getPosition().getX();
+    int positionY = pixel.getPosition().getY();
+
+    int alteredRed = 0;
+    int alteredGreen = 0;
+    int alteredBlue = 0;
+
+    for (int j = 0; j < matrix[0].length; j++) {
+      alteredRed += (int) (red * matrix[j][0]);
+      alteredGreen += (int) (green * matrix[j][1]);
+      alteredBlue += (int) (blue * matrix[j][2]);
+    }
+
+    return new PixelImpl(new Position2D(positionX, positionY), new ColorImpl(alteredRed,
+        alteredGreen, alteredBlue));
+
+  }
+
   private int bounds(int rgb) {
     if (rgb > 255) {
       return 255;

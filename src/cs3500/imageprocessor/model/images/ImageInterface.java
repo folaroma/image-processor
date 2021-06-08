@@ -12,5 +12,7 @@ public interface ImageInterface {
 
   IPixel filter(IPixel pixel, double[][] matrix);
 
+  IPixel colorTransform(IPixel pixel, double[][] matrix);
+
 
 }
