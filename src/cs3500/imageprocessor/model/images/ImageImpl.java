@@ -87,15 +87,13 @@ public class ImageImpl implements ImageInterface {
     int positionX = pixel.getPosition().getX();
     int positionY = pixel.getPosition().getY();
 
-    int alteredRed = 0;
-    int alteredGreen = 0;
-    int alteredBlue = 0;
+    int alteredRed = (int) (red * matrix[0][0] + green * matrix[0][1] + blue * matrix[0][2]);
+    int alteredGreen = (int) (red * matrix[1][0] + green * matrix[1][1] + blue * matrix[1][2]);
+    int alteredBlue = (int) (red * matrix[2][0] + green * matrix[2][1] + blue * matrix[2][2]);
 
-    for (int j = 0; j < matrix[0].length; j++) {
-      alteredRed += (int) (red * matrix[0][j]);
-      alteredGreen += (int) (green * matrix[1][j]);
-      alteredBlue += (int) (blue * matrix[2][j]);
-    }
+    alteredRed = clampValues(alteredRed);
+    alteredGreen = clampValues(alteredGreen);
+    alteredBlue = clampValues(alteredBlue);
 
     return new PixelImpl(new Position2D(positionX, positionY), new ColorImpl(alteredRed,
         alteredGreen, alteredBlue));
