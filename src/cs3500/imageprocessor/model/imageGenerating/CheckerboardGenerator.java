@@ -11,14 +11,14 @@ import java.util.List;
 
 public class CheckerboardGenerator implements IImageGenerator{
 
-  private final int size;
-  private final int numPiles;
+  private final int rows;
+  private final int columns;
   private final List<IColor> colors;
 
-  public CheckerboardGenerator(int size, int numPiles,
+  public CheckerboardGenerator(int rows, int columns,
       List<IColor> colors) {
-    this.size = size;
-    this.numPiles = numPiles;
+    this.rows = rows;
+    this.columns = columns;
     this.colors = colors;
   }
 
@@ -26,9 +26,9 @@ public class CheckerboardGenerator implements IImageGenerator{
   public ImageInterface generateImage() {
     List<ArrayList<IPixel>> pixels = new ArrayList<>();
 
-    for (int i = 0; i < this.numPiles; i++) {
+    for (int i = 0; i < this.rows; i++) {
       ArrayList<IPixel> row = new ArrayList<>();
-      for (int j = 0; j < this.size; j++) {
+      for (int j = 0; j < this.columns; j++) {
         row.add(new PixelImpl(new Position2D(j, i), alternateColors(this.colors, i, j)));
       }
       pixels.add(row);

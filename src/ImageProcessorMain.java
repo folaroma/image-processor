@@ -4,11 +4,9 @@ import cs3500.imageprocessor.model.colorTransformations.GrayscaleTransformation;
 import cs3500.imageprocessor.model.colorTransformations.SepiaTransformation;
 import cs3500.imageprocessor.model.fileReading.PPMFileReader;
 import cs3500.imageprocessor.model.fileWriting.PPMFileWriter;
-import cs3500.imageprocessor.model.filters.FilterBlur;
 import cs3500.imageprocessor.model.filters.FilterSharpen;
 import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
-import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ public class ImageProcessorMain {
      */
 
     ImageInterface checkerboard = new CheckerboardGenerator(100, 100,
-        new ArrayList<IColor>(Arrays.asList(new ColorImpl(0, 0, 0),
+        new ArrayList<>(Arrays.asList(new ColorImpl(0, 0, 0),
             new ColorImpl(255, 255, 255)))).generateImage();
     testModel.addImage("checkerboard", checkerboard);
     testModel.exportImage("res/Checkerboard.ppm", "checkerboard", new PPMFileWriter());
