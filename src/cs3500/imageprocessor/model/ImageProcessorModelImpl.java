@@ -1,5 +1,6 @@
 package cs3500.imageprocessor.model;
 
+import cs3500.imageprocessor.model.colorTransformations.IColorTransformation;
 import cs3500.imageprocessor.model.fileReading.IFileReader;
 import cs3500.imageprocessor.model.fileWriting.IImageFileWriter;
 import cs3500.imageprocessor.model.filters.IFilter;
@@ -98,43 +99,12 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
     return filter.applyFilter(this.getImage(id));
   }
 
-
   @Override
-  public ImageInterface colorMonochrome(ImageInterface image) {
-    List<ArrayList<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
-    double[][] monochrome = {{0.2126, 0.7152, 0.0722},
-        {0.2126, 0.7152, 0.0722},
-        {0.2126, 0.7152, 0.0722}};
-
-    return new ImageImpl(transform(image, imagePixels, monochrome));
-
-  }
-
-  private List<ArrayList<IPixel>> transform(ImageInterface image,
-      List<ArrayList<IPixel>> imagePixels, double[][] matrix) {
-    List<ArrayList<IPixel>> updatedPixels = new ArrayList<>();
-
-    for (List<IPixel> l : imagePixels) {
-      ArrayList<IPixel> row = new ArrayList<>();
-      for (IPixel p : l) {
-        row.add(image.colorTransform(p, matrix));
-      }
-      updatedPixels.add(row);
+  public ImageInterface transformImage(String id, IColorTransformation transformation) {
+    if (id == null || transformation == null) {
+      throw new IllegalArgumentException("Arguments cannot be null.");
     }
-
-    return updatedPixels;
-
-  }
-
-  @Override
-  public ImageInterface colorSepia(ImageInterface image) {
-    List<ArrayList<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
-    double[][] sepia = {{0.393, 0.769, 0.189},
-        {0.349, 0.686, 0.168},
-        {0.272, 0.534, 0.131}};
-
-    return new ImageImpl(transform(image, imagePixels, sepia));
-
+    return transformation.applyTransformation(this.getImage(id));
   }
 
 

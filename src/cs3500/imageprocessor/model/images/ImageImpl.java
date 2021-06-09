@@ -28,7 +28,7 @@ public class ImageImpl implements ImageInterface {
   @Override
   public IPixel filter(IPixel pixel, double[][] matrix) throws IllegalArgumentException {
     if (matrix.length % 2 == 0) {
-      throw new IllegalArgumentException("Dimensions of kernel must be odd");
+      throw new IllegalArgumentException("Dimensions of kernel must be odd.");
     }
     if (matrix.length != matrix[0].length) {
       throw new IllegalArgumentException("Kernel must be square.");
@@ -79,7 +79,10 @@ public class ImageImpl implements ImageInterface {
   }
 
   @Override
-  public IPixel colorTransform(IPixel pixel, double[][] matrix) {
+  public IPixel colorTransform(IPixel pixel, double[][] matrix) throws IllegalArgumentException {
+    if (matrix[0].length != 3) {
+      throw new IllegalArgumentException("Transformation matrix must be nX3.");
+    }
     int red = pixel.getColor().getRed();
     int green = pixel.getColor().getGreen();
     int blue = pixel.getColor().getBlue();

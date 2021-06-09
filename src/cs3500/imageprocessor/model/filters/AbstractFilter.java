@@ -12,10 +12,10 @@ public abstract class AbstractFilter implements IFilter {
     this.matrix = matrix;
   }
 
-  public abstract ImageInterface applyFilter(ImageInterface image);
+  public abstract ImageInterface applyFilter(ImageInterface image) throws IllegalArgumentException;
 
   protected List<ArrayList<IPixel>> filtered(List<ArrayList<IPixel>> pixels, double[][] matrix,
-      ImageInterface image) {
+      ImageInterface image) throws IllegalArgumentException{
     List<ArrayList<IPixel>> filteredPixels = new ArrayList<>();
     for (int i = 0; i < pixels.size(); i++) {
       ArrayList<IPixel> row = new ArrayList<>();

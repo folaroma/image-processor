@@ -1,7 +1,10 @@
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
+import cs3500.imageprocessor.model.colorTransformations.GrayscaleTransformation;
+import cs3500.imageprocessor.model.colorTransformations.SepiaTransformation;
 import cs3500.imageprocessor.model.fileReading.PPMFileReader;
 import cs3500.imageprocessor.model.fileWriting.PPMFileWriter;
+import cs3500.imageprocessor.model.filters.FilterBlur;
 import cs3500.imageprocessor.model.filters.FilterSharpen;
 import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
@@ -39,13 +42,16 @@ public class ImageProcessorMain {
     testModel.addImage("checkerboard", checkerboard);
     testModel.exportImage("res/Checkerboard.ppm", "checkerboard", new PPMFileWriter());
 
-    ImageInterface monochromeKoala = testModel.colorMonochrome(testModel.getImage("res/Koala.ppm"));
+    ImageInterface monochromeKoala = testModel
+        .transformImage("res/Koala.ppm", new GrayscaleTransformation());
     testModel.addImage("monochromeKoala", monochromeKoala);
     testModel.exportImage("res/monochromeKoala.ppm", "monochromeKoala", new PPMFileWriter());
 
-    ImageInterface sepiaKoala = testModel.colorSepia(testModel.getImage("res/Koala.ppm"));
+    ImageInterface sepiaKoala = testModel
+        .transformImage("res/Koala.ppm", new SepiaTransformation());
     testModel.addImage("sepiaKoala", sepiaKoala);
     testModel.exportImage("res/sepiaKoala.ppm", "sepiaKoala", new PPMFileWriter());
+
 
   }
 
