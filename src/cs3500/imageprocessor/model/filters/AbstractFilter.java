@@ -2,6 +2,7 @@ package cs3500.imageprocessor.model.filters;
 
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.IPixel;
+import cs3500.imageprocessor.model.images.ImageImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import cs3500.imageprocessor.model.images.PixelImpl;
 import cs3500.imageprocessor.model.images.Position2D;
@@ -9,22 +10,59 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Abstract class to represent a filter with a given matrix. The matrix must have odd dimensions and
+ * be square.
+ */
 public abstract class AbstractFilter implements IFilter {
+
   protected final double[][] matrix;
 
-  protected AbstractFilter(double[][] matrix) {
+  /**
+   * Creates and instance of the abstract filter with the given matrix.
+   *
+   * @param matrix Matrix to be associated with the filter.
+   * @throws IllegalArgumentException If th matrix is null, it does not have odd dimensions, or it
+   *                                  is not square.
+   */
+  protected AbstractFilter(double[][] matrix) throws IllegalArgumentException {
+    if (matrix == null) {
+      throw new IllegalArgumentException("Argument cannot be null.");
+    }
+    if (matrix.length % 2 == 0) {
+      throw new IllegalArgumentException("Dimensions of kernel must be odd.");
+    }
+    if (matrix.length != matrix[0].length) {
+      throw new IllegalArgumentException("Kernel must be square.");
+    }
     this.matrix = matrix;
   }
 
-  public abstract ImageInterface applyFilter(ImageInterface image) throws IllegalArgumentException;
+  @Override
+  public ImageInterface applyFilter(ImageInterface image) throws IllegalArgumentException {
+    if (image == null) {
+      throw new IllegalArgumentException("Image cannot be null.");
+    }
+    List<ArrayList<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
+    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, image);
 
-  protected List<ArrayList<IPixel>> filtered(List<ArrayList<IPixel>> pixels, double[][] matrix,
-      ImageInterface image) throws IllegalArgumentException{
+    return new ImageImpl(filteredPixels);
+  }
+
+  /**
+   * Returns the pixels of the image after the filter has been applied.
+   *
+   * @param pixels Pixels of the image to be filtered.
+   * @param image  Image to be filtered.
+   * @return The filtered pixels.
+   */
+  protected List<ArrayList<IPixel>> filtered(List<ArrayList<IPixel>> pixels,
+      ImageInterface image) {
     List<ArrayList<IPixel>> filteredPixels = new ArrayList<>();
     for (int i = 0; i < pixels.size(); i++) {
       ArrayList<IPixel> row = new ArrayList<>();
       for (int j = 0; j < pixels.get(0).size(); j++) {
-        row.add(filter(pixels.get(i).get(j), matrix, image));
+        row.add(filter(pixels.get(i).get(j), image));
       }
       filteredPixels.add(row);
     }
@@ -33,14 +71,15 @@ public abstract class AbstractFilter implements IFilter {
 
   }
 
-  protected IPixel filter(IPixel pixel, double[][] matrix, ImageInterface image)
-      throws IllegalArgumentException {
-    if (matrix.length % 2 == 0) {
-      throw new IllegalArgumentException("Dimensions of kernel must be odd.");
-    }
-    if (matrix.length != matrix[0].length) {
-      throw new IllegalArgumentException("Kernel must be square.");
-    }
+  /**
+   * Applies the filter to the given pixel using the filter's matrix. RGB values are clamped at a
+   * max of 255 and a min of 0.
+   *
+   * @param pixel Pixel to be filtered.
+   * @param image Original image.
+   * @return The filtered pixel
+   */
+  protected IPixel filter(IPixel pixel, ImageInterface image) {
     List<ArrayList<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
     int pixelX = pixel.getPosition().getX();
     int pixelY = pixel.getPosition().getY();
@@ -86,6 +125,13 @@ public abstract class AbstractFilter implements IFilter {
 
   }
 
+  /**
+   * Clamps the values of invalid rgb values if they exceed 255 or are less than 0. If it is in
+   * range it stays the same
+   *
+   * @param rgb RGB value to clamp.
+   * @return The clamped value.
+   */
   private int clampValues(int rgb) {
     if (rgb > 255) {
       return 255;

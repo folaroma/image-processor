@@ -28,10 +28,22 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
 
   private final Map<String, ImageInterface> images;
 
-  public ImageProcessorModelImpl() throws IllegalArgumentException {
+  /**
+   * Default constructor for the model. Sets the map as an empty hashmap.
+   */
+  public ImageProcessorModelImpl() {
     this.images = new HashMap<>();
   }
 
+  /**
+   * Convenience constructor to create a model with an imported image in the map.
+   *
+   * @param filename Name of the file to be read.
+   * @param reader   The file reader function object to use.
+   * @throws IllegalArgumentException If any argument is null, the file cannot be found, or if * it
+   *                                  is not a valid file of the desired type associated with the
+   *                                  IFileReader.
+   */
   public ImageProcessorModelImpl(String filename, IFileReader reader)
       throws IllegalArgumentException {
     this();
@@ -41,6 +53,14 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
     images.putIfAbsent(filename, reader.readImageFromFile(filename));
   }
 
+  /**
+   * Convenience constructor to create a model with a programmatically generated image in the map.
+   *
+   * @param id        Id to be associated with the image.
+   * @param generator Image generator function object to use.
+   * @throws IllegalArgumentException If any argument is null or the generator cannot properly
+   *                                  generate the image.
+   */
   public ImageProcessorModelImpl(String id, IImageGenerator generator)
       throws IllegalArgumentException {
     this();

@@ -1,31 +1,18 @@
 package cs3500.imageprocessor.model.filters;
 
-import cs3500.imageprocessor.model.images.IPixel;
-import cs3500.imageprocessor.model.images.ImageImpl;
-import cs3500.imageprocessor.model.images.ImageInterface;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Class representing a sharpen filter than can be applied to images.
+ */
 public class FilterSharpen extends AbstractFilter {
 
+  /**
+   * Creates an instance of a sharpen filter using the associated matrix for sharpening.
+   */
   public FilterSharpen() {
     super(new double[][]{{-0.125, -0.125, -0.125, -0.125, -0.125},
         {-0.125, 0.25, 0.25, 0.25, -0.125},
         {-0.125, 0.25, 1, 0.25, -0.12},
         {-0.125, 0.25, 0.25, 0.25, -0.125},
         {-0.125, -0.125, -0.125, -0.125, -0.125}});
-  }
-
-  @Override
-  public ImageInterface applyFilter(ImageInterface image) throws IllegalArgumentException {
-    if (image == null) {
-      throw new IllegalArgumentException("Image cannot be null.");
-    }
-    List<ArrayList<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
-
-    List<ArrayList<IPixel>> filteredPixels = filtered(imagePixels, this.matrix, image);
-
-    return new ImageImpl(filteredPixels);
-
   }
 }

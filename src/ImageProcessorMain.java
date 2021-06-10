@@ -26,14 +26,6 @@ public class ImageProcessorMain {
     testModel.addImage("sharperKoala", sharperKoala);
     testModel.exportImage("res/KoalaDoubleSharpen.ppm", "sharperKoala", new PPMFileWriter());
 
-    /*
-    testModel.addImage("res//amitdrip.ppm", ImageUtil.readPPM("res\\amitdrip.ppm"));
-    ImageInterface sharpDrip = testModel.filterSharpen(
-        testModel.filterSharpen(testModel.filterSharpen(testModel.getImage("res\\amitdrip.ppm"))));
-    testModel.addImage("sharpDrip", sharpDrip);
-    testModel.exportImage("res\\sharpamitdrip.ppm", "sharpDrip");
-     */
-
     ImageInterface checkerboard = new CheckerboardGenerator(100, 100,
         new ArrayList<>(Arrays.asList(new ColorImpl(0, 0, 0),
             new ColorImpl(255, 255, 255)))).generateImage();

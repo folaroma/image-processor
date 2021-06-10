@@ -5,10 +5,22 @@ package cs3500.imageprocessor.model.images;
  */
 public interface IColor {
 
+  /**
+   * Returns the red value of this color.
+   * @return Color's red value.
+   */
   int getRed();
 
+  /**
+   * Returns the green value of the color.
+   * @return Color's green value.
+   */
   int getGreen();
 
+  /**
+   * Returns the blue value of the color.
+   * @return Color's blue value.
+   */
   int getBlue();
 
 

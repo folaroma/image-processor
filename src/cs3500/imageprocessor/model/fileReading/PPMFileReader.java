@@ -1,6 +1,5 @@
 package cs3500.imageprocessor.model.fileReading;
 
-import cs3500.imageprocessor.model.fileReading.IFileReader;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.IPixel;
 import cs3500.imageprocessor.model.images.ImageImpl;
@@ -19,14 +18,7 @@ import java.io.FileInputStream;
  */
 public class PPMFileReader implements IFileReader {
 
-  /**
-   * Read an image file in the PPM format and print the colors.
-   *
-   * @param filename the path of the file.
-   * @throws IllegalArgumentException If the given filename is null, the file cannot be found, or
-   *                                  if it is not a valid ppm ASCII file.
-   */
-
+  @Override
   public ImageInterface readImageFromFile(String filename) throws IllegalArgumentException {
     Scanner sc;
 

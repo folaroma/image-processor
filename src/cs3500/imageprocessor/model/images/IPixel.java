@@ -5,8 +5,18 @@ package cs3500.imageprocessor.model.images;
  */
 public interface IPixel {
 
+  /**
+   * Returns the position of the pixel.
+   *
+   * @return Pixel's position
+   */
   Position2D getPosition();
 
+  /**
+   * Gets the RGB color of the pixel.
+   *
+   * @return The pixel's color.
+   */
   IColor getColor();
 
 }

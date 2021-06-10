@@ -1,20 +1,18 @@
 package cs3500.imageprocessor.model.colorTransformations;
 
-import cs3500.imageprocessor.model.images.IPixel;
-import cs3500.imageprocessor.model.images.ImageImpl;
-import cs3500.imageprocessor.model.images.ImageInterface;
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * Class to represent a grayscale transformation on an image.
+ */
+public class GrayscaleTransformation extends AbstractColorTransformation {
 
-public class GrayscaleTransformation extends AbstractColorTransformation{
-
-  @Override
-  public ImageInterface applyTransformation(ImageInterface image) {
-    List<ArrayList<IPixel>> imagePixels = new ArrayList<>(image.getPixels());
-    double[][] monochrome = {{0.2126, 0.7152, 0.0722},
+  /**
+   * Creates a grayscale transformation with the matrix that will create the grayscale effect on a
+   * pixel.
+   */
+  public GrayscaleTransformation() {
+    super(new double[][]{{0.2126, 0.7152, 0.0722},
         {0.2126, 0.7152, 0.0722},
-        {0.2126, 0.7152, 0.0722}};
-
-    return new ImageImpl(transform(image, imagePixels, monochrome));
+        {0.2126, 0.7152, 0.0722}});
   }
+
 }
