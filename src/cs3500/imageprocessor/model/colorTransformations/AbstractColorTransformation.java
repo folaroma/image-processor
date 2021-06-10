@@ -17,7 +17,7 @@ public abstract class AbstractColorTransformation implements IColorTransformatio
   protected final double[][] matrix;
 
   /**
-   * Creates an AbstractColorTransformation using a provided matrix
+   * Creates an AbstractColorTransformation using a provided matrix.
    *
    * @param matrix Matrix to be applied to each pixel in an image.
    * @throws IllegalArgumentException If the supplied matrix is not 3 x 3 or is null.

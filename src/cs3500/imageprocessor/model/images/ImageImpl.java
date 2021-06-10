@@ -27,7 +27,7 @@ public class ImageImpl implements ImageInterface {
 
   @Override
   public List<ArrayList<IPixel>> getPixels() {
-    return new ArrayList<>(pixels);
+    return this.deepCopyPixel(pixels);
   }
 
   @Override

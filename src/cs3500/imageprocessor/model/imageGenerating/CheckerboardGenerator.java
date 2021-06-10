@@ -63,7 +63,7 @@ public class CheckerboardGenerator implements IImageGenerator {
    * @return The color to apply to the square.
    */
   private IColor alternateColors(int row, int column) {
-    int i = columns % colors.size() + rows % colors.size();
+    int i = row % colors.size() + column % colors.size();
     if (i > 1) {
       i = 0;
     }
