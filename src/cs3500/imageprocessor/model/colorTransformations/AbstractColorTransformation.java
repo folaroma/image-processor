@@ -77,9 +77,9 @@ public abstract class AbstractColorTransformation implements IColorTransformatio
     int positionX = pixel.getPosition().getX();
     int positionY = pixel.getPosition().getY();
 
-    int alteredRed = (int) (red * matrix[0][0] + green * matrix[0][1] + blue * matrix[0][2]);
-    int alteredGreen = (int) (red * matrix[1][0] + green * matrix[1][1] + blue * matrix[1][2]);
-    int alteredBlue = (int) (red * matrix[2][0] + green * matrix[2][1] + blue * matrix[2][2]);
+    int alteredRed = (int) (red * this.matrix[0][0] + green * this.matrix[0][1] + blue * this.matrix[0][2]);
+    int alteredGreen = (int) (red * this.matrix[1][0] + green * this.matrix[1][1] + blue * this.matrix[1][2]);
+    int alteredBlue = (int) (red * this.matrix[2][0] + green * this.matrix[2][1] + blue * this.matrix[2][2]);
 
     alteredRed = clampValues(alteredRed);
     alteredGreen = clampValues(alteredGreen);

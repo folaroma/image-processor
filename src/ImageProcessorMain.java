@@ -35,7 +35,7 @@ public class ImageProcessorMain {
     ImageInterface monochromeKoala = testModel
         .transformImage("res/Koala.ppm", new GrayscaleTransformation());
     testModel.addImage("monochromeKoala", monochromeKoala);
-    testModel.exportImage("res/monochromeKoala.ppm", "monochromeKoala", new PPMFileWriter());
+   testModel.exportImage("res\\monochromeKoala.ppm", "monochromeKoala", new PPMFileWriter());
 
     ImageInterface sepiaKoala = testModel
         .transformImage("res/Koala.ppm", new SepiaTransformation());
