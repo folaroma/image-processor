@@ -107,26 +107,26 @@ Generating an image, with support only for creating a basic checkerboard.
 
   * [ImageProcessorModel](#imageprocessormodel)
   * [ImageProcessorModelImpl](#imageprocessormodelimpl)
-  * [colorTransformations](#colortransformations)
+  * [colorTransformations]
     - [IColorTransformation](#icolortransformation)
     - [AbstractColorTransformation](#abstractcolortransformation)
     - [GrayscaleTransformation](#grayscaletransformation)
     - [SepiaTransformation](#sepiatransformation)
-  - [fileReading](#filereading)
+  - [fileReading]
     - [IFileReader](#ifilereader)
     - [PPMFileReader](#ppmfilereader)
-  - [fileWriting](#filewriting)
+  - [fileWriting]
     - [IImageFileWriter](#iimagefilewriter)
     - [PPMFileWriter](#ppmfilewriter)
-  - [filters](#filters)
+  - [filters]
     - [IFilter](#ifilter)
     - [AbstractFilter](#abstractfilter)
     - [FilterBlur](#filterblur)
     - [FilterSharpen](#filtersharpen)
-  - [imageGenerating](#imagegenerating)
+  - [imageGenerating]
     - [IImageGenerator](#iimagegenerator)
     - [CheckerboardGenerator](#checkerboardgenerator)
-  - [images](#images)
+  - [images]
     - [ImageInterface](#imageinterface)
     - [IColor](#icolor)
     - [IPixel](#ipixel)
