@@ -4,8 +4,10 @@ import cs3500.imageprocessor.model.colorTransformations.IColorTransformation;
 import cs3500.imageprocessor.controller.fileWriting.IImageFileWriter;
 import cs3500.imageprocessor.model.filters.IFilter;
 import cs3500.imageprocessor.model.imageGenerating.IImageGenerator;
+import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Interface to represent an image processing program.
@@ -41,33 +43,55 @@ public interface ImageProcessorModel {
   ImageInterface getImage(String id) throws IllegalArgumentException;
 
   /**
-   * Applies the desired filter to the image associated with the id.
+   * Applies the blur filter to the image in the map associated with the given id.
    *
-   * @param id     Id for image to filter.
-   * @param filter Filter to apply on the image.
-   * @return The filtered image.
+   * @param id Id for image to filter.
+   * @return The filtered image with blur applied.
    * @throws IllegalArgumentException If any argument is null or the id is invalid.
    */
-  ImageInterface filterImage(String id, IFilter filter) throws IllegalArgumentException;
+  ImageInterface blur(String id) throws IllegalArgumentException;
 
   /**
-   * Applies the desired color transformation to the image associated with the id.
+   * Applies the sharpen filter to the image in the map associated with the given id.
    *
-   * @param id             Id for the image to be transformed.
-   * @param transformation Transformation to apply to the image.
-   * @return The transformed image.
+   * @param id Id for image to filter.
+   * @return The filtered image with sharpen applied.
+   * @throws IllegalArgumentException If any argument is null or the id is invalid.
+   */
+  ImageInterface sharpen(String id) throws IllegalArgumentException;
+
+  /**
+   * Applies the grayscale color transformation to the image associated with the id.
+   *
+   * @param id Id for the image to be transformed.
+   * @return The transformed image in grayscale.
    * @throws IllegalArgumentException If any argument is null or the id is not contained in the
    *                                  map.
    */
-  ImageInterface transformImage(String id, IColorTransformation transformation)
+  ImageInterface grayscale(String id)
       throws IllegalArgumentException;
 
   /**
-   * Creates an image from the given IImageGenerator.
-   * @param generator Generator to use to programmatically create an image.
-   * @return The generated image.
-   * @throws IllegalArgumentException If the generator is null or fails to generate.
+   * Applies the sepia color transformation to the image associated with the id.
+   *
+   * @param id Id for the image to be transformed.
+   * @return The transformed image in sepia.
+   * @throws IllegalArgumentException If any argument is null or the id is not contained in the
+   *                                  map.
    */
-  ImageInterface generateImage(IImageGenerator generator) throws IllegalArgumentException;
+  ImageInterface sepia(String id)
+      throws IllegalArgumentException;
+
+  /**
+   * Creates a checkerboard where each square is 1 pixel.
+   * @param rows The amount of rows in the checkerboard
+   * @param columns The amount of columns in the checkerboard.
+   * @param colors The two colors that the board will alternate through.
+   * @return The generated image.
+   * @throws IllegalArgumentException If the list of colors are null, there are more than 2 colors
+   *                                  in the list, or the number of rows or columns is less than 2.
+   */
+  ImageInterface generateCheckerboard(int rows, int columns, List<IColor> colors)
+      throws IllegalArgumentException;
 }
 

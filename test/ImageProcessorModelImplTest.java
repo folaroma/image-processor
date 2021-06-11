@@ -2,8 +2,6 @@ import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
-import cs3500.imageprocessor.controller.fileReading.IFileReader;
-import cs3500.imageprocessor.controller.fileReading.PPMFileReader;
 import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.imageGenerating.IImageGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;

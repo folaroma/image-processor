@@ -62,13 +62,13 @@ public class Position2DTest {
   // getting the y of Position 1 0
   @Test
   public void getYOneZero() {
-    assertEquals(this.oneZero.getX(), 0);
+    assertEquals(this.oneZero.getX(), 1);
   }
 
   // getting the y of Position 0 1
   @Test
   public void getYZeroOne() {
-    assertEquals(this.zeroOne.getX(), 1);
+    assertEquals(this.zeroOne.getY(), 1);
   }
 
 

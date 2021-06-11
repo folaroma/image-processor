@@ -18,29 +18,29 @@ public class ImageProcessorMain {
     ImageProcessorModel testModel = new ImageProcessorModelImpl();
     testModel.addImage("res/Koala.ppm", new PPMFileReader().readImageFromFile("res/Koala.ppm"));
 
-    ImageInterface sharpKoala = testModel.filterImage("res/Koala.ppm", new FilterSharpen());
+    ImageInterface sharpKoala = testModel.sharpen("res/Koala.ppm");
     testModel.addImage("sharpKoala", sharpKoala);
     new PPMFileWriter().writeFile("res/KoalaSharpen.ppm", testModel.getImage("sharpKoala"));
 
-    ImageInterface sharperKoala = testModel.filterImage("sharpKoala", new FilterSharpen());
+    ImageInterface sharperKoala = testModel.sharpen("sharpKoala");
     testModel.addImage("sharperKoala", sharperKoala);
     new PPMFileWriter().writeFile("res/KoalaDoubleSharpen.ppm", testModel.getImage("sharperKoala"));
 
-    ImageInterface checkerboard = new CheckerboardGenerator(100, 100,
+    ImageInterface checkerboard = testModel.generateCheckerboard(100, 100,
         new ArrayList<>(Arrays.asList(new ColorImpl(0, 0, 0),
-            new ColorImpl(255, 255, 255)))).generateImage();
+            new ColorImpl(255, 255, 255))));
     testModel.addImage("checkerboard", checkerboard);
     new PPMFileWriter().writeFile("res/Checkerboard.ppm", testModel.getImage("checkerboard"));
 
 
     ImageInterface monochromeKoala = testModel
-        .transformImage("res/Koala.ppm", new GrayscaleTransformation());
+        .grayscale("res/Koala.ppm");
     testModel.addImage("monochromeKoala", monochromeKoala);
     new PPMFileWriter().writeFile("res\\monochromeKoala.ppm", testModel.getImage("monochromeKoala"));
 
 
     ImageInterface sepiaKoala = testModel
-        .transformImage("res/Koala.ppm", new SepiaTransformation());
+        .sepia("res/Koala.ppm");
     testModel.addImage("sepiaKoala", sepiaKoala);
     new PPMFileWriter().writeFile("res/sepiaKoala.ppm", testModel.getImage("sepiaKoala"));
 
