@@ -9,6 +9,7 @@ A project for CS3500 at Northeastern University.
 - [About](#about)
 - [Usage](#usage)
 - [Class Overviews](#class-overviews)
+- [Image Citations](#image-citations)
 
 &nbsp;
 
@@ -264,4 +265,13 @@ The implementation of the color interface, which has 3 8-bit channels for red, g
 The implementation of the pixel interface, which has a position and color.
 
 
+&nbsp;
 
+
+## Image Citations
+
+By license, the images are free for use:
+
+https://unsplash.com/photos/hPYiwTyEHhU
+
+https://unsplash.com/photos/eijM2bJLD-k
