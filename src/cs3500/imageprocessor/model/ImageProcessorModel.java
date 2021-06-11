@@ -61,6 +61,14 @@ public interface ImageProcessorModel {
   ImageInterface transformImage(String id, IColorTransformation transformation)
       throws IllegalArgumentException;
 
+  /**
+   * Exports the image with the given id to a file with the given filename.
+   * @param filename Name and path of the exported image.
+   * @param id Id of the image in the map.
+   * @param writer Type of file writer to use for this export.
+   * @throws IOException If writing to the file fails.
+   * @throws IllegalArgumentException If any argument is null, or if the id is not contained in the map.
+   */
   void exportImage(String filename, String id, IImageFileWriter writer)
       throws IOException, IllegalArgumentException;
 
