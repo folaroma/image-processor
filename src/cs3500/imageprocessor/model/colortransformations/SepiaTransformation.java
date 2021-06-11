@@ -1,4 +1,4 @@
-package cs3500.imageprocessor.model.colorTransformations;
+package cs3500.imageprocessor.model.colortransformations;
 
 /**
  * Class to represent a sepia color transformation on an image.

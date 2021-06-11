@@ -1,4 +1,4 @@
-package cs3500.imageprocessor.controller.fileReading;
+package cs3500.imageprocessor.controller.filereading;
 
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.IPixel;

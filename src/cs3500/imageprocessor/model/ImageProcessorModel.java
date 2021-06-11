@@ -1,12 +1,7 @@
 package cs3500.imageprocessor.model;
 
-import cs3500.imageprocessor.model.colorTransformations.IColorTransformation;
-import cs3500.imageprocessor.controller.fileWriting.IImageFileWriter;
-import cs3500.imageprocessor.model.filters.IFilter;
-import cs3500.imageprocessor.model.imageGenerating.IImageGenerator;
 import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.ImageInterface;
-import java.io.IOException;
 import java.util.List;
 
 /**

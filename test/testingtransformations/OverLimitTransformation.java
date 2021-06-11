@@ -1,6 +1,6 @@
 package testingtransformations;
 
-import cs3500.imageprocessor.model.colorTransformations.AbstractColorTransformation;
+import cs3500.imageprocessor.model.colortransformations.AbstractColorTransformation;
 
 /**
  * Transformation that can take color values over 255.

@@ -1,6 +1,8 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
+import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.ImageImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
@@ -8,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Test;
 
+/**
+ * Testing class for ImageImpl.
+ */
 public class ImageImplTest {
 
   private ImageInterface checkerboard = new CheckerboardGenerator(10, 10,

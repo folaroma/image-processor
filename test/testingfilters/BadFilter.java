@@ -2,6 +2,9 @@ package testingfilters;
 
 import cs3500.imageprocessor.model.filters.AbstractFilter;
 
+/**
+ * Represents a filter with an incorrect matrix for filter.
+ */
 public class BadFilter extends AbstractFilter {
 
   /**

@@ -1,6 +1,6 @@
 package testingtransformations;
 
-import cs3500.imageprocessor.model.colorTransformations.AbstractColorTransformation;
+import cs3500.imageprocessor.model.colortransformations.AbstractColorTransformation;
 
 /**
  * Color transformation with an invalid index, that is not square.

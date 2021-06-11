@@ -1,8 +1,13 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import cs3500.imageprocessor.model.images.Position2D;
 import org.junit.Test;
 
+/**
+ * Testing class for Position2D.
+ */
 public class Position2DTest {
 
   private final Position2D zeroZero = new Position2D(0, 0);

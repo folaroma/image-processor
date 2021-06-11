@@ -2,13 +2,16 @@ import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.filters.FilterBlur;
 import cs3500.imageprocessor.model.filters.IFilter;
-import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
+import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Test;
 
+/**
+ * Testing class for FilterBlur.
+ */
 public class FilterBlurTest extends AbstractFilterTest {
 
   protected IFilter filters() {

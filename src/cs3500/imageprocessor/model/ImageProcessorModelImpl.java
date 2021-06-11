@@ -1,18 +1,12 @@
 package cs3500.imageprocessor.model;
 
-import cs3500.imageprocessor.model.colorTransformations.GrayscaleTransformation;
-import cs3500.imageprocessor.model.colorTransformations.IColorTransformation;
-import cs3500.imageprocessor.controller.fileReading.IFileReader;
-import cs3500.imageprocessor.controller.fileWriting.IImageFileWriter;
-import cs3500.imageprocessor.model.colorTransformations.SepiaTransformation;
+import cs3500.imageprocessor.model.colortransformations.GrayscaleTransformation;
+import cs3500.imageprocessor.model.colortransformations.SepiaTransformation;
 import cs3500.imageprocessor.model.filters.FilterBlur;
 import cs3500.imageprocessor.model.filters.FilterSharpen;
-import cs3500.imageprocessor.model.filters.IFilter;
-import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
-import cs3500.imageprocessor.model.imageGenerating.IImageGenerator;
+import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.ImageInterface;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,12 +108,11 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
       throw new IllegalArgumentException("Colors cannot be null.");
     }
     if (rows < 2 || columns < 2) {
-      throw new IllegalArgumentException("There must be at least two columns and two rows in a checkerboard.");
+      throw new IllegalArgumentException(
+          "There must be at least two columns and two rows in a checkerboard.");
     }
     return new CheckerboardGenerator(rows, columns, colors).generateImage();
   }
-
-
 
 
 }

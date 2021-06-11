@@ -1,4 +1,4 @@
-package cs3500.imageprocessor.model.imageGenerating;
+package cs3500.imageprocessor.model.imagegenerating;
 
 import cs3500.imageprocessor.model.images.ImageInterface;
 

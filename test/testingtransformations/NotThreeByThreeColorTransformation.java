@@ -1,6 +1,6 @@
 package testingtransformations;
 
-import cs3500.imageprocessor.model.colorTransformations.AbstractColorTransformation;
+import cs3500.imageprocessor.model.colortransformations.AbstractColorTransformation;
 
 /**
  * Class that is a color transformation with a non 3 x 3 square matrix.

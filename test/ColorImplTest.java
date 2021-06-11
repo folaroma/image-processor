@@ -1,10 +1,16 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.IColor;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Testing class for ColorImpl.
+ */
 public class ColorImplTest {
 
   private IColor white = new ColorImpl(0, 0, 0);
@@ -29,7 +35,6 @@ public class ColorImplTest {
 
     this.blue = new ColorImpl(0, 0, 255);
   }
-
 
   // CONSTRUCTOR TESTS
 
@@ -91,7 +96,6 @@ public class ColorImplTest {
     new ColorImpl(-1, -1, -1);
   }
 
-
   // GENERAL TESTS
 
   // -----------------------------------------------------------------------------------------------
@@ -135,7 +139,6 @@ public class ColorImplTest {
     assertEquals(this.blue.getRed(), 0);
   }
 
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -176,7 +179,6 @@ public class ColorImplTest {
     assertEquals(this.blue.getGreen(), 0);
   }
 
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -216,7 +218,6 @@ public class ColorImplTest {
   public void getBlueBlue() {
     assertEquals(this.blue.getBlue(), 255);
   }
-
 
   // -----------------------------------------------------------------------------------------------
 
@@ -263,7 +264,6 @@ public class ColorImplTest {
   public void testNotEqualWhiteBlack() {
     assertFalse(this.white.equals(this.black));
   }
-
 
   // -----------------------------------------------------------------------------------------------
 

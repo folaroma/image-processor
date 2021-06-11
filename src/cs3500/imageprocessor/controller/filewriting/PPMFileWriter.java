@@ -1,4 +1,4 @@
-package cs3500.imageprocessor.controller.fileWriting;
+package cs3500.imageprocessor.controller.filewriting;
 
 import cs3500.imageprocessor.model.images.IPixel;
 import cs3500.imageprocessor.model.images.ImageInterface;

@@ -1,17 +1,16 @@
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
-import cs3500.imageprocessor.model.colorTransformations.GrayscaleTransformation;
-import cs3500.imageprocessor.model.colorTransformations.SepiaTransformation;
-import cs3500.imageprocessor.controller.fileReading.PPMFileReader;
-import cs3500.imageprocessor.controller.fileWriting.PPMFileWriter;
-import cs3500.imageprocessor.model.filters.FilterSharpen;
-import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
+import cs3500.imageprocessor.controller.filereading.PPMFileReader;
+import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Main class to work with the model of the image processor.
+ */
 public class ImageProcessorMain {
 
   public static void main(String[] args) throws IOException {

@@ -1,6 +1,6 @@
 import static org.junit.Assert.assertEquals;
 
-import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
+import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.util.ArrayList;

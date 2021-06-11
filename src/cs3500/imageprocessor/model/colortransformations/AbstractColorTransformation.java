@@ -1,4 +1,4 @@
-package cs3500.imageprocessor.model.colorTransformations;
+package cs3500.imageprocessor.model.colortransformations;
 
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.IPixel;

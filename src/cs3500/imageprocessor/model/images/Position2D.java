@@ -1,16 +1,17 @@
 package cs3500.imageprocessor.model.images;
 
 import java.util.Objects;
+// Taken from starter code from the lectures.
 
 /**
- * This class represents a 2D point represented in Cartesian coordinates
+ * This class represents a 2D point represented in Cartesian coordinates.
  */
 public class Position2D {
 
   private int x, y;
 
   /**
-   * Create a 2D point given its x and y coordinates
+   * Create a 2D point given its x and y coordinates.
    *
    * @param x x-coordinate of the 2D point
    * @param y y-coordinate of the 2D point
@@ -21,7 +22,7 @@ public class Position2D {
   }
 
   /**
-   * Return the x-coordinate of this point
+   * Return the x-coordinate of this point.
    *
    * @return the x-coordinate as an integer
    */
@@ -30,9 +31,9 @@ public class Position2D {
   }
 
   /**
-   * Return the y-coordinate of this point
+   * Return the y-coordinate of this point.
    *
-   * @return the y-coordinate as an integer
+   * @return the y-coordinate as an integer.
    */
   public int getY() {
     return this.y;
