@@ -141,7 +141,7 @@ Generating an image, with support only for creating a basic checkerboard.
 
 The interface to represent the image processing program.
 
-Contains the methods for replacing, adding, exporting, getting, filtering, and transforming images.
+Contains the methods for replacing, adding, getting, filtering, and transforming images.
 
 ### ImageProcessorModelImpl
 
