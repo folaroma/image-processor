@@ -37,7 +37,7 @@ public class PPMFileReaderTest {
     reader.readImageFromFile("test\\testreaderfiles\\badfile.txt");
   }
 
-  // tests that reading in a propper ppm file will create an image interface with the right data
+  // tests that reading in a proper ppm file will create an image interface with the right data
   @Test
   public void testReadingGoodPPMFile() {
     ImageInterface testImage = reader.readImageFromFile("test\\testreaderfiles\\goodfile.txt");

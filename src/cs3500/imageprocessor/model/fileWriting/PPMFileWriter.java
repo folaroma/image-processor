@@ -12,6 +12,9 @@ public class PPMFileWriter implements IImageFileWriter {
 
   @Override
   public void writeFile(String filename, ImageInterface image) throws IOException {
+    if (filename == null || image == null) {
+      throw new IllegalArgumentException("Argument is null.");
+    }
     String ppmString = this.generatePPM(image);
     FileOutputStream file = new FileOutputStream(filename);
     file.write(ppmString.getBytes());

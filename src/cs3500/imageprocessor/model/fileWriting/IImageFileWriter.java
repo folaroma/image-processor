@@ -14,7 +14,8 @@ public interface IImageFileWriter {
    * @param filename Filename and path of the desired output image
    * @param image Image data to be written.
    * @throws IOException If the file writing fails.
+   * @throws IllegalArgumentException If the image or filename is null.
    */
-  void writeFile(String filename, ImageInterface image) throws IOException;
+  void writeFile(String filename, ImageInterface image) throws IOException, IllegalArgumentException;
 
 }
