@@ -11,6 +11,7 @@ public interface ImageInterface {
 
   /**
    * Returns the 2D arraylist of the pixels of the image.
+   *
    * @return The pixels of the image.
    */
   List<ArrayList<IPixel>> getPixels();

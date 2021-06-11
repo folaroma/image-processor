@@ -6,10 +6,10 @@ import cs3500.imageprocessor.model.images.ImageImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import cs3500.imageprocessor.model.images.PixelImpl;
 import cs3500.imageprocessor.model.images.Position2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.FileNotFoundException;
-import java.io.FileInputStream;
 
 
 /**

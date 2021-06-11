@@ -16,18 +16,16 @@ import org.junit.Test;
 public class ImageProcessorModelImplTest {
 
   private ImageProcessorModel testModel;
-  private ImageInterface blackRedCheckerBoard;
-  private ImageInterface greenRedCheckerBoard;
 
   @Before
   public void setUp() throws Exception {
     testModel = new ImageProcessorModelImpl();
     testModel.addImage("checkerboard", testModel.generateCheckerboard(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0)))));
-    blackRedCheckerBoard = new CheckerboardGenerator(2, 2,
+    ImageInterface blackRedCheckerBoard = new CheckerboardGenerator(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))))
         .generateImage();
-    greenRedCheckerBoard = new CheckerboardGenerator(2, 2,
+    ImageInterface greenRedCheckerBoard = new CheckerboardGenerator(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 255, 0))))
         .generateImage();
     testModel.addImage("blackRedCheckerBoard", blackRedCheckerBoard);
@@ -371,7 +369,8 @@ public class ImageProcessorModelImplTest {
 
   }
 
-  // tests running a grayscale transformation on a 4x4 black red checkerboard. Checks if the rgb values are good.
+  // tests running a grayscale transformation on a 4x4 black red checkerboard.
+  // Checks if the rgb values are good.
   @Test
   public void testGrayscaleBlackRedCheckerboard() {
     ImageInterface grayCheckerboard = testModel.grayscale("blackRedCheckerBoard");
@@ -393,7 +392,8 @@ public class ImageProcessorModelImplTest {
 
   }
 
-  // tests running a grayscale transformation on a 4x4 green red checkerboard. Checks if the rgb values are good.
+  // tests running a grayscale transformation on a 4x4 green red checkerboard.
+  // Checks if the rgb values are good.
   @Test
   public void testGrayscaleGreenRedCheckerboard() {
     ImageInterface grayCheckerboard = testModel.grayscale("greenRedCheckerBoard");
@@ -441,7 +441,8 @@ public class ImageProcessorModelImplTest {
   }
 
 
-  // tests running a sepia transformation on a 4x4 black red checkerboard. Checks if the rgb values are good.
+  // tests running a sepia transformation on a 4x4 black red checkerboard.
+  // Checks if the rgb values are good.
   @Test
   public void testSepiaBlackRedCheckerboard() {
     ImageInterface sepiaCheckerboard = testModel.sepia("blackRedCheckerBoard");
@@ -464,7 +465,8 @@ public class ImageProcessorModelImplTest {
 
   }
 
-  // tests running a grayscale transformation on a 4x4 green red checkerboard. Checks if the rgb values are good.
+  // tests running a grayscale transformation on a 4x4 green red checkerboard.
+  // Checks if the rgb values are good.
   @Test
   public void testSepiaGreenRedCheckerboard() {
     ImageInterface sepiaCheckerboard = testModel.sepia("greenRedCheckerBoard");

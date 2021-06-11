@@ -12,6 +12,7 @@ import org.junit.Test;
  * Testing class for PPMFileReader.
  */
 public class PPMFileReaderTest {
+
   private IFileReader reader;
 
   @Before
@@ -41,10 +42,10 @@ public class PPMFileReaderTest {
   @Test
   public void testReadingGoodPPMFile() {
     ImageInterface testImage = reader.readImageFromFile("test\\testreaderfiles\\goodfile.txt");
-    assertEquals(new ColorImpl(255,123,123), testImage.getPixels().get(0).get(0).getColor());
-    assertEquals(new ColorImpl(255,123,123), testImage.getPixels().get(0).get(1).getColor());
-    assertEquals(new ColorImpl(255,123,123), testImage.getPixels().get(1).get(0).getColor());
-    assertEquals(new ColorImpl(255,123,123), testImage.getPixels().get(1).get(1).getColor());
+    assertEquals(new ColorImpl(255, 123, 123), testImage.getPixels().get(0).get(0).getColor());
+    assertEquals(new ColorImpl(255, 123, 123), testImage.getPixels().get(0).get(1).getColor());
+    assertEquals(new ColorImpl(255, 123, 123), testImage.getPixels().get(1).get(0).getColor());
+    assertEquals(new ColorImpl(255, 123, 123), testImage.getPixels().get(1).get(1).getColor());
 
     for (int i = 0; i < testImage.getPixels().size(); i++) {
       for (int j = 0; j < testImage.getPixels().get(0).size(); j++) {

@@ -15,6 +15,7 @@ public class ImageImpl implements ImageInterface {
 
   /**
    * Creates a new image with the given 2d arraylist of pixels.
+   *
    * @param pixels Pixels to create the image with.
    * @throws IllegalArgumentException If the list of pixels is null.
    */
@@ -50,6 +51,7 @@ public class ImageImpl implements ImageInterface {
 
   /**
    * Creates a deepy copy of the given 2d arraylist of pixels.
+   *
    * @param pixels Pixels to be copied.
    * @return The deep copy of the list.
    */

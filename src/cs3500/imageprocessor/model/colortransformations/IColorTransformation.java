@@ -16,6 +16,6 @@ public interface IColorTransformation {
    * @return The transformed image.
    * @throws IllegalArgumentException If the supplied image is null.
    */
-   ImageInterface applyTransformation(ImageInterface image) throws IllegalArgumentException;
+  ImageInterface applyTransformation(ImageInterface image) throws IllegalArgumentException;
 
 }

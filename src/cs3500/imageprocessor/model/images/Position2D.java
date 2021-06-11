@@ -8,7 +8,8 @@ import java.util.Objects;
  */
 public class Position2D {
 
-  private int x, y;
+  private final int x;
+  private final int y;
 
   /**
    * Create a 2D point given its x and y coordinates.

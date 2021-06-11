@@ -15,10 +15,9 @@ import org.junit.Test;
  */
 public class ImageImplTest {
 
-  private ImageInterface checkerboard = new CheckerboardGenerator(10, 10,
+  private final ImageInterface checkerboard = new CheckerboardGenerator(10, 10,
       new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0),
           new ColorImpl(0, 255, 0)))).generateImage();
-
 
   // CONSTRUCTOR TESTS
 
@@ -36,7 +35,6 @@ public class ImageImplTest {
   public void testNullImage() {
     new ImageImpl(null);
   }
-
 
   // GENERAL TESTS
 
@@ -61,7 +59,6 @@ public class ImageImplTest {
   public void getPixelsCheckerboardColumns() {
     assertEquals(this.checkerboard.getPixels().get(0).size(), 10);
   }
-
 
   // -----------------------------------------------------------------------------------------------
 
@@ -88,7 +85,6 @@ public class ImageImplTest {
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0),
             new ColorImpl(0, 255, 0)))).generateImage()));
   }
-
 
   // -----------------------------------------------------------------------------------------------
 

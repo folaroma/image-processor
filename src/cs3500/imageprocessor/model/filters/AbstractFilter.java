@@ -143,13 +143,14 @@ public abstract class AbstractFilter implements IFilter {
 
   /**
    * Checks if the given 2d array matrix is a square matrix.
+   *
    * @param matrix Matrix to check.
    * @return True if square, false if not.
    */
   private boolean isSquareMatrix(double[][] matrix) {
-    for(int i = 0; i < matrix.length; i++) {
-        if (matrix[i].length != matrix.length) {
-          return false;
+    for (int i = 0; i < matrix.length; i++) {
+      if (matrix[i].length != matrix.length) {
+        return false;
       }
     }
     return true;

@@ -15,5 +15,4 @@ public class FilterBlur extends AbstractFilter {
   }
 
 
-
 }

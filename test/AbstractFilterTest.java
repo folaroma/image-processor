@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.filters.AbstractFilter;
 import cs3500.imageprocessor.model.filters.IFilter;

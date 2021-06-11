@@ -79,9 +79,10 @@ public interface ImageProcessorModel {
 
   /**
    * Creates a checkerboard where each square is 1 pixel.
-   * @param rows The amount of rows in the checkerboard
+   *
+   * @param rows    The amount of rows in the checkerboard
    * @param columns The amount of columns in the checkerboard.
-   * @param colors The two colors that the board will alternate through.
+   * @param colors  The two colors that the board will alternate through.
    * @return The generated image.
    * @throws IllegalArgumentException If the list of colors are null, there are more than 2 colors
    *                                  in the list, or the number of rows or columns is less than 2.

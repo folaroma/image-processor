@@ -9,6 +9,7 @@ public interface IImageGenerator {
 
   /**
    * Creates the generate programmatic image.
+   *
    * @return The generated image.
    */
   ImageInterface generateImage();

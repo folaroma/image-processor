@@ -26,20 +26,32 @@ public class FilterBlurTest extends AbstractFilterTest {
         new ArrayList<>(Arrays.asList(new ColorImpl(100, 100, 100),
             new ColorImpl(200, 200, 200)))).generateImage();
 
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(0).getColor().getRed(), 81);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(1).getColor().getRed(), 86);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(0).getColor().getRed(), 86);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(1).getColor().getRed(), 81);
+    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(0).getColor().getRed(),
+        81);
+    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(1).getColor().getRed(),
+        86);
+    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(0).getColor().getRed(),
+        86);
+    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(1).getColor().getRed(),
+        81);
 
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(0).getColor().getGreen(), 81);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(1).getColor().getGreen(), 86);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(0).getColor().getGreen(), 86);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(1).getColor().getGreen(), 81);
+    assertEquals(
+        filters().applyFilter(checkerboard).getPixels().get(0).get(0).getColor().getGreen(), 81);
+    assertEquals(
+        filters().applyFilter(checkerboard).getPixels().get(0).get(1).getColor().getGreen(), 86);
+    assertEquals(
+        filters().applyFilter(checkerboard).getPixels().get(1).get(0).getColor().getGreen(), 86);
+    assertEquals(
+        filters().applyFilter(checkerboard).getPixels().get(1).get(1).getColor().getGreen(), 81);
 
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(0).getColor().getBlue(), 81);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(1).getColor().getBlue(), 86);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(0).getColor().getBlue(), 86);
-    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(1).getColor().getBlue(), 81);
+    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(0).getColor().getBlue(),
+        81);
+    assertEquals(filters().applyFilter(checkerboard).getPixels().get(0).get(1).getColor().getBlue(),
+        86);
+    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(0).getColor().getBlue(),
+        86);
+    assertEquals(filters().applyFilter(checkerboard).getPixels().get(1).get(1).getColor().getBlue(),
+        81);
 
   }
 

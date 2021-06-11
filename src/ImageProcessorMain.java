@@ -1,18 +1,18 @@
-import cs3500.imageprocessor.model.ImageProcessorModel;
-import cs3500.imageprocessor.model.ImageProcessorModelImpl;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
 import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
-import cs3500.imageprocessor.model.images.ColorImpl;
+import cs3500.imageprocessor.model.ImageProcessorModel;
+import cs3500.imageprocessor.model.ImageProcessorModelImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Main class to work with the model of the image processor.
  */
 public class ImageProcessorMain {
 
+  /**
+   * Main method for the model.
+   */
   public static void main(String[] args) throws IOException {
     ImageProcessorModel testModel = new ImageProcessorModelImpl();
     testModel.addImage("desert", new PPMFileReader().readImageFromFile("res\\desert.ppm"));

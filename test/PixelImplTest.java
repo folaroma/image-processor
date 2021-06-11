@@ -16,10 +16,10 @@ public class PixelImplTest {
 
   private final IPixel pixelWhite = new PixelImpl(new Position2D(0, 0), new ColorImpl(0, 0, 0));
 
-  private final IPixel pixelBlack = new PixelImpl(new Position2D(1, 0), new ColorImpl(255, 255, 255));
+  private final IPixel pixelBlack = new PixelImpl(new Position2D(1, 0),
+      new ColorImpl(255, 255, 255));
 
   private final IPixel pixelRed = new PixelImpl(new Position2D(0, 1), new ColorImpl(255, 0, 0));
-
 
   // CONSTRUCTOR TESTS
 
@@ -51,7 +51,6 @@ public class PixelImplTest {
     new PixelImpl(null, null);
   }
 
-
   // GENERAL TESTS
 
   // -----------------------------------------------------------------------------------------------
@@ -82,7 +81,6 @@ public class PixelImplTest {
     assertEquals(this.pixelRed.getPosition(), new Position2D(0, 1));
   }
 
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -112,7 +110,6 @@ public class PixelImplTest {
 
   }
 
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -134,7 +131,6 @@ public class PixelImplTest {
   public void testNotEqualsWhiteRed() {
     assertFalse(this.pixelWhite.equals(this.pixelRed));
   }
-
 
   // -----------------------------------------------------------------------------------------------
 

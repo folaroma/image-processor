@@ -10,7 +10,6 @@ public class OverLimitTransformation extends AbstractColorTransformation {
   /**
    * Creates an AbstractColorTransformation using a provided matrix.
    *
-
    * @throws IllegalArgumentException If the supplied matrix is not 3 x 3 or is null.
    */
   public OverLimitTransformation() throws IllegalArgumentException {

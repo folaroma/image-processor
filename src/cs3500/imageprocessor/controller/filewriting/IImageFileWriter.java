@@ -11,11 +11,13 @@ public interface IImageFileWriter {
 
   /**
    * Writes a file of the given filename using the data from the given image.
+   *
    * @param filename Filename and path of the desired output image
-   * @param image Image data to be written.
-   * @throws IOException If the file writing fails.
+   * @param image    Image data to be written.
+   * @throws IOException              If the file writing fails.
    * @throws IllegalArgumentException If the image or filename is null.
    */
-  void writeFile(String filename, ImageInterface image) throws IOException, IllegalArgumentException;
+  void writeFile(String filename, ImageInterface image)
+      throws IOException, IllegalArgumentException;
 
 }

@@ -65,7 +65,7 @@ public abstract class AbstractColorTransformation implements IColorTransformatio
    * Applies the given transformation to the given pixel by updating its rgb values. Any out of
    * range rgb value is clamped to the minimum value of 0 or the maximum value of 255.
    *
-   * @param pixel  Pixel to transform.
+   * @param pixel Pixel to transform.
    * @return The transformed pixel.
    */
   protected IPixel colorTransform(IPixel pixel) {
@@ -77,9 +77,12 @@ public abstract class AbstractColorTransformation implements IColorTransformatio
     int positionX = pixel.getPosition().getX();
     int positionY = pixel.getPosition().getY();
 
-    int alteredRed = (int) (red * this.matrix[0][0] + green * this.matrix[0][1] + blue * this.matrix[0][2]);
-    int alteredGreen = (int) (red * this.matrix[1][0] + green * this.matrix[1][1] + blue * this.matrix[1][2]);
-    int alteredBlue = (int) (red * this.matrix[2][0] + green * this.matrix[2][1] + blue * this.matrix[2][2]);
+    int alteredRed = (int) (red * this.matrix[0][0] + green * this.matrix[0][1]
+        + blue * this.matrix[0][2]);
+    int alteredGreen = (int) (red * this.matrix[1][0] + green * this.matrix[1][1]
+        + blue * this.matrix[1][2]);
+    int alteredBlue = (int) (red * this.matrix[2][0] + green * this.matrix[2][1]
+        + blue * this.matrix[2][2]);
 
     alteredRed = clampValues(alteredRed);
     alteredGreen = clampValues(alteredGreen);

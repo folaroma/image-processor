@@ -1,9 +1,9 @@
 import static org.junit.Assert.assertEquals;
 
-import cs3500.imageprocessor.model.colortransformations.GrayscaleTransformation;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
 import cs3500.imageprocessor.controller.filewriting.IImageFileWriter;
 import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
+import cs3500.imageprocessor.model.colortransformations.GrayscaleTransformation;
 import cs3500.imageprocessor.model.filters.FilterBlur;
 import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
@@ -42,7 +42,8 @@ public class PPMFileWriterTest {
     writer.writeFile("res\\test.ppm", null);
   }
 
-  // tests that file written from the image will return the same information after being read in again as a PPM file.
+  // tests that file written from the image will return
+  // the same information after being read in again as a PPM file.
   @Test
   public void testWritingToFileAsPPM() throws IOException {
     writer.writeFile("test\\testreaderfiles\\writtenfile.txt", testCheckerboard);
@@ -67,7 +68,7 @@ public class PPMFileWriterTest {
     writer.writeFile("test\\testreaderfiles\\writtenfile1.txt", blurredCheckerboard);
     ImageInterface testImage = new PPMFileReader()
         .readImageFromFile("test\\testreaderfiles\\writtenfile1.txt");
-    assertEquals(new ColorImpl(78 ,62, 0), testImage.getPixels().get(0).get(0).getColor());
+    assertEquals(new ColorImpl(78, 62, 0), testImage.getPixels().get(0).get(0).getColor());
     assertEquals(new ColorImpl(62, 78, 0), testImage.getPixels().get(0).get(1).getColor());
     assertEquals(new ColorImpl(62, 78, 0), testImage.getPixels().get(1).get(0).getColor());
     assertEquals(new ColorImpl(78, 62, 0), testImage.getPixels().get(1).get(1).getColor());
@@ -82,11 +83,12 @@ public class PPMFileWriterTest {
   // tests writing a transformed image
   @Test
   public void testWritingToFileAsPPMGray() throws IOException {
-    ImageInterface grayCheckerboard = new GrayscaleTransformation().applyTransformation(testCheckerboard);
+    ImageInterface grayCheckerboard = new GrayscaleTransformation()
+        .applyTransformation(testCheckerboard);
     writer.writeFile("test\\testreaderfiles\\writtenfile2.txt", grayCheckerboard);
     ImageInterface testImage = new PPMFileReader()
         .readImageFromFile("test\\testreaderfiles\\writtenfile2.txt");
-    assertEquals(new ColorImpl(54 ,54, 54), testImage.getPixels().get(0).get(0).getColor());
+    assertEquals(new ColorImpl(54, 54, 54), testImage.getPixels().get(0).get(0).getColor());
     assertEquals(new ColorImpl(182, 182, 182), testImage.getPixels().get(0).get(1).getColor());
     assertEquals(new ColorImpl(182, 182, 182), testImage.getPixels().get(1).get(0).getColor());
     assertEquals(new ColorImpl(54, 54, 54), testImage.getPixels().get(1).get(1).getColor());

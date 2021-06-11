@@ -25,6 +25,7 @@ public class PPMFileWriter implements IImageFileWriter {
 
   /**
    * Generates the string in the format of a PPM ASCII image for the given image data.
+   *
    * @param image Image to generate the string from.
    * @return The generated PPM ASCII string.
    */

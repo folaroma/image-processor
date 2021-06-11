@@ -13,8 +13,9 @@ public class PixelImpl implements IPixel {
 
   /**
    * Creates a new pixel.
+   *
    * @param position Position of the pixel in an image.
-   * @param color Color of that pixel.
+   * @param color    Color of that pixel.
    * @throws IllegalArgumentException If any argument is null.
    */
   public PixelImpl(Position2D position, IColor color) throws IllegalArgumentException {

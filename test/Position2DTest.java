@@ -16,8 +16,6 @@ public class Position2DTest {
 
   private final Position2D zeroOne = new Position2D(0, 1);
 
-
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -46,7 +44,6 @@ public class Position2DTest {
     assertEquals(this.zeroOne.getX(), 0);
   }
 
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -74,7 +71,6 @@ public class Position2DTest {
   public void getYZeroOne() {
     assertEquals(this.zeroOne.getY(), 1);
   }
-
 
   // -----------------------------------------------------------------------------------------------
 

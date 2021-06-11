@@ -1,4 +1,5 @@
 package cs3500.imageprocessor.model.filters;
+
 import cs3500.imageprocessor.model.images.ImageInterface;
 
 /**
@@ -8,6 +9,7 @@ public interface IFilter {
 
   /**
    * Applies the specified filter to the given image.
+   *
    * @param image Image to be filtered.
    * @return The image with the filter applied.
    */

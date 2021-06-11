@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.colortransformations.SepiaTransformation;
 import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Testing class for SepiaTransformation
+ * Testing class for SepiaTransformation.
  */
 public class SepiaTransformationTest {
 
@@ -35,7 +35,8 @@ public class SepiaTransformationTest {
     testSepia.applyTransformation(null);
   }
 
-  // tests running a sepia transformation on a 4x4 black red checkerboard. Checks if the rgb values are good.
+  // tests running a sepia transformation on a 4x4 black red checkerboard.
+  // Checks if the rgb values are good.
   @Test
   public void testSepiaBlackRedCheckerboard() {
     ImageInterface sepiaCheckerboard = testSepia.applyTransformation(blackRedCheckerBoard);
@@ -58,7 +59,8 @@ public class SepiaTransformationTest {
 
   }
 
-  // tests running a grayscale transformation on a 4x4 green red checkerboard. Checks if the rgb values are good.
+  // tests running a grayscale transformation on a 4x4 green red checkerboard.
+  // Checks if the rgb values are good.
   @Test
   public void testSepiaGreenRedCheckerboard() {
     ImageInterface sepiaCheckerboard = testSepia.applyTransformation(greenRedCheckerBoard);

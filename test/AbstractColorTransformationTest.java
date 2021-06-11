@@ -17,6 +17,7 @@ import testingtransformations.UnderLimitTransformation;
  * Testing class for an AbstractColorTransformation.
  */
 public class AbstractColorTransformationTest {
+
   private ImageInterface greenRedCheckerBoard;
 
   @Before
@@ -32,7 +33,8 @@ public class AbstractColorTransformationTest {
     new NonSquareColorTransformation();
   }
 
-  // tests that creating a color transformation with a square but not 3 x 3 matrix matrix results in an exception.
+  // tests that creating a color transformation with a square but not
+  // 3 x 3 matrix matrix results in an exception.
   @Test(expected = IllegalArgumentException.class)
   public void testBadColorTransformationNonThreeByThree() {
     new NotThreeByThreeColorTransformation();
@@ -47,7 +49,8 @@ public class AbstractColorTransformationTest {
   // tests that color values are clamped to 255 when they exceed 255.
   @Test
   public void testClampingOverLimit() {
-    ImageInterface overLimitBoard = new OverLimitTransformation().applyTransformation(greenRedCheckerBoard);
+    ImageInterface overLimitBoard = new OverLimitTransformation()
+        .applyTransformation(greenRedCheckerBoard);
     assertEquals(255, overLimitBoard.getPixels().get(0).get(0).getColor().getRed());
     assertEquals(255, overLimitBoard.getPixels().get(0).get(0).getColor().getGreen());
     assertEquals(255, overLimitBoard.getPixels().get(0).get(0).getColor().getBlue());
@@ -68,7 +71,8 @@ public class AbstractColorTransformationTest {
   // tests that color values are clamped to 0 when they are below 0.
   @Test
   public void testClampingUnderLimit() {
-    ImageInterface underLimitBoard = new UnderLimitTransformation().applyTransformation(greenRedCheckerBoard);
+    ImageInterface underLimitBoard = new UnderLimitTransformation()
+        .applyTransformation(greenRedCheckerBoard);
     assertEquals(0, underLimitBoard.getPixels().get(0).get(0).getColor().getRed());
     assertEquals(0, underLimitBoard.getPixels().get(0).get(0).getColor().getGreen());
     assertEquals(0, underLimitBoard.getPixels().get(0).get(0).getColor().getBlue());

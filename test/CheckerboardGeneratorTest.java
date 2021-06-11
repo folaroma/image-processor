@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
@@ -11,8 +11,6 @@ import org.junit.Test;
  * Testing class for CheckerboardGenerator.
  */
 public class CheckerboardGeneratorTest {
-
-
 
   // CONSTRUCTOR TESTS
 
@@ -46,7 +44,6 @@ public class CheckerboardGeneratorTest {
             new ColorImpl(1, 0, 0),
             new ColorImpl(0, 1, 0))));
   }
-
 
   // GENERAL TESTS
 

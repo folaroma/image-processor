@@ -36,7 +36,8 @@ public class GrayscaleTransformationTest {
   }
 
 
-  // tests running a grayscale transformation on a 4x4 black red checkerboard. Checks if the rgb values are good.
+  // tests running a grayscale transformation on a 4x4 black red checkerboard.
+  // Checks if the rgb values are good.
   @Test
   public void testGrayscaleBlackRedCheckerboard() {
     ImageInterface grayCheckerboard = testGrayscale.applyTransformation(blackRedCheckerBoard);
@@ -58,7 +59,8 @@ public class GrayscaleTransformationTest {
 
   }
 
-  // tests running a grayscale transformation on a 4x4 green red checkerboard. Checks if the rgb values are good.
+  // tests running a grayscale transformation on a 4x4 green red checkerboard.
+  // Checks if the rgb values are good.
   @Test
   public void testGrayscaleGreenRedCheckerboard() {
     ImageInterface grayCheckerboard = testGrayscale.applyTransformation(greenRedCheckerBoard);

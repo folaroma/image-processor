@@ -1,6 +1,6 @@
 # Image processor - Manipulation and Enhancement
 
-A project for CS3500 at Northeastern University. 
+A project for CS3500 at Northeastern University.
 
 &nbsp;
 
@@ -15,11 +15,10 @@ A project for CS3500 at Northeastern University.
 
 ## About
 
-Many applications use color images. A good number of these applications 
-provide a way to change their appearance in different ways. For example, 
-Instagram has ''filters" that convert a picture into something more 
-interesting. They do this by editing the colors of individual dots in 
-the image (called pixels).
+Many applications use color images. A good number of these applications provide a way to change
+their appearance in different ways. For example, Instagram has ''filters" that convert a picture
+into something more interesting. They do this by editing the colors of individual dots in the
+image (called pixels).
 
 &nbsp;
 
@@ -106,28 +105,29 @@ Generating an image, with support only for creating a basic checkerboard.
 
 ## Class Overviews
 
-  * [ImageProcessorModel](#imageprocessormodel)
-  * [ImageProcessorModelImpl](#imageprocessormodelimpl)
-  * [colorTransformations]
+* [ImageProcessorModel](#imageprocessormodel)
+* [ImageProcessorModelImpl](#imageprocessormodelimpl)
+* [colorTransformations]
     - [IColorTransformation](#icolortransformation)
     - [AbstractColorTransformation](#abstractcolortransformation)
     - [GrayscaleTransformation](#grayscaletransformation)
     - [SepiaTransformation](#sepiatransformation)
-  - [fileReading]
+
+- [fileReading]
     - [IFileReader](#ifilereader)
     - [PPMFileReader](#ppmfilereader)
-  - [fileWriting]
+- [fileWriting]
     - [IImageFileWriter](#iimagefilewriter)
     - [PPMFileWriter](#ppmfilewriter)
-  - [filters]
+- [filters]
     - [IFilter](#ifilter)
     - [AbstractFilter](#abstractfilter)
     - [FilterBlur](#filterblur)
     - [FilterSharpen](#filtersharpen)
-  - [imageGenerating]
+- [imageGenerating]
     - [IImageGenerator](#iimagegenerator)
     - [CheckerboardGenerator](#checkerboardgenerator)
-  - [images]
+- [images]
     - [ImageInterface](#imageinterface)
     - [IColor](#icolor)
     - [IPixel](#ipixel)
@@ -160,7 +160,8 @@ Contains the method to apply the transformation.
 
 An abstraction of the color transformation classes.
 
-Contains the methods to transform each pixel, the entire image, and ensure the RGB values do not surpass the limits.
+Contains the methods to transform each pixel, the entire image, and ensure the RGB values do not
+surpass the limits.
 
 ### GrayscaleTransformation
 
@@ -206,7 +207,8 @@ Contains the method to apply a filter to a given image.
 
 An abstraction of the filtering classes.
 
-Contains the methods to apply a filter to every pixel, the entire image, and ensure the RGB values do not surpass the limits.
+Contains the methods to apply a filter to every pixel, the entire image, and ensure the RGB values
+do not surpass the limits.
 
 ### FilterBlur
 
@@ -258,15 +260,14 @@ The implementation of the image interface, which is a 2D array of pixels.
 
 ### ColorImpl
 
-The implementation of the color interface, which has 3 8-bit channels for red, green, and blue values as ints.
+The implementation of the color interface, which has 3 8-bit channels for red, green, and blue
+values as ints.
 
 ### PixelImpl
 
 The implementation of the pixel interface, which has a position and color.
 
-
 &nbsp;
-
 
 ## Image Citations
 
