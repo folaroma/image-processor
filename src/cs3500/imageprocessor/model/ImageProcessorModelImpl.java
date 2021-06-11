@@ -1,28 +1,19 @@
 package cs3500.imageprocessor.model;
 
 import cs3500.imageprocessor.model.colorTransformations.IColorTransformation;
-import cs3500.imageprocessor.model.fileReading.IFileReader;
-import cs3500.imageprocessor.model.fileWriting.IImageFileWriter;
+import cs3500.imageprocessor.controller.fileReading.IFileReader;
+import cs3500.imageprocessor.controller.fileWriting.IImageFileWriter;
 import cs3500.imageprocessor.model.filters.IFilter;
 import cs3500.imageprocessor.model.imageGenerating.IImageGenerator;
-import cs3500.imageprocessor.model.images.IColor;
-import cs3500.imageprocessor.model.images.IPixel;
-import cs3500.imageprocessor.model.images.ImageImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
-import cs3500.imageprocessor.model.images.PixelImpl;
-import cs3500.imageprocessor.model.images.Position2D;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Class representing a simple image processing program model. Images are represented using the
  * ImageInterface implementation, and images can either be created programmatically or read in
- * through PPM format.
+ * through a file.
  */
 public class ImageProcessorModelImpl implements ImageProcessorModel {
 
@@ -33,24 +24,6 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
    */
   public ImageProcessorModelImpl() {
     this.images = new HashMap<>();
-  }
-
-  /**
-   * Convenience constructor to create a model with an imported image in the map.
-   *
-   * @param filename Name of the file to be read.
-   * @param reader   The file reader function object to use.
-   * @throws IllegalArgumentException If any argument is null, the file cannot be found, or if * it
-   *                                  is not a valid file of the desired type associated with the
-   *                                  IFileReader.
-   */
-  public ImageProcessorModelImpl(String filename, IFileReader reader)
-      throws IllegalArgumentException {
-    this();
-    if (filename == null || reader == null) {
-      throw new IllegalArgumentException("Arguments cannot be null.");
-    }
-    images.putIfAbsent(filename, reader.readImageFromFile(filename));
   }
 
   /**
@@ -127,14 +100,12 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
     return transformation.applyTransformation(this.getImage(id));
   }
 
-
   @Override
-  public void exportImage(String filename, String id, IImageFileWriter writer)
-      throws IOException, IllegalArgumentException {
-    if (id == null || filename == null || writer == null) {
-      throw new IllegalArgumentException("Argument cannot be null.");
+  public ImageInterface generateImage(IImageGenerator generator) throws IllegalArgumentException {
+    if(generator == null) {
+      throw new IllegalArgumentException("Generator cannot be null.");
     }
-    writer.writeFile(filename, this.getImage(id));
+    return generator.generateImage();
   }
 
 

@@ -1,9 +1,9 @@
 import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.colorTransformations.GrayscaleTransformation;
-import cs3500.imageprocessor.model.fileReading.PPMFileReader;
-import cs3500.imageprocessor.model.fileWriting.IImageFileWriter;
-import cs3500.imageprocessor.model.fileWriting.PPMFileWriter;
+import cs3500.imageprocessor.controller.fileReading.PPMFileReader;
+import cs3500.imageprocessor.controller.fileWriting.IImageFileWriter;
+import cs3500.imageprocessor.controller.fileWriting.PPMFileWriter;
 import cs3500.imageprocessor.model.filters.FilterBlur;
 import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;

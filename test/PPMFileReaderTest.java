@@ -1,7 +1,7 @@
 import static org.junit.Assert.assertEquals;
 
-import cs3500.imageprocessor.model.fileReading.IFileReader;
-import cs3500.imageprocessor.model.fileReading.PPMFileReader;
+import cs3500.imageprocessor.controller.fileReading.IFileReader;
+import cs3500.imageprocessor.controller.fileReading.PPMFileReader;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import cs3500.imageprocessor.model.images.Position2D;

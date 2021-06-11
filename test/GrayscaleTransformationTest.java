@@ -1,14 +1,9 @@
 import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.colorTransformations.GrayscaleTransformation;
-import cs3500.imageprocessor.model.fileReading.PPMFileReader;
-import cs3500.imageprocessor.model.fileWriting.PPMFileWriter;
-import cs3500.imageprocessor.model.filters.FilterBlur;
 import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
-import cs3500.imageprocessor.model.images.IPixel;
 import cs3500.imageprocessor.model.images.ImageInterface;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Before;
