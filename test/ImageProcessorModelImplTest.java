@@ -2,9 +2,10 @@ import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
-import cs3500.imageprocessor.model.fileReading.IFileReader;
-import cs3500.imageprocessor.model.fileReading.PPMFileReader;
+import cs3500.imageprocessor.controller.fileReading.IFileReader;
+import cs3500.imageprocessor.controller.fileReading.PPMFileReader;
 import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
+import cs3500.imageprocessor.model.imageGenerating.IImageGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,30 +22,6 @@ public class ImageProcessorModelImplTest {
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0)))));
   }
 
-  // tests that an exception is thrown when the file name in a constructor is null
-  @Test(expected = IllegalArgumentException.class)
-  public void testNullFilenameConstructor() {
-    new ImageProcessorModelImpl(null, new PPMFileReader());
-  }
-
-  // tests that an exception is thrown when the file reader in a constructor is null
-  @Test(expected = IllegalArgumentException.class)
-  public void testNullFileReaderConstructor() {
-    new ImageProcessorModelImpl("res\\Koala.ppm", (IFileReader) null);
-  }
-
-  // tests that an exception is thrown when the file cannot be found
-  @Test(expected = IllegalArgumentException.class)
-  public void testFileCannotBeFoundConstructor() {
-    new ImageProcessorModelImpl("hello?.ppm", new PPMFileReader());
-  }
-
-  // tests that an exception is thrown when the file is not a valid type of its file
-  @Test(expected = IllegalArgumentException.class)
-  public void testBadFileConstructor() {
-    new ImageProcessorModelImpl("test\\testreaderfiles\\badfile.txt", new PPMFileReader());
-  }
-
   // tests that exception is thrown when the name for a generated image in the constructor is null
   @Test(expected = IllegalArgumentException.class)
   public void testNullIdGenerateConstructor() {
@@ -55,7 +32,7 @@ public class ImageProcessorModelImplTest {
   // tests that exception is thrown when the image generator is null
   @Test(expected = IllegalArgumentException.class)
   public void testNullGeneratorGenerateConstructor() {
-    new ImageProcessorModelImpl("test", (IFileReader) null);
+    new ImageProcessorModelImpl("test", (IImageGenerator) null);
   }
 
   // tests that exception is thrown when the list of colors in the generator is not 2.

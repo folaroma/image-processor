@@ -1,8 +1,9 @@
 package cs3500.imageprocessor.model;
 
 import cs3500.imageprocessor.model.colorTransformations.IColorTransformation;
-import cs3500.imageprocessor.model.fileWriting.IImageFileWriter;
+import cs3500.imageprocessor.controller.fileWriting.IImageFileWriter;
 import cs3500.imageprocessor.model.filters.IFilter;
+import cs3500.imageprocessor.model.imageGenerating.IImageGenerator;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
 
@@ -62,14 +63,11 @@ public interface ImageProcessorModel {
       throws IllegalArgumentException;
 
   /**
-   * Exports the image with the given id to a file with the given filename.
-   * @param filename Name and path of the exported image.
-   * @param id Id of the image in the map.
-   * @param writer Type of file writer to use for this export.
-   * @throws IOException If writing to the file fails.
-   * @throws IllegalArgumentException If any argument is null, or if the id is not contained in the map.
+   * Creates an image from the given IImageGenerator.
+   * @param generator Generator to use to programmatically create an image.
+   * @return The generated image.
+   * @throws IllegalArgumentException If the generator is null or fails to generate.
    */
-  void exportImage(String filename, String id, IImageFileWriter writer)
-      throws IOException, IllegalArgumentException;
-
+  ImageInterface generateImage(IImageGenerator generator) throws IllegalArgumentException;
 }
+

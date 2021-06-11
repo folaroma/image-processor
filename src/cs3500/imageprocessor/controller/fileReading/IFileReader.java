@@ -1,4 +1,4 @@
-package cs3500.imageprocessor.model.fileReading;
+package cs3500.imageprocessor.controller.fileReading;
 
 import cs3500.imageprocessor.model.images.ImageInterface;
 
