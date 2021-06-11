@@ -33,13 +33,13 @@ Filtering images, with support only for blurring or sharpening.
 1. Create a new <code>ImageProcessorModel</code> with a given image:
 
     ```Java
-    ImageProcessorModel testModel = new ImageProcessorModelImpl("res/Koala.ppm", new PPMFileReader());
+    ImageProcessorModel testModel = new ImageProcessorModelImpl();
     ```
 
 2. Create a new <code>ImageInterface</code> where you apply the filter to the model:
 
     ```Java
-    ImageInterface sharpKoala = testModel.filterImage("res/Koala.ppm", new FilterSharpen());
+    ImageInterface sharpKoala = testModel.sharpen("res/Koala.ppm");
     ```
 
 3. Add the new Image to the model:
@@ -48,10 +48,10 @@ Filtering images, with support only for blurring or sharpening.
     testModel.addImage("sharpKoala", sharpKoala);
     ```
 
-4. Finally, export the model image:
+4. Finally, write the model image:
 
     ```Java
-    testModel.exportImage("res/KoalaDoubleSharpen.ppm", "sharperKoala", new PPMFileWriter());
+    new PPMFileWriter().writeFile("res/KoalaSharpen.ppm", testModel.getImage("sharpKoala"));
     ```
 
 </details>
@@ -67,25 +67,25 @@ Transforming an image's color, with support only for grayscale and sepia.
 1. Create a new <code>ImageProcessorModel</code> with a given image:
 
     ```Java
-    ImageProcessorModel testModel = new ImageProcessorModelImpl("res/Koala.ppm", new PPMFileReader());    
+    ImageProcessorModel testModel = new ImageProcessorModelImpl();
     ```
 
 2. Create a new <code>ImageInterface</code> where you apply the transformation to the model:
 
     ```Java
-    ImageInterface monochromeKoala = testModel.transformImage("res/Koala.ppm", new GrayscaleTransformation());
+    ImageInterface monochromeKoala = testModel.grayscale("res/Koala.ppm");    
     ```
 
 3. Add the new Image to the model:
 
     ```Java
-    testModel.addImage("monochromeKoala", monochromeKoala);
+    testModel.addImage("monochromeKoala", monochromeKoala);    
     ```
 
 4. Finally, export the model image:
 
     ```Java
-    testModel.exportImage("res/monochromeKoala.ppm", "monochromeKoala", new PPMFileWriter());
+    new PPMFileWriter().writeFile("res\\monochromeKoala.ppm", testModel.getImage("monochromeKoala"));
     ```
 
 </details>
@@ -141,7 +141,7 @@ Generating an image, with support only for creating a basic checkerboard.
 
 The interface to represent the image processing program.
 
-Contains the methods for replacing, adding, exporting, getting, filtering, and transforming images.
+Contains the methods for replacing, adding, getting, filtering, and transforming images.
 
 ### ImageProcessorModelImpl
 
