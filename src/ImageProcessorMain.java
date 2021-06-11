@@ -15,35 +15,46 @@ public class ImageProcessorMain {
 
   public static void main(String[] args) throws IOException {
     ImageProcessorModel testModel = new ImageProcessorModelImpl();
-    testModel.addImage("res/Koala.ppm", new PPMFileReader().readImageFromFile("res/Koala.ppm"));
+    testModel.addImage("desert", new PPMFileReader().readImageFromFile("res\\desert.ppm"));
 
-    ImageInterface sharpKoala = testModel.sharpen("res/Koala.ppm");
-    testModel.addImage("sharpKoala", sharpKoala);
-    new PPMFileWriter().writeFile("res/KoalaSharpen.ppm", testModel.getImage("sharpKoala"));
+    ImageInterface sharpDesert = testModel.sharpen("desert");
+    testModel.addImage("sharpDesert", sharpDesert);
+    new PPMFileWriter().writeFile("res\\sharpDesert.ppm", testModel.getImage("sharpDesert"));
 
-    ImageInterface sharperKoala = testModel.sharpen("sharpKoala");
-    testModel.addImage("sharperKoala", sharperKoala);
-    new PPMFileWriter().writeFile("res/KoalaDoubleSharpen.ppm", testModel.getImage("sharperKoala"));
+    ImageInterface blurDesert = testModel.blur("desert");
+    testModel.addImage("blurDesert", blurDesert);
+    new PPMFileWriter().writeFile("res\\blurDesert.ppm", testModel.getImage("blurDesert"));
 
+    ImageInterface monochromeDesert = testModel
+        .grayscale("desert");
+    testModel.addImage("monochromeDesert", monochromeDesert);
+    new PPMFileWriter()
+        .writeFile("res\\grayscaleDesert.ppm", testModel.getImage("monochromeDesert"));
 
-    ImageInterface checkerboard = testModel.generateCheckerboard(100, 100,
-        new ArrayList<>(Arrays.asList(new ColorImpl(0, 0, 0),
-            new ColorImpl(255, 255, 255))));
-    testModel.addImage("checkerboard", checkerboard);
-    new PPMFileWriter().writeFile("res/Checkerboard.ppm", testModel.getImage("checkerboard"));
+    ImageInterface sepiaDesert = testModel
+        .sepia("desert");
+    testModel.addImage("sepiaDesert", sepiaDesert);
+    new PPMFileWriter().writeFile("res\\sepiaDesert.ppm", testModel.getImage("sepiaDesert"));
 
+    testModel.addImage("bug", new PPMFileReader().readImageFromFile("res\\bug.ppm"));
 
-    ImageInterface monochromeKoala = testModel
-        .grayscale("res/Koala.ppm");
-    testModel.addImage("monochromeKoala", monochromeKoala);
-    new PPMFileWriter().writeFile("res\\monochromeKoala.ppm", testModel.getImage("monochromeKoala"));
+    ImageInterface sharpBug = testModel.sharpen("bug");
+    testModel.addImage("sharpBug", sharpBug);
+    new PPMFileWriter().writeFile("res\\sharpBug.ppm", testModel.getImage("sharpBug"));
 
+    ImageInterface blurBug = testModel.blur("bug");
+    testModel.addImage("blurBug", blurBug);
+    new PPMFileWriter().writeFile("res\\blurBug.ppm", testModel.getImage("blurBug"));
 
-    ImageInterface sepiaKoala = testModel
-        .sepia("res/Koala.ppm");
-    testModel.addImage("sepiaKoala", sepiaKoala);
-    new PPMFileWriter().writeFile("res/sepiaKoala.ppm", testModel.getImage("sepiaKoala"));
+    ImageInterface monochromeBug = testModel.grayscale("bug");
+    testModel.addImage("monochromeBug", monochromeBug);
+    new PPMFileWriter()
+        .writeFile("res\\monochromeBug.ppm", testModel.getImage("monochromeBug"));
 
+    ImageInterface sepiaBug = testModel
+        .sepia("bug");
+    testModel.addImage("sepiaBug", sepiaBug);
+    new PPMFileWriter().writeFile("res\\sepiaBug.ppm", testModel.getImage("sepiaBug"));
 
 
   }
