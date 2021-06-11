@@ -1,7 +1,7 @@
-package cs3500.imageprocessor.model.images;
-
 import static org.junit.Assert.*;
 
+import cs3500.imageprocessor.model.images.ColorImpl;
+import cs3500.imageprocessor.model.images.IColor;
 import org.junit.Before;
 import org.junit.Test;
 

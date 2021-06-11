@@ -1,27 +1,100 @@
-//import static org.junit.Assert.assertEquals;
-//
-//import cs3500.imageprocessor.model.ImageProcessorModel;
-//import cs3500.imageprocessor.model.ImageProcessorModelImpl;
-//import cs3500.imageprocessor.controller.fileReading.PPMFileReader;
-//import cs3500.imageprocessor.controller.fileWriting.PPMFileWriter;
-//import cs3500.imageprocessor.model.filters.FilterBlur;
-//import cs3500.imageprocessor.model.images.ImageInterface;
-//import java.io.IOException;
-//import org.junit.Test;
-//
-//public class ImageImplTest {
-//
-//  @Test
-//  public void getNeighbors() {
-//    ImageProcessorModel model = new ImageProcessorModelImpl("res/Koala.ppm", new PPMFileReader());
-//    ImageInterface blurKoala = model.filterImage("res/Koala.ppm", new FilterBlur());
-//    model.addImage("blurKoala", blurKoala);
-//    try {
-//      model.exportImage("res/KoalaBlur.ppm", "blurKoala", new PPMFileWriter());
-//    }
-//    catch(IOException io) {
-//      throw new IllegalStateException();
-//    }
-//
-//  }
-//}
+import static org.junit.Assert.*;
+
+import cs3500.imageprocessor.model.imageGenerating.CheckerboardGenerator;
+import cs3500.imageprocessor.model.images.ColorImpl;
+import cs3500.imageprocessor.model.images.ImageImpl;
+import cs3500.imageprocessor.model.images.ImageInterface;
+import java.util.ArrayList;
+import java.util.Arrays;
+import org.junit.Test;
+
+public class ImageImplTest {
+
+  private ImageInterface checkerboard = new CheckerboardGenerator(10, 10,
+      new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0),
+          new ColorImpl(0, 255, 0)))).generateImage();
+
+
+  // CONSTRUCTOR TESTS
+
+  // -----------------------------------------------------------------------------------------------
+
+
+  /*
+        -----------------------------
+       | Constructor Exception Tests |
+        -----------------------------
+  */
+
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullImage() {
+    new ImageImpl(null);
+  }
+
+
+  // GENERAL TESTS
+
+  // -----------------------------------------------------------------------------------------------
+
+
+  /*
+        -----------------
+       | getPixels Tests |
+        -----------------
+  */
+
+
+  // getting pixels from checkerboard image
+  @Test
+  public void getPixelsCheckerboard() {
+    assertEquals(this.checkerboard.getPixels().size(), 10);
+    assertEquals(this.checkerboard.getPixels().get(0).size(), 10);
+  }
+
+
+  // -----------------------------------------------------------------------------------------------
+
+
+  /*
+        --------------
+       | equals Tests |
+        --------------
+  */
+
+
+  // testing equals with a checkerboard and a newly generated checkerboard
+  @Test
+  public void testEqualsCheckerboard() {
+    assertTrue(this.checkerboard.equals(new CheckerboardGenerator(10, 10,
+        new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0),
+            new ColorImpl(0, 255, 0)))).generateImage()));
+  }
+
+  // testing two images not equal
+  @Test
+  public void testNotEqualsCheckerboard() {
+    assertFalse(this.checkerboard.equals(new CheckerboardGenerator(5, 5,
+        new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0),
+            new ColorImpl(0, 255, 0)))).generateImage()));
+  }
+
+
+  // -----------------------------------------------------------------------------------------------
+
+
+  /*
+        ----------------
+       | hashCode Tests |
+        ----------------
+  */
+
+
+  // testing the hashCode of checkerboard
+  @Test
+  public void testHashCodeCheckerboard() {
+    assertEquals(this.checkerboard.hashCode(), 823490140);
+  }
+
+
+}
