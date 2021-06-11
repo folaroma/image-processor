@@ -81,7 +81,7 @@ public class PPMFileWriterTest {
 
   // tests writing a transformed image
   @Test
-  public void testWritingToFileAsPPMBlurred() throws IOException {
+  public void testWritingToFileAsPPMGray() throws IOException {
     ImageInterface grayCheckerboard = new GrayscaleTransformation().applyTransformation(testCheckerboard);
     writer.writeFile("test\\testreaderfiles\\writtenfile2.txt", grayCheckerboard);
     ImageInterface testImage = new PPMFileReader()

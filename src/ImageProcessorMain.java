@@ -26,6 +26,7 @@ public class ImageProcessorMain {
     testModel.addImage("sharperKoala", sharperKoala);
     new PPMFileWriter().writeFile("res/KoalaDoubleSharpen.ppm", testModel.getImage("sharperKoala"));
 
+
     ImageInterface checkerboard = testModel.generateCheckerboard(100, 100,
         new ArrayList<>(Arrays.asList(new ColorImpl(0, 0, 0),
             new ColorImpl(255, 255, 255))));
