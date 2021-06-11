@@ -33,22 +33,6 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
     this.images = new HashMap<>();
   }
 
-  /**
-   * Convenience constructor to create a model with a programmatically generated image in the map.
-   *
-   * @param id        Id to be associated with the image.
-   * @param generator Image generator function object to use.
-   * @throws IllegalArgumentException If any argument is null or the generator cannot properly
-   *                                  generate the image.
-   */
-  public ImageProcessorModelImpl(String id, IImageGenerator generator)
-      throws IllegalArgumentException {
-    this();
-    if (id == null || generator == null) {
-      throw new IllegalArgumentException("Arguments cannot be null.");
-    }
-    images.putIfAbsent(id, generator.generateImage());
-  }
 
   @Override
   public void replaceImage(String id, ImageInterface image) throws IllegalArgumentException {

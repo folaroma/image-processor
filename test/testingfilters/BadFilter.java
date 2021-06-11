@@ -1,3 +1,5 @@
+package testingfilters;
+
 import cs3500.imageprocessor.model.filters.AbstractFilter;
 
 public class BadFilter extends AbstractFilter {

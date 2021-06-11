@@ -32,7 +32,7 @@ public abstract class AbstractFilter implements IFilter {
     if (matrix.length % 2 == 0) {
       throw new IllegalArgumentException("Dimensions of kernel must be odd.");
     }
-    if (matrix.length != matrix[0].length) {
+    if (!this.isSquareMatrix(matrix)) {
       throw new IllegalArgumentException("Kernel must be square.");
     }
     this.matrix = matrix;
@@ -139,6 +139,20 @@ public abstract class AbstractFilter implements IFilter {
       return 0;
     }
     return rgb;
+  }
+
+  /**
+   * Checks if the given 2d array matrix is a square matrix.
+   * @param matrix Matrix to check.
+   * @return True if square, false if not.
+   */
+  private boolean isSquareMatrix(double[][] matrix) {
+    for(int i = 0; i < matrix.length; i++) {
+        if (matrix[i].length != matrix.length) {
+          return false;
+      }
+    }
+    return true;
   }
 
 }
