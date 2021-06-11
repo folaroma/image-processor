@@ -1,7 +1,6 @@
-package cs3500.imageprocessor.model.images;
-
 import static org.junit.Assert.*;
 
+import cs3500.imageprocessor.model.images.Position2D;
 import org.junit.Test;
 
 public class Position2DTest {
