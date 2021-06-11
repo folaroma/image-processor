@@ -45,10 +45,15 @@ public class ImageImplTest {
   */
 
 
-  // getting pixels from checkerboard image
+  // getting pixels from checkerboard image rows
   @Test
-  public void getPixelsCheckerboard() {
+  public void getPixelsCheckerboardRows() {
     assertEquals(this.checkerboard.getPixels().size(), 10);
+  }
+
+  // getting pixels from checkerboard image columns
+  @Test
+  public void getPixelsCheckerboardColumns() {
     assertEquals(this.checkerboard.getPixels().get(0).size(), 10);
   }
 

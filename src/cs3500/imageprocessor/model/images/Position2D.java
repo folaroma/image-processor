@@ -38,17 +38,6 @@ public class Position2D {
     return this.y;
   }
 
-  /**
-   * Update the location of this point
-   *
-   * @param x the new x-coordinate
-   * @param y the new y-coordinate
-   */
-  public void update(int x, int y) {
-    this.x = x;
-    this.y = y;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
