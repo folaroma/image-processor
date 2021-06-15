@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import javax.imageio.ImageIO;
 
 public class ImageIOFileWriter implements IImageFileWriter {
@@ -14,8 +15,17 @@ public class ImageIOFileWriter implements IImageFileWriter {
   @Override
   public void writeFile(String filename, ImageInterface image)
       throws IOException, IllegalArgumentException {
+    if (filename == null || image == null) {
+      throw new IllegalArgumentException("Argument cannot be null.");
+    }
+    if (!filename.contains(".") || filename.indexOf(".") == filename.length() - 1) {
+      throw new IllegalArgumentException("Filename is does not have a type extension");
+    }
 
     String type = filename.substring(filename.indexOf(".") + 1);
+    if (!Arrays.asList(ImageIO.getWriterFileSuffixes()).contains(type)) {
+      throw new IllegalArgumentException("File extension is not a valid file suffix for an image.");
+    }
 
     FileOutputStream output = new FileOutputStream(filename);
 

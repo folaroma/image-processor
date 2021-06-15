@@ -9,6 +9,7 @@ import cs3500.imageprocessor.model.images.Position2D;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,11 @@ import javax.imageio.ImageIO;
 public class ImageIOFileReader implements IFileReader {
 
   @Override
-  public ImageInterface readImageFromFile(String filename) {
+  public ImageInterface readImageFromFile(String filename) throws IllegalArgumentException {
+    if (filename == null) {
+      throw new IllegalArgumentException("Filename cannot be null.");
+    }
     File imageFile = new File(filename);
-
     try {
       BufferedImage image = ImageIO.read(imageFile);
       int imageHeight = image.getHeight();
