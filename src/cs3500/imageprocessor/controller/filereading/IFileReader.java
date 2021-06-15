@@ -1,6 +1,7 @@
 package cs3500.imageprocessor.controller.filereading;
 
 import cs3500.imageprocessor.model.images.ImageInterface;
+import java.io.IOException;
 
 /**
  * Class to represent a function object that can read in a file and create image data from it using
