@@ -115,5 +115,17 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
     return new CheckerboardGenerator(rows, columns, colors).generateImage();
   }
 
+  @Override
+  public void removeImage(String id) throws IllegalArgumentException{
+    if (id == null) {
+      throw new IllegalArgumentException("Arguments cannot be null.");
+    }
+
+    if (!this.images.containsKey(id)) {
+      throw new IllegalArgumentException("No such image is contained");
+    }
+    this.images.remove(id);
+  }
+
 
 }

@@ -89,5 +89,7 @@ public interface ImageProcessorModel {
    */
   ImageInterface generateCheckerboard(int rows, int columns, List<IColor> colors)
       throws IllegalArgumentException;
+
+  void removeImage(String id) throws IllegalArgumentException;
 }
 

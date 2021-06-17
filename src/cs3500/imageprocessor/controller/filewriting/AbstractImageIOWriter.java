@@ -8,11 +8,17 @@ import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
 
-public class ImageIOFileWriter implements IImageFileWriter {
+public abstract class AbstractImageIOWriter {
+  protected final String fileType;
+
+  protected AbstractImageIOWriter(String fileType) throws IllegalArgumentException{
+    if (!Arrays.asList(ImageIO.getWriterFileSuffixes()).contains(fileType)) {
+      throw new IllegalArgumentException("File extension is not a valid file suffix for an image.");
+    }
+    this.fileType = fileType;
+  }
 
 
-  // TODO: check for type validity
-  @Override
   public void writeFile(String filename, ImageInterface image)
       throws IOException, IllegalArgumentException {
     if (filename == null || image == null) {
@@ -20,11 +26,6 @@ public class ImageIOFileWriter implements IImageFileWriter {
     }
     if (!filename.contains(".") || filename.indexOf(".") == filename.length() - 1) {
       throw new IllegalArgumentException("Filename is does not have a type extension");
-    }
-
-    String type = filename.substring(filename.indexOf(".") + 1);
-    if (!Arrays.asList(ImageIO.getWriterFileSuffixes()).contains(type)) {
-      throw new IllegalArgumentException("File extension is not a valid file suffix for an image.");
     }
 
     FileOutputStream output = new FileOutputStream(filename);
@@ -45,7 +46,7 @@ public class ImageIOFileWriter implements IImageFileWriter {
       }
     }
 
-    ImageIO.write(outputImage, type, output);
+    ImageIO.write(outputImage, this.fileType, output);
     output.close();
 
   }

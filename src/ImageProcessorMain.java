@@ -1,6 +1,6 @@
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
-import cs3500.imageprocessor.controller.filewriting.ImageIOFileWriter;
+import cs3500.imageprocessor.controller.filewriting.PNGImageIOWriter;
 import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
@@ -23,7 +23,7 @@ public class ImageProcessorMain {
 
     ImageInterface sharpDesert = testModel.sharpen("desert");
     testModel.addImage("sharpDesert", sharpDesert);
-    new ImageIOFileWriter().writeFile("res/sharpDesert.jpeg", testModel.getImage("sharpDesert"));
+    new PNGImageIOWriter().writeFile("res/sharpDesert.png", testModel.getImage("sharpDesert"));
 
     /*
     ImageInterface blurDesert = testModel.blur("desert");
