@@ -20,6 +20,7 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
 
   private final Map<String, ImageInterface> images;
 
+
   /**
    * Default constructor for the model. Sets the map as an empty hashmap.
    */
