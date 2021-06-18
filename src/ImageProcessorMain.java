@@ -5,6 +5,7 @@ import cs3500.imageprocessor.controller.filewriting.PNGImageIOWriter;
 import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
+import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,7 +20,7 @@ public class ImageProcessorMain {
    */
   public static void main(String[] args) throws IOException {
 
-    new ImageProcessorControllerImpl(new ImageProcessorModelImpl(),
+    new ImageProcessorControllerImpl(new MultiLayerProcessorModelImpl(),
         new InputStreamReader(System.in), System.out).startEditor();
 
     /*

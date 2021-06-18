@@ -1,18 +1,34 @@
 package cs3500.imageprocessor;
 
 import cs3500.imageprocessor.controller.ImageProcessorController;
-import cs3500.imageprocessor.model.ImageProcessorModel;
+import cs3500.imageprocessor.controller.filereading.IMultiLayerReader;
+import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
+import cs3500.imageprocessor.controller.filereading.MultiLayerFileReader;
+import cs3500.imageprocessor.controller.filereading.PPMFileReader;
+import cs3500.imageprocessor.controller.filewriting.JPEGImageIOWriter;
+import cs3500.imageprocessor.controller.filewriting.MultiLayerImageWriter;
+import cs3500.imageprocessor.controller.filewriting.PNGImageIOWriter;
+import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
+import cs3500.imageprocessor.model.MultiLayerProcessorModel;
 import cs3500.imageprocessor.model.images.ColorImpl;
+import cs3500.imageprocessor.model.images.ImageInterface;
+import cs3500.imageprocessor.view.ImageProcessorTextView;
+import cs3500.imageprocessor.view.ImageProcessorView;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ImageProcessorControllerImpl implements ImageProcessorController {
-  private final ImageProcessorModel model;
+
+  private final MultiLayerProcessorModel model;
   private final Readable stringReader;
   private final Appendable out;
+  private ImageProcessorView view;
+  private String current;
 
-  public ImageProcessorControllerImpl(ImageProcessorModel model, Readable stringReader,
+  public ImageProcessorControllerImpl(MultiLayerProcessorModel model, Readable stringReader,
       Appendable out) throws IllegalArgumentException {
     if (model == null || stringReader == null || out == null) {
       throw new IllegalArgumentException("Null parameter.");
@@ -25,63 +41,417 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
   @Override
   public void startEditor() {
+    this.view = new ImageProcessorTextView(this.model, this.out);
 
-    Scanner scan = new Scanner(this.stringReader).useDelimiter("\n");
+    Scanner scan = new Scanner(this.stringReader);
 
     if (!scan.hasNext()) {
       throw new IllegalStateException();
     }
 
     while (scan.hasNext()) {
-      String str = scan.next();
-      Scanner stringScan = new Scanner(str);
+      String str = scan.nextLine();
 
       String[] command = str.split("\\s+");
 
       switch (command[0]) {
         case "create":
+          if (command.length == 5) {
+            if (command[2].equals("add")) {
+              if (command[4].equals("ppm")) {
+                try {
+                  this.model.addImage(command[1],
+                      new PPMFileReader()
+                          .readImageFromFile("res/" + command[3] + "." + command[4]));
+                } catch (IllegalArgumentException e) {
+                  try {
+                    this.view.renderMessage("Incorrect file name or file type.\n");
+                  } catch (IOException io) {
+                    throw new IllegalStateException();
+                  }
+                }
+              } else {
+                try {
+                  this.model.addImage(command[1],
+                      new ImageIOFileReader()
+                          .readImageFromFile("res/" + command[3] + "." + command[4]));
+                } catch (IllegalArgumentException e) {
+                  try {
+                    this.view.renderMessage("Incorrect file name or file type.\n");
+                  } catch (IOException io) {
+                    throw new IllegalStateException();
+                  }
+                }
+              }
+            }
+          } else if (command.length == 12) {
+            if (command[2].equals("add")) {
+              if (command[3].equals("checkerboard")
+                  && command[4].matches("-?\\d+")
+                  && command[5].matches("-?\\d+")
+                  && command[6].matches("\\(-?\\d+,")
+                  && command[7].matches("-?\\d+,")
+                  && command[8].matches("-?\\d+\\)")
+                  && command[9].matches("\\(-?\\d+,")
+                  && command[10].matches("-?\\d+,")
+                  && command[11].matches("-?\\d+\\)")) {
+                ImageInterface checkerboard = null;
+
+                try {
+                  checkerboard = this.model
+                      .generateCheckerboard(Integer.parseInt(command[4]),
+                          Integer.parseInt(command[5]), new ArrayList<>(Arrays.asList(
+                              new ColorImpl(Integer.parseInt(command[6].replaceAll("[\\D]", "")),
+                                  Integer.parseInt(command[7].replaceAll("[\\D]", "")),
+                                  Integer.parseInt(command[8].replaceAll("[\\D]", ""))),
+                              new ColorImpl(Integer.parseInt(command[9].replaceAll("[\\D]", "")),
+                                  Integer.parseInt(command[10].replaceAll("[\\D]", "")),
+                                  Integer.parseInt(command[11].replaceAll("[\\D]", ""))))));
+                } catch (IllegalArgumentException e) {
+                  try {
+                    this.view.renderMessage("Invalid checkerboard dimensions or colors.\n");
+                  } catch (IOException io) {
+                    throw new IllegalStateException();
+                  }
+                }
+
+                try {
+                  this.model.addImage(command[1], checkerboard);
+                } catch (IllegalArgumentException e) {
+                  try {
+                    this.view.renderMessage("Incorrect file name or file type.");
+                  } catch (IOException io) {
+                    throw new IllegalStateException();
+                  }
+                }
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid create command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
+
         case "remove":
+          if (command.length == 2) {
+            try {
+              this.model.removeImage(command[1]);
+            } catch (IllegalArgumentException e) {
+              try {
+                this.view.renderMessage("Invalid layer ID.\n");
+              } catch (IOException io) {
+                throw new IllegalStateException();
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid remove command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
         case "current":
+          if (command.length == 2) {
+            try {
+              this.current = command[1];
+            } catch (IllegalArgumentException e) {
+              try {
+                this.view.renderMessage("Invalid layer ID.\n");
+              } catch (IOException io) {
+                throw new IllegalStateException();
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid create command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
         case "blur":
+          if (command.length == 1) {
+            if (this.current != null) {
+              try {
+                this.model.blur(this.current);
+              } catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid layer ID.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid blur command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
         case "sharpen":
+          if (command.length == 1) {
+            if (this.current != null) {
+              try {
+                this.model.sharpen(this.current);
+              } catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid layer ID.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid blur command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
         case "grayscale":
+          if (command.length == 1) {
+            if (this.current != null) {
+              try {
+                this.model.grayscale(this.current);
+              } catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid layer ID.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid blur command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
         case "sepia":
+          if (command.length == 1) {
+            if (this.current != null) {
+              try {
+                this.model.sepia(this.current);
+              } catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid layer ID.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid blur command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
         case "show":
+          if (command.length == 1) {
+            if (this.model.getVisibility().contains(this.current)) {
+              try {
+                this.model.showLayer(this.current);
+              } catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid layer ID.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            } else {
+              try {
+                this.view.renderMessage("Layer is already visible.\n");
+              } catch (IOException io) {
+                throw new IllegalStateException();
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid show command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
         case "hide":
-      }
-
-      if (command.length == 4
-          && command[0].equals("create")
-          && command[2].equals("add")) {
-        try {
-          this.model.addImage(command[1], this.model.getImage(command[3]));
-        }
-        catch (IllegalArgumentException e) {
-
-        }
-      }
-
-      if (command.length == 11
-          && command[0].equals("create")
-          && command[2].equals("add")
-          && command[3].equals("checkerboard")) {
-
-        try {
-
-          this.model.addImage(command[1],
-              this.model.generateCheckerboard(Integer.parseInt(command[4]),
-                  Integer.parseInt(command[5]), new ArrayList<>(Arrays.asList(
-                      new ColorImpl(stringScan.nextInt(), stringScan.nextInt(),
-                          stringScan.nextInt()),
-                      new ColorImpl(stringScan.nextInt(), stringScan.nextInt(),
-                          stringScan.nextInt())))));
-        }
-        catch (IllegalArgumentException e) {
-
-        }
+          if (command.length == 1) {
+            if (!this.model.getVisibility().contains(this.current)) {
+              try {
+                this.model.hideLayer(this.current);
+              } catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid layer ID.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            } else {
+              try {
+                this.view.renderMessage("Layer already hidden.\n");
+              } catch (IOException io) {
+                throw new IllegalStateException();
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid hide command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
+        case "save":
+          if (command.length == 3) {
+            if (this.current != null) {
+              if (command[1].equals("ppm")) {
+                try {
+                  new PPMFileWriter().writeFile("res/" + command[2] + ".ppm", this.model.getImage(this.current));
+                } catch (IllegalArgumentException e) {
+                  try {
+                    this.view.renderMessage("Invalid layer ID.\n");
+                  } catch (IOException io) {
+                    throw new IllegalStateException();
+                  }
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              } else if (command[1].equals("jpeg")) {
+                try {
+                  new JPEGImageIOWriter().writeFile("res/" + command[2] + ".jpeg", this.model.getImage(this.current));
+                }
+                catch (IllegalArgumentException e) {
+                  try {
+                    this.view.renderMessage("Invalid layer ID.\n");
+                  }
+                  catch (IOException io) {
+                    throw new IllegalStateException();
+                  }
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              } else if (command[1].equals("png")) {
+                try {
+                  new PNGImageIOWriter().writeFile("res/" + command[2] + ".png", this.model.getImage(this.current));
+                }
+                catch (IllegalArgumentException e) {
+                  try {
+                    this.view.renderMessage("Invalid layer ID.\n");
+                  }
+                  catch (IOException io) {
+                    throw new IllegalStateException();
+                  }
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              } else {
+                try {
+                  this.view.renderMessage("Invalid file type.\n");
+                }
+                catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid save command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
+        case "saveall":
+          if (command.length == 3) {
+            if (command[1].equals("ppm")) {
+              saveAllTry(command);
+            }
+            else if (command[1].equals("jpeg")) {
+              saveAllTry(command);
+            }
+            else if (command[1].equals("png")) {
+              saveAllTry(command);
+            }
+            else {
+              try {
+                this.view.renderMessage("Invalid file type.\n");
+              }
+              catch (IOException io) {
+                throw new IllegalStateException();
+              }
+            }
+          } else {
+            try {
+              this.view.renderMessage("Invalid saveall command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
+          break;
+        case "addmulti":
+          if (command.length == 2) {
+            try {
+              IMultiLayerReader newMulti = new MultiLayerFileReader();
+              Map<String, ImageInterface> newMultiImages = newMulti.readImages(command[1]);
+              try {
+                this.model.addMultiLayer(newMultiImages, newMulti.readVisibility());
+              }
+              catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid multi-layer file.\n");
+                }
+                catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            }
+            catch (IllegalArgumentException e) {
+              try {
+                this.view.renderMessage("Invalid file name.\n");
+              }
+              catch (IOException io) {
+                throw new IllegalStateException();
+              }
+            }
+          }
+          else {
+            try {
+              this.view.renderMessage("Invalid addmulti command syntax.\n");
+            } catch (IOException io) {
+              throw new IllegalStateException();
+            }
+          }
       }
 
     }
 
+  }
+
+  private void saveAllTry(String[] command) {
+    try {
+      new MultiLayerImageWriter().writeFile("/res" + command[2] + "." + command[1], command[1],
+          this.model.getLayers(), this.model.getVisibility());
+    }
+    catch (IllegalArgumentException e) {
+      try {
+        this.view.renderMessage("Invalid file name.\n");
+      }
+      catch (IOException io) {
+        throw new IllegalStateException();
+      }
+    }
+    catch (IOException io) {
+      throw new IllegalStateException();
+    }
   }
 }

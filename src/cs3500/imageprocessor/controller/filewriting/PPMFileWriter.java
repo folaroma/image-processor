@@ -13,7 +13,8 @@ import java.util.List;
 public class PPMFileWriter implements IImageFileWriter {
 
   @Override
-  public void writeFile(String filename, ImageInterface image) throws IOException {
+  public void writeFile(String filename, ImageInterface image)
+      throws IOException, IllegalArgumentException {
     if (filename == null || image == null) {
       throw new IllegalArgumentException("Argument is null.");
     }
