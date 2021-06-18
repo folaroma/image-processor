@@ -6,8 +6,22 @@ import java.util.Map;
 
 public interface IMultiLayerReader {
 
-  Map<String, ImageInterface> readImages(String filename) throws IllegalArgumentException;
+  /**
+   * Reads in the formated txt file representing a multi layer image. The txt file contains a string
+   * for the file type of the images, then each line for each layer contains the path for image
+   * file, its id, and whether its invisible or not.
+   *
+   * @param filename File path of the txt file.
+   * @return The mapping of ids to the images they represent for the layers.
+   * @throws IllegalArgumentException If the file cannot be found, or the name is null.
+   */
+  Map<String, ImageInterface> readImages(String filename)
+      throws IllegalArgumentException;
 
-  List<String> readVisibility(String filename) throws IllegalArgumentException;
+  /**
+   * Returns the list of invisible ids for the multi layer image.
+   * @return List of ids of invisible images.
+   */
+  List<String> readVisibility();
 
 }

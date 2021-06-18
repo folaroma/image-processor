@@ -8,17 +8,37 @@ import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
 
+/**
+ * Abstract class representing a file writer that uses file types from the ImageIO library. Holds
+ * the file type to designate what kind of file to write.
+ */
 public abstract class AbstractImageIOWriter {
+
   protected final String fileType;
 
-  protected AbstractImageIOWriter(String fileType) throws IllegalArgumentException{
+  /**
+   * Creates a new instance of the class with the given file type.
+   *
+   * @param fileType  String of the file type.
+   * @throws IllegalArgumentException If the filetype is null or not supported by ImageIO.
+   */
+  protected AbstractImageIOWriter(String fileType) throws IllegalArgumentException {
+    if (fileType == null) {
+      throw new IllegalArgumentException("Null file type.");
+    }
     if (!Arrays.asList(ImageIO.getWriterFileSuffixes()).contains(fileType)) {
       throw new IllegalArgumentException("File extension is not a valid file suffix for an image.");
     }
     this.fileType = fileType;
   }
 
-
+  /**
+   * Writes an image file of the desired type of this object using the given filename and image.
+   * @param filename File path to be used for the file.
+   * @param image Image to be written to an image file.
+   * @throws IOException If writing fails.
+   * @throws IllegalArgumentException If any argument is null or the file name does not have an extension.
+   */
   public void writeFile(String filename, ImageInterface image)
       throws IOException, IllegalArgumentException {
     if (filename == null || image == null) {

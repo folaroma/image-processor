@@ -9,16 +9,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Class to represent a function object to read in MultiLayerImages from a txt file. File
+ * specifications are outlined in the interface documentation. Invisible image ids are stored in an
+ * internal list.
+ */
 public class MultiLayerFileReader implements IMultiLayerReader {
 
   private final List<String> visibility;
 
+  /**
+   * Constructs a new instance of the file reader.
+   */
   public MultiLayerFileReader() {
     this.visibility = new ArrayList<>();
   }
 
   @Override
-  public Map<String, ImageInterface> readImages(String filename) throws IllegalArgumentException {
+  public Map<String, ImageInterface> readImages(String filename)
+      throws IllegalArgumentException {
     Scanner sc;
     Map<String, ImageInterface> layers = new HashMap<>();
 
@@ -59,8 +68,10 @@ public class MultiLayerFileReader implements IMultiLayerReader {
         case "png":
         case "jpeg":
           image = new ImageIOFileReader().readImageFromFile(line[0]);
+          break;
         case "ppm":
           image = new PPMFileReader().readImageFromFile(line[0]);
+          break;
 
       }
       String id = line[1];
@@ -70,6 +81,12 @@ public class MultiLayerFileReader implements IMultiLayerReader {
     return layers;
   }
 
+  /**
+   * Adds the id of the image to the internal list if it is marked as invisible in the txt file.
+   *
+   * @param id Id of the image.
+   * @param status Visibility status, either invisible or visible.
+   */
   private void checkVisibility(String id, String status) {
     if (status.equals("invisible")) {
       this.visibility.add(id);
@@ -77,7 +94,7 @@ public class MultiLayerFileReader implements IMultiLayerReader {
   }
 
   @Override
-  public List<String> readVisibility(String filename) {
+  public List<String> readVisibility() {
     return new ArrayList<>(this.visibility);
   }
 }

@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Function object to facilitate the writing of txt files and images representing a multi layer
+ * image.
+ */
 public class MultiLayerImageWriter implements IMultiLayerImageWriter {
 
   @Override
@@ -46,9 +50,15 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
     stream.close();
 
 
-
   }
 
+  /**
+   * Sets the status of visiblity for the image.
+   *
+   * @param key        Id for the image.
+   * @param visibility List of invisible image ids.
+   * @return String representing the visibility status.
+   */
   private String visibilityStatus(String key, List<String> visibility) {
     if (visibility.contains(key)) {
       return "invisible";

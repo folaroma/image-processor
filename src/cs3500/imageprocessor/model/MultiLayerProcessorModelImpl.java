@@ -7,12 +7,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class representing the implementation of a multi layer image processor model. One model contains
+ * only one multi layer image, and can have as many layers as it wants. Layers are given names, and
+ * the names are then assigned to images in the delegate. The ids of invisible layers are stored in
+ * another list.
+ */
 public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
 
   private final ImageProcessorModel delegate;
   private final List<String> layers;
   private final List<String> hidden;
 
+  /**
+   * Creates an instance of the multi layer model.
+   * @param delegate ImageProcessor model containing the map of ids to images.
+   * @param layers List of ids of the layers.
+   * @param hidden List of ids of invisible layers.
+   * @throws IllegalArgumentException If any argument is null.
+   */
   public MultiLayerProcessorModelImpl(ImageProcessorModel delegate, List<String> layers,
       List<String> hidden) throws IllegalArgumentException {
     if (delegate == null || layers == null || hidden == null) {
@@ -24,6 +37,9 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
 
   }
 
+  /**
+   * Convenience constructor for the model.
+   */
   public MultiLayerProcessorModelImpl() {
     this.delegate = new ImageProcessorModelImpl();
     this.layers = new ArrayList<>();
@@ -65,6 +81,11 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
 
   }
 
+  /**
+   * Checks if the given image has the same dimensions as the first added layer.
+   * @param image Image to check.
+   * @throws IllegalArgumentException If the image does not have the same dimensions.
+   */
   private void sameDimensions(ImageInterface image) throws IllegalArgumentException {
     if (!this.layers.isEmpty() && (
         image.getPixels().size() != this.delegate.getImage(this.layers.get(0)).getPixels().size() ||
@@ -166,7 +187,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
   }
 
   @Override
-  public Map<String, ImageInterface> getLayers() throws IllegalArgumentException{
+  public Map<String, ImageInterface> getLayers() throws IllegalArgumentException {
     Map<String, ImageInterface> layersMap = new HashMap<>();
     for (String id : this.layers) {
       layersMap.put(id, this.getImage(id));

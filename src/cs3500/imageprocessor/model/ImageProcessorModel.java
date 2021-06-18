@@ -90,6 +90,11 @@ public interface ImageProcessorModel {
   ImageInterface generateCheckerboard(int rows, int columns, List<IColor> colors)
       throws IllegalArgumentException;
 
+  /**
+   * Removes the given image associated with the string id from the model.
+   * @param id String of image to remove.
+   * @throws IllegalArgumentException If the string is null, or it is not contained in the model.
+   */
   void removeImage(String id) throws IllegalArgumentException;
 }
 

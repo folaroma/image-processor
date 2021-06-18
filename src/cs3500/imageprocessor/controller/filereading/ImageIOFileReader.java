@@ -9,21 +9,25 @@ import cs3500.imageprocessor.model.images.Position2D;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
+/**
+ * Class to represent a function object to read in file types supported by the ImageIO library.
+ * Files are read in through a given file name.
+ */
 public class ImageIOFileReader implements IFileReader {
 
   @Override
-  public ImageInterface readImageFromFile(String filename) throws IllegalArgumentException {
+  public ImageInterface readImageFromFile(String filename)
+      throws IllegalArgumentException {
     if (filename == null) {
       throw new IllegalArgumentException("Filename cannot be null.");
     }
-    File imageFile = new File(filename);
     try {
+      File imageFile = new File(filename);
       BufferedImage image = ImageIO.read(imageFile);
       int imageHeight = image.getHeight();
       int imageWidth = image.getWidth();
@@ -43,8 +47,8 @@ public class ImageIOFileReader implements IFileReader {
       return new ImageImpl(pixels);
 
 
-    } catch (IOException io) {
-      throw new IllegalStateException();
+    } catch (IOException e) {
+      throw new IllegalArgumentException("File does not exist.");
     }
 
   }

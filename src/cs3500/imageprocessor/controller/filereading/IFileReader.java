@@ -17,6 +17,6 @@ public interface IFileReader {
    * @throws IllegalArgumentException If the given filename is null, the file cannot be found, or if
    *                                  it is not a valid file of the desired type.
    */
-  ImageInterface readImageFromFile(String filename);
+  ImageInterface readImageFromFile(String filename) throws IOException;
 
 }

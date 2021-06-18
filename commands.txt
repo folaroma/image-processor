@@ -28,3 +28,6 @@ types are png, jpeg, and ppm. Bad inputs include bad filetype, no file type, no 
 
 12. saveall (type) (filename) - saves all of the layers into images of the given file type and
 creates a text file representing the whole image with the given file name. Bad inputs include bad file type, no file type, no filename.
+
+13. addmulti (filename) - Adds a new multi layer image from the given text file. Replaces the currernt multi layer with this one.
+Bad inputs include non existant file, or badly formed file.
