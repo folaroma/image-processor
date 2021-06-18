@@ -26,7 +26,6 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
   private final Readable stringReader;
   private final Appendable out;
   private ImageProcessorView view;
-  private String current;
 
   public ImageProcessorControllerImpl(MultiLayerProcessorModel model, Readable stringReader,
       Appendable out) throws IllegalArgumentException {
@@ -41,6 +40,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
   @Override
   public void startEditor() {
+    String current = null;
     this.view = new ImageProcessorTextView(this.model, this.out);
 
     Scanner scan = new Scanner(this.stringReader);
@@ -157,7 +157,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
         case "current":
           if (command.length == 2) {
             try {
-              this.current = command[1];
+              current = command[1];
             } catch (IllegalArgumentException e) {
               try {
                 this.view.renderMessage("Invalid layer ID.\n");
@@ -175,15 +175,23 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "blur":
           if (command.length == 1) {
-            if (this.current != null) {
+            if (current != null) {
               try {
-                this.model.blur(this.current);
+                this.model.blur(current);
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
+              }
+            }
+            else {
+              try {
+                this.view.renderMessage("No current set.\n");
+              }
+              catch (IOException io) {
+                throw new IllegalStateException();
               }
             }
           } else {
@@ -196,15 +204,23 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "sharpen":
           if (command.length == 1) {
-            if (this.current != null) {
+            if (current != null) {
               try {
-                this.model.sharpen(this.current);
+                this.model.sharpen(current);
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
+              }
+            }
+            else {
+              try {
+                this.view.renderMessage("No current set.\n");
+              }
+              catch (IOException io) {
+                throw new IllegalStateException();
               }
             }
           } else {
@@ -217,15 +233,23 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "grayscale":
           if (command.length == 1) {
-            if (this.current != null) {
+            if (current != null) {
               try {
-                this.model.grayscale(this.current);
+                this.model.grayscale(current);
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
+              }
+            }
+            else {
+              try {
+                this.view.renderMessage("No current set.\n");
+              }
+              catch (IOException io) {
+                throw new IllegalStateException();
               }
             }
           } else {
@@ -238,15 +262,23 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "sepia":
           if (command.length == 1) {
-            if (this.current != null) {
+            if (current != null) {
               try {
-                this.model.sepia(this.current);
+                this.model.sepia(current);
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
+              }
+            }
+            else {
+              try {
+                this.view.renderMessage("No current set.\n");
+              }
+              catch (IOException io) {
+                throw new IllegalStateException();
               }
             }
           } else {
@@ -259,9 +291,9 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "show":
           if (command.length == 1) {
-            if (this.model.getVisibility().contains(this.current)) {
+            if (this.model.getVisibility().contains(current)) {
               try {
-                this.model.showLayer(this.current);
+                this.model.showLayer(current);
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
@@ -286,9 +318,9 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "hide":
           if (command.length == 1) {
-            if (!this.model.getVisibility().contains(this.current)) {
+            if (!this.model.getVisibility().contains(current)) {
               try {
-                this.model.hideLayer(this.current);
+                this.model.hideLayer(current);
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
@@ -313,10 +345,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "save":
           if (command.length == 3) {
-            if (this.current != null) {
+            if (current != null) {
               if (command[1].equals("ppm")) {
                 try {
-                  new PPMFileWriter().writeFile("res/" + command[2] + ".ppm", this.model.getImage(this.current));
+                  new PPMFileWriter().writeFile("res/" + command[2] + ".ppm", this.model.getImage(
+                      current));
                 } catch (IllegalArgumentException e) {
                   try {
                     this.view.renderMessage("Invalid layer ID.\n");
@@ -328,7 +361,8 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 }
               } else if (command[1].equals("jpeg")) {
                 try {
-                  new JPEGImageIOWriter().writeFile("res/" + command[2] + ".jpeg", this.model.getImage(this.current));
+                  new JPEGImageIOWriter().writeFile("res/" + command[2] + ".jpeg", this.model.getImage(
+                      current));
                 }
                 catch (IllegalArgumentException e) {
                   try {
@@ -342,7 +376,8 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 }
               } else if (command[1].equals("png")) {
                 try {
-                  new PNGImageIOWriter().writeFile("res/" + command[2] + ".png", this.model.getImage(this.current));
+                  new PNGImageIOWriter().writeFile("res/" + command[2] + ".png", this.model.getImage(
+                      current));
                 }
                 catch (IllegalArgumentException e) {
                   try {
