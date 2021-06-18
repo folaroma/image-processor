@@ -12,4 +12,8 @@ public interface MultiLayerProcessorModel extends ImageProcessorModel {
 
   void addMultiLayer(Map<String, ImageInterface> images, List<String> invisibleLayers);
 
+  List<String> getVisibility();
+
+  Map<String, ImageInterface> getLayers();
+
 }

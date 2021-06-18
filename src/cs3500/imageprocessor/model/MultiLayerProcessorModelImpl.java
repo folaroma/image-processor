@@ -3,6 +3,7 @@ package cs3500.imageprocessor.model;
 import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -157,6 +158,20 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
       this.hidden.add(layer);
     }
 
+  }
+
+  @Override
+  public List<String> getVisibility() {
+    return new ArrayList<>(this.hidden);
+  }
+
+  @Override
+  public Map<String, ImageInterface> getLayers() throws IllegalArgumentException{
+    Map<String, ImageInterface> layersMap = new HashMap<>();
+    for (String id : this.layers) {
+      layersMap.put(id, this.getImage(id));
+    }
+    return layersMap;
   }
 
 }
