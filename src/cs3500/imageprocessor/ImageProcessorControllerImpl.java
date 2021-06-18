@@ -34,8 +34,21 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
     while (scan.hasNext()) {
       String str = scan.next();
+      Scanner stringScan = new Scanner(str);
 
       String[] command = str.split("\\s+");
+
+      switch (command[0]) {
+        case "create":
+        case "remove":
+        case "current":
+        case "blur":
+        case "sharpen":
+        case "grayscale":
+        case "sepia":
+        case "show":
+        case "hide":
+      }
 
       if (command.length == 4
           && command[0].equals("create")
@@ -48,7 +61,8 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
         }
       }
 
-      if (command[0].equals("create")
+      if (command.length == 11
+          && command[0].equals("create")
           && command[2].equals("add")
           && command[3].equals("checkerboard")) {
 
@@ -56,10 +70,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
           this.model.addImage(command[1],
               this.model.generateCheckerboard(Integer.parseInt(command[4]),
-                  Integer.parseInt(command[5]),
-                  new ArrayList<>(Arrays.asList(
-                      new ColorImpl(Integer.parseInt(command[6]), Integer.parseInt(command[7]), Integer.parseInt(command[8])),
-                      new ColorImpl(Integer.parseInt(command[9]), Integer.parseInt(command[10]), Integer.parseInt(command[11]))))));
+                  Integer.parseInt(command[5]), new ArrayList<>(Arrays.asList(
+                      new ColorImpl(stringScan.nextInt(), stringScan.nextInt(),
+                          stringScan.nextInt()),
+                      new ColorImpl(stringScan.nextInt(), stringScan.nextInt(),
+                          stringScan.nextInt())))));
         }
         catch (IllegalArgumentException e) {
 

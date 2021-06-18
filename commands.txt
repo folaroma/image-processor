@@ -3,7 +3,7 @@ Commands to support and what their requirements are:
 1. create (layer name) (layer image) - Creates a new layer with the name and the image. Image can either be a generated checkerboard or a loaded image.
 Invalid inputs include no name, no image, bad image etc. Expects one of checkerboard or load.
 
-2. checkerboard (rows) (columns) (colors) - Uses the checkerboard as the image.
+2. checkerboard (rows) (columns) (r, g, b) (r, g, b) - Uses the checkerboard as the image.
 
 3. add (filename) - Adds in an image.  Exceptions include  no filename, filename does not exist, bad file.
 

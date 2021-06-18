@@ -1,3 +1,4 @@
+import cs3500.imageprocessor.ImageProcessorControllerImpl;
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
 import cs3500.imageprocessor.controller.filewriting.PNGImageIOWriter;
@@ -6,6 +7,7 @@ import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * Main class to work with the model of the image processor.
@@ -17,6 +19,10 @@ public class ImageProcessorMain {
    */
   public static void main(String[] args) throws IOException {
 
+    new ImageProcessorControllerImpl(new ImageProcessorModelImpl(),
+        new InputStreamReader(System.in), System.out).startEditor();
+
+    /*
     ImageProcessorModel testModel = new ImageProcessorModelImpl();
 
     testModel.addImage("desert", new PPMFileReader().readImageFromFile("res/desert.ppm"));
@@ -25,7 +31,6 @@ public class ImageProcessorMain {
     testModel.addImage("sharpDesert", sharpDesert);
     new PNGImageIOWriter().writeFile("res/sharpDesert.png", testModel.getImage("sharpDesert"));
 
-    /*
     ImageInterface blurDesert = testModel.blur("desert");
     testModel.addImage("blurDesert", blurDesert);
     new PPMFileWriter().writeFile("res\\blurDesert.ppm", testModel.getImage("blurDesert"));
@@ -60,13 +65,11 @@ public class ImageProcessorMain {
         .sepia("bug");
     testModel.addImage("sepiaBug", sepiaBug);
     new PPMFileWriter().writeFile("res\\sepiaBug.ppm", testModel.getImage("sepiaBug"));
-    */
-
-
 
     ImageProcessorModel checkerboardModel = new ImageProcessorModelImpl();
     checkerboardModel.addImage("checkerboard", new ImageIOFileReader().readImageFromFile("res/checkerboard.png"));
     new PPMFileWriter().writeFile("res/checkerboardPPM.ppm", checkerboardModel.getImage("checkerboard"));
+     */
 
   }
 
