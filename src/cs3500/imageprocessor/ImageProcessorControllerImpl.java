@@ -156,12 +156,22 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "current":
           if (command.length == 2) {
-            try {
-              current = command[1];
-            } catch (IllegalArgumentException e) {
+            if (!this.model.getLayers().isEmpty()) {
               try {
-                this.view.renderMessage("Invalid layer ID.\n");
-              } catch (IOException io) {
+                current = command[1];
+              } catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid layer ID.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              }
+            }
+            else {
+              try {
+                this.view.renderMessage("No layers created.\n");
+              }
+              catch (IOException io) {
                 throw new IllegalStateException();
               }
             }
