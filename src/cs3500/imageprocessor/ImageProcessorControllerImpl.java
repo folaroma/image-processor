@@ -102,24 +102,24 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
             if (command[2].equals("checkerboard")
                 && command[3].matches("-?\\d+")
                 && command[4].matches("-?\\d+")
-                && command[5].matches("\\(-?\\d+,")
-                && command[6].matches("-?\\d+,")
-                && command[7].matches("-?\\d+\\)")
-                && command[8].matches("\\(-?\\d+,")
-                && command[9].matches("-?\\d+,")
-                && command[10].matches("-?\\d+\\)")) {
+                && command[5].matches("-?\\d+")
+                && command[6].matches("-?\\d+")
+                && command[7].matches("-?\\d+")
+                && command[8].matches("-?\\d+")
+                && command[9].matches("-?\\d+")
+                && command[10].matches("-?\\d+")) {
               ImageInterface checkerboard = null;
 
               try {
                 checkerboard = this.model
                     .generateCheckerboard(Integer.parseInt(command[3]),
                         Integer.parseInt(command[4]), new ArrayList<>(Arrays.asList(
-                            new ColorImpl(Integer.parseInt(command[5].replaceAll("[\\D]", "")),
-                                Integer.parseInt(command[6].replaceAll("[\\D]", "")),
-                                Integer.parseInt(command[7].replaceAll("[\\D]", ""))),
-                            new ColorImpl(Integer.parseInt(command[8].replaceAll("[\\D]", "")),
-                                Integer.parseInt(command[9].replaceAll("[\\D]", "")),
-                                Integer.parseInt(command[10].replaceAll("[\\D]", ""))))));
+                            new ColorImpl(Integer.parseInt(command[5]),
+                                Integer.parseInt(command[6]),
+                                Integer.parseInt(command[7])),
+                            new ColorImpl(Integer.parseInt(command[8]),
+                                Integer.parseInt(command[9]),
+                                Integer.parseInt(command[10])))));
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid checkerboard dimensions or colors.\n");
