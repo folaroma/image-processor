@@ -178,7 +178,7 @@ Generating an image, with support only for creating a basic checkerboard.
 
 &nbsp;
 
-## ImageProcessorModel
+### ImageProcessorModel
 
 The interface to represent the image processing program. At this time, the model has support for blurring, sharpening, grayscale, and sepia, along with generating a checkerboard.
 
@@ -187,6 +187,14 @@ Contains the methods for replacing, adding, getting, filtering, and transforming
 ### ImageProcessorModelImpl
 
 The implemenation of the ImageProcessorModel interface. Images are stored in a map with a String id. These images can then be retrieved and edited with the given filters and transformations to make new images.
+
+### MultiLayerProcessorModel
+
+The interface to represent the multi-layer image processing programming. At this time, the model has support for blurring, sharpening, grayscale, and sepia, along with generating a checkerboard and support for creating multiple layers of an image.
+
+### MultiLayerProcessorModelImpl
+
+The implementation of the MultiLayerProcessorModel interface. Images are stored in a delegate of ImageProcessorModel, which are stored in a map with a String id. These images can then be retrieved and edited with the given filters and transformations to make new images, as well as creating multiple layers of images, which can be hidden or shown.
 
 &nbsp;
 
@@ -215,9 +223,25 @@ Function object for sepia color transformations. Given an image, it will return 
 
 ### IFileReader
 
-The interface to represent reading an image file. File read in can be of various file types.
+The interface to represent reading an image file. File read can be of various file types.
 
 Contains the method to read an image from a file.
+
+### IMultiLayerReader
+
+The interface to represent reading from an image file with multiple layers. File read can be of various file types.
+
+Contains the method to read the images from a multi-layer image file.
+
+### MultiLayerReader
+
+The implementation of the IMultiLayerReader interface. Handles the reading of the multi-layer image and contains the visibility of each layer.
+
+### ImageIOFileReader
+
+The implementation of the IFileReader interface that handles the reading of images that are supported by the ImageIO library. 
+
+For our program specifically, this handles reading JPEG and PNG formats.
 
 ### PPMFileReader
 
@@ -230,6 +254,28 @@ Function object to read a PPM image file. PPM must bein in the ASCII format, or 
 The interface to represent writing an image file. File can be written to multiple file types.
 
 Contains the method to write an image with a given filename and image.
+
+### IMultiLayerImageWriter
+
+The interface to represent writing a multi-layer image file. File can be written to multiple file types.
+
+Contains the method to write a multi-layer image with a given filename and image.
+
+### MultiLayerImageWriter
+
+The implementation of the IMultiLayerImageWriter interface. Handles the writing of the multi-layer image.
+
+### AbstractImageIOWriter
+
+An abstraction of file writing that supports file types from the ImageIO library. Holds the file type to designate what type of file to write.
+
+### JPEGImageIOWriter
+
+Function object that extends the abstract class AbstractImageIOWriter to facilitate the writing of JPEG images.
+
+### PNGIOImageWriter
+
+Function object that extends the abstract class AbstractImageIOWriter to facilitate the writing of PNG images.
 
 ### PPMFileWriter
 
@@ -305,6 +351,26 @@ The implementation of the color interface, which has 3 8-bit channels for red, g
 ### PixelImpl
 
 The implementation of the pixel interface, which has a position and color.
+
+&nbsp;
+
+### ImageProcessorController
+
+The interface to represent the controller for the image processing program. It handles the inputs and outputs of the programming, and keeps the model and view separate.
+
+### ImageProcessorControllerImpl
+
+The implementation of the ImageProcessorController interface. This handles all the commands inputted into the program, determining whether they are valid or not. If valid, it executes the change on the model.
+
+&nbsp;
+
+### ImageProcessorView
+
+The interface to represent the view of the image processing program. Represents the visualization of the program.
+
+### ImageProcessorTextView
+
+The implementation of the ImageProcessorView interface in text form. Handles all the text visualizations that are shown to the user.
 
 &nbsp;
 
