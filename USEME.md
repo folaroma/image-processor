@@ -8,12 +8,11 @@ Commands supported by the Image Processor program:
 
     Creates a new layer with the name and the image. Image can either be a generated checkerboard or an added image:
 
-
-    ```
+    
     create first add desert ppm
 
     create second checkerboard 5 5 0 0 0 255 255 255
-    ```
+    
 
 
 2. `checkerboard [rows] [columns] [r] [g] [b] [r] [g] [b]` - only used in `create`
