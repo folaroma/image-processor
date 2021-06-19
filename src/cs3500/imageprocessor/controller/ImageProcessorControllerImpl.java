@@ -1,4 +1,4 @@
-package cs3500.imageprocessor;
+package cs3500.imageprocessor.controller;
 
 import cs3500.imageprocessor.controller.ImageProcessorController;
 import cs3500.imageprocessor.controller.filereading.IMultiLayerReader;
