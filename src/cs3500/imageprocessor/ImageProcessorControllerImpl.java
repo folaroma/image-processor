@@ -335,7 +335,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.hideLayer(current);
               } catch (IllegalArgumentException e) {
                 try {
-                  this.view.renderMessage("Invalid layer ID.\n");
+                  this.view.renderMessage("Invalid current layer..\n");
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
