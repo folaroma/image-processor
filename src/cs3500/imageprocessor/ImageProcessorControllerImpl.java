@@ -352,7 +352,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
       }
       addHandler(command[1], checkerboard);
     } else {
-      renderHandler("Inavlid checkerboard synatx.");
+      renderHandler("Invalid checkerboard syntax.");
     }
   }
 

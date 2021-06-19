@@ -7,6 +7,8 @@ import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
 import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -18,60 +20,19 @@ public class ImageProcessorMain {
   /**
    * Main method for the model.
    */
-  public static void main(String[] args) throws IOException {
-
-    new ImageProcessorControllerImpl(new MultiLayerProcessorModelImpl(),
-        new InputStreamReader(System.in), System.out).startEditor();
-
-    /*
-    ImageProcessorModel testModel = new ImageProcessorModelImpl();
-
-    testModel.addImage("desert", new PPMFileReader().readImageFromFile("res/desert.ppm"));
-
-    ImageInterface sharpDesert = testModel.sharpen("desert");
-    testModel.addImage("sharpDesert", sharpDesert);
-    new PNGImageIOWriter().writeFile("res/sharpDesert.png", testModel.getImage("sharpDesert"));
-
-    ImageInterface blurDesert = testModel.blur("desert");
-    testModel.addImage("blurDesert", blurDesert);
-    new PPMFileWriter().writeFile("res\\blurDesert.ppm", testModel.getImage("blurDesert"));
-
-    ImageInterface monochromeDesert = testModel
-        .grayscale("desert");
-    testModel.addImage("monochromeDesert", monochromeDesert);
-    new PPMFileWriter()
-        .writeFile("res\\grayscaleDesert.ppm", testModel.getImage("monochromeDesert"));
-
-    ImageInterface sepiaDesert = testModel
-        .sepia("desert");
-    testModel.addImage("sepiaDesert", sepiaDesert);
-    new PPMFileWriter().writeFile("res\\sepiaDesert.ppm", testModel.getImage("sepiaDesert"));
-
-    testModel.addImage("bug", new PPMFileReader().readImageFromFile("res\\bug.ppm"));
-
-    ImageInterface sharpBug = testModel.sharpen("bug");
-    testModel.addImage("sharpBug", sharpBug);
-    new PPMFileWriter().writeFile("res\\sharpBug.ppm", testModel.getImage("sharpBug"));
-
-    ImageInterface blurBug = testModel.blur("bug");
-    testModel.addImage("blurBug", blurBug);
-    new PPMFileWriter().writeFile("res\\blurBug.ppm", testModel.getImage("blurBug"));
-
-    ImageInterface monochromeBug = testModel.grayscale("bug");
-    testModel.addImage("monochromeBug", monochromeBug);
-    new PPMFileWriter()
-        .writeFile("res\\monochromeBug.ppm", testModel.getImage("monochromeBug"));
-
-    ImageInterface sepiaBug = testModel
-        .sepia("bug");
-    testModel.addImage("sepiaBug", sepiaBug);
-    new PPMFileWriter().writeFile("res\\sepiaBug.ppm", testModel.getImage("sepiaBug"));
-
-    ImageProcessorModel checkerboardModel = new ImageProcessorModelImpl();
-    checkerboardModel.addImage("checkerboard", new ImageIOFileReader().readImageFromFile("res/checkerboard.png"));
-    new PPMFileWriter().writeFile("res/checkerboardPPM.ppm", checkerboardModel.getImage("checkerboard"));
-     */
-
+  public static void main(String[] args) throws IOException, IllegalArgumentException {
+    if (args.length == 2) {
+      if (args[0].equals("script")) {
+        new ImageProcessorControllerImpl(new MultiLayerProcessorModelImpl(),
+            new FileReader(args[1]), System.out).startEditor();
+      }
+    }
+    if (args.length == 1 && args[0].equals("interactive")) {
+      new ImageProcessorControllerImpl(new MultiLayerProcessorModelImpl(),
+          new InputStreamReader(System.in), System.out).startEditor();
+    }
+    else {
+      throw new IllegalArgumentException("Bad arguments for program.");
+    }
   }
-
 }

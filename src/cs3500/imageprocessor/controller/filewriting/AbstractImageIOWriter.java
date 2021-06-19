@@ -49,7 +49,10 @@ public abstract class AbstractImageIOWriter implements IImageFileWriter{
       throw new IllegalArgumentException("Filename is does not have a type extension");
     }
     File file = new File(filename);
-    file.getParentFile().mkdirs();
+    File parent = file.getParentFile();
+    if (parent != null) {
+      parent.mkdirs();
+    }
     FileOutputStream output = new FileOutputStream(file);
 
     int height = image.getPixels().size();

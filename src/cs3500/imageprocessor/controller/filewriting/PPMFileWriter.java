@@ -21,7 +21,10 @@ public class PPMFileWriter implements IImageFileWriter {
     }
     String ppmString = this.generatePPM(image);
     File file = new File(filename);
-    file.getParentFile().mkdirs();
+    File parent = file.getParentFile();
+    if (parent != null) {
+      parent.mkdirs();
+    }
     FileOutputStream fileStream = new FileOutputStream(file);
     fileStream.write(ppmString.getBytes());
     fileStream.close();
