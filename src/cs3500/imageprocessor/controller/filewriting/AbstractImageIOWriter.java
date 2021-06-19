@@ -3,6 +3,7 @@ package cs3500.imageprocessor.controller.filewriting;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -47,8 +48,9 @@ public abstract class AbstractImageIOWriter {
     if (!filename.contains(".") || filename.indexOf(".") == filename.length() - 1) {
       throw new IllegalArgumentException("Filename is does not have a type extension");
     }
-
-    FileOutputStream output = new FileOutputStream(filename);
+    File file = new File(filename);
+    file.getParentFile().mkdirs();
+    FileOutputStream output = new FileOutputStream(file);
 
     int height = image.getPixels().size();
     int width = image.getPixels().get(0).size();

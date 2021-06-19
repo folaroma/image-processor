@@ -2,6 +2,7 @@ package cs3500.imageprocessor.controller.filewriting;
 
 import cs3500.imageprocessor.model.images.IPixel;
 import cs3500.imageprocessor.model.images.ImageInterface;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,9 +20,11 @@ public class PPMFileWriter implements IImageFileWriter {
       throw new IllegalArgumentException("Argument is null.");
     }
     String ppmString = this.generatePPM(image);
-    FileOutputStream file = new FileOutputStream(filename);
-    file.write(ppmString.getBytes());
-    file.close();
+    File file = new File(filename);
+    file.getParentFile().mkdirs();
+    FileOutputStream fileStream = new FileOutputStream(file);
+    fileStream.write(ppmString.getBytes());
+    fileStream.close();
   }
 
   /**

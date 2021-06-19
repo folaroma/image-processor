@@ -1,6 +1,7 @@
 package cs3500.imageprocessor.controller.filewriting;
 
 import cs3500.imageprocessor.model.images.ImageInterface;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -45,7 +46,9 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
       }
       output.append("\n");
     }
-    FileOutputStream stream = new FileOutputStream(filename + ".txt");
+    File textFile = new File("res\\" + filename + "\\" + filename + ".txt");
+    textFile.getParentFile().mkdirs();
+    FileOutputStream stream = new FileOutputStream(textFile);
     stream.write(output.toString().getBytes());
     stream.close();
 

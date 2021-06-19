@@ -53,11 +53,7 @@ public class MultiLayerFileReader implements IMultiLayerReader {
     sc = new Scanner(builder.toString());
 
     String token;
-    String type = sc.next();
-
-    if (!type.equals("png") || !type.equals("jpeg") || !type.equals("ppm")) {
-      throw new IllegalArgumentException("Invalid multi layer text.");
-    }
+    String type = sc.nextLine();
 
     while (sc.hasNextLine()) {
       token = sc.nextLine();
@@ -72,6 +68,8 @@ public class MultiLayerFileReader implements IMultiLayerReader {
         case "ppm":
           image = new PPMFileReader().readImageFromFile(line[0]);
           break;
+        default:
+          throw new IllegalArgumentException("Invalid multi layer text.");
 
       }
       String id = line[1];
