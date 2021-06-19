@@ -164,11 +164,11 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
     if (images == null || invisibleLayers == null) {
       throw new IllegalArgumentException("Null parameters.");
     }
-    this.layers.clear();
-    this.hidden.clear();
     for (String id : this.layers) {
       this.delegate.removeImage(id);
     }
+    this.layers.clear();
+    this.hidden.clear();
     for (Map.Entry<String, ImageInterface> item : images.entrySet()) {
       this.addImage(item.getKey(), item.getValue());
     }

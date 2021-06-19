@@ -466,6 +466,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.addMultiLayer(newMultiImages, newMulti.readVisibility());
               } catch (IllegalArgumentException e) {
                 try {
+                  System.out.println(e.getMessage());
                   view.renderMessage("Invalid multi-layer file.\n");
                 } catch (IOException io) {
                   throw new IllegalStateException();
