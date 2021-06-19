@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
  * Abstract class representing a file writer that uses file types from the ImageIO library. Holds
  * the file type to designate what kind of file to write.
  */
-public abstract class AbstractImageIOWriter {
+public abstract class AbstractImageIOWriter implements IImageFileWriter{
 
   protected final String fileType;
 

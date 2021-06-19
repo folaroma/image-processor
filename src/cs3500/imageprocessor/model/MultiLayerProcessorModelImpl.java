@@ -143,7 +143,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
     if (!this.hidden.contains(id)) {
       throw new IllegalArgumentException("Layer with id is already visible.");
     }
-    this.hidden.add(id);
+    this.hidden.remove(id);
   }
 
   @Override
@@ -154,7 +154,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
     if (this.hidden.contains(id)) {
       throw new IllegalArgumentException("Layer with id is already hidden.");
     }
-    this.hidden.remove(id);
+    this.hidden.add(id);
   }
 
 
