@@ -1,6 +1,6 @@
 # USEME
 
-To run the program, either double-click the JAR file, or open a terminal and navigate to the folder it's in. Then from there, enter `-jar NameOfJARFile.jar` and the program should run accordingly.
+To run the program, either double-click the JAR file, or open a terminal and navigate to the folder it's in. Then from there, enter `java -jar image-processor.jar interactive` or `java -jar image-processor.jar script [filename]`and the program should run accordingly.
 
 Commands supported by the Image Processor program:
 
