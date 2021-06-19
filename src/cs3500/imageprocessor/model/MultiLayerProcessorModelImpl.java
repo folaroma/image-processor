@@ -130,9 +130,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
       throw new IllegalArgumentException("Layer with id does not exist.");
     }
     this.layers.remove(id);
-    if (this.hidden.contains(id)) {
-      this.hidden.remove(id);
-    }
+    this.hidden.remove(id);
     this.delegate.removeImage(id);
   }
 
@@ -174,9 +172,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
     for (Map.Entry<String, ImageInterface> item : images.entrySet()) {
       this.addImage(item.getKey(), item.getValue());
     }
-    for (String layer : invisibleLayers) {
-      this.hidden.add(layer);
-    }
+    this.hidden.addAll(invisibleLayers);
 
   }
 
