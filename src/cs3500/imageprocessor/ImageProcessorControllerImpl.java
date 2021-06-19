@@ -62,7 +62,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                             .readImageFromFile("res/" + command[3] + "." + command[4]));
                   } catch (IllegalArgumentException e) {
                     try {
-                      view.renderMessage("Incorrect file name or file type.\n");
+                      view.renderMessage(e.getMessage());
                     } catch (IOException io) {
                       throw new IllegalStateException();
                     }
@@ -74,7 +74,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                             .readImageFromFile("res/" + command[3] + "." + command[4]));
                   } catch (IllegalArgumentException e) {
                     try {
-                      view.renderMessage("Incorrect file name or file type.\n");
+                      view.renderMessage(e.getMessage());
                     } catch (IOException io) {
                       throw new IllegalStateException();
                     }
@@ -118,7 +118,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                                 Integer.parseInt(command[10])))));
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Invalid checkerboard dimensions or colors.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -128,7 +128,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.addImage(command[1], checkerboard);
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Incorrect file name or file type.");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -149,7 +149,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
               this.model.removeImage(command[1]);
             } catch (IllegalArgumentException e) {
               try {
-                view.renderMessage("Invalid layer ID.\n");
+                view.renderMessage(e.getMessage());
               } catch (IOException io) {
                 throw new IllegalStateException();
               }
@@ -170,7 +170,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                   current = command[1];
                 } catch (IllegalArgumentException e) {
                   try {
-                    view.renderMessage("Invalid layer ID.\n");
+                    view.renderMessage(e.getMessage());
                   } catch (IOException io) {
                     throw new IllegalStateException();
                   }
@@ -206,7 +206,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.replaceImage(current, this.model.blur(current));
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Invalid layer ID.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -233,7 +233,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.replaceImage(current, this.model.sharpen(current));
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Invalid layer ID.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -260,7 +260,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.replaceImage(current, this.model.grayscale(current));
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Invalid layer ID.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -287,7 +287,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.replaceImage(current, this.model.sepia(current));
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Invalid layer ID.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -314,7 +314,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.showLayer(current);
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Invalid layer ID.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -341,7 +341,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.hideLayer(current);
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Invalid current layer.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -371,7 +371,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                         current));
                   } catch (IllegalArgumentException e) {
                     try {
-                      view.renderMessage("Invalid layer ID.\n");
+                      view.renderMessage(e.getMessage());
                     } catch (IOException io) {
                       throw new IllegalStateException();
                     }
@@ -386,7 +386,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                             current));
                   } catch (IllegalArgumentException e) {
                     try {
-                      view.renderMessage("Invalid layer ID.\n");
+                      view.renderMessage(e.getMessage());
                     } catch (IOException io) {
                       throw new IllegalStateException();
                     }
@@ -401,7 +401,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                             current));
                   } catch (IllegalArgumentException e) {
                     try {
-                      view.renderMessage("Invalid layer ID.\n");
+                      view.renderMessage(e.getMessage());
                     } catch (IOException io) {
                       throw new IllegalStateException();
                     }
@@ -435,7 +435,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                         this.model.getVisibility());
               } catch (IllegalArgumentException e) {
                 try {
-                  view.renderMessage("Invalid file name.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
@@ -466,16 +466,14 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.addMultiLayer(newMultiImages, newMulti.readVisibility());
               } catch (IllegalArgumentException e) {
                 try {
-                  System.out.println(e.getMessage());
-                  view.renderMessage("Invalid multi-layer file.\n");
+                  view.renderMessage(e.getMessage());
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }
               }
             } catch (IllegalArgumentException e) {
-              System.out.println(e.getMessage());
               try {
-                view.renderMessage("Invalid file name.\n");
+                view.renderMessage(e.getMessage());
               } catch (IOException io) {
                 throw new IllegalStateException();
               }
