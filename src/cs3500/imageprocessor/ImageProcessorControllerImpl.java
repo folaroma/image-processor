@@ -45,9 +45,6 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
     Scanner scan = new Scanner(this.stringReader);
 
-    if (!scan.hasNext()) {
-      throw new IllegalStateException();
-    }
 
     while (scan.hasNext()) {
       String str = scan.nextLine();
@@ -197,7 +194,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           if (command.length == 1) {
             if (current != null) {
               try {
-                this.model.blur(current);
+                this.model.replaceImage(current, this.model.blur(current));
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
@@ -224,7 +221,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           if (command.length == 1) {
             if (current != null) {
               try {
-                this.model.sharpen(current);
+                this.model.replaceImage(current, this.model.sharpen(current));
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
@@ -251,7 +248,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           if (command.length == 1) {
             if (current != null) {
               try {
-                this.model.grayscale(current);
+                this.model.replaceImage(current, this.model.grayscale(current));
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
@@ -278,7 +275,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           if (command.length == 1) {
             if (current != null) {
               try {
-                this.model.sepia(current);
+                this.model.replaceImage(current, this.model.sepia(current));
               } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid layer ID.\n");
@@ -474,6 +471,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
               throw new IllegalStateException();
             }
           }
+          break;
         default:
           try {
             this.view.renderMessage("Unrecognizable command.\n");

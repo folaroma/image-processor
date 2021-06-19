@@ -57,7 +57,6 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
     this.sameDimensions(image);
     this.layers.add(id);
     this.delegate.addImage(id, image);
-    this.hidden.add(id);
   }
 
   @Override
@@ -170,7 +169,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
     this.layers.clear();
     this.hidden.clear();
     for (String id : this.layers) {
-      this.removeImage(id);
+      this.delegate.removeImage(id);
     }
     for (Map.Entry<String, ImageInterface> item : images.entrySet()) {
       this.addImage(item.getKey(), item.getValue());
