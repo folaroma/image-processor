@@ -2,11 +2,10 @@
 
 A project for CS3500 at Northeastern University.
 
-&nbsp;
-
 ## Index
 
 - [About](#about)
+- [Design Changes](#design-changes)
 - [Usage](#usage)
 - [Class Overviews](#class-overviews)
 - [Image Citations](#image-citations)
@@ -26,6 +25,15 @@ to apply the filter pixel by pixel. The application also supports programmatical
 specifically the checkerboard for this assigment. IO work is done outside of the model, and can read and 
 create image data from ASCII PPM files and also write image data into these files.
 
+The Model and Controller are now complete.
+
+&nbsp;
+
+## Design Changes
+
+Only design change made was the addition of a `remove` method to the original Model.
+This is to add support for removing images in a Multi-Layer Model.
+
 &nbsp;
 
 ## Usage
@@ -34,7 +42,7 @@ create image data from ASCII PPM files and also write image data into these file
 
 Filtering images, with support only for blurring or sharpening.
 
-<details><summary><b>Show instructions</b></summary>
+<details><summary><b>Code instructions</b></summary>
 
 1. Create a new <code>ImageProcessorModel</code> with a given image:
 
@@ -125,18 +133,13 @@ Generating an image, with support only for creating a basic checkerboard.
 
 * [ImageProcessorModel](#imageprocessormodel)
 * [ImageProcessorModelImpl](#imageprocessormodelimpl)
+* [MultiLayerProcessorModel](#multilayerprocessormodel)
+* [MultiLayerProcessorModelImpl](#multilayerprocessormodelimpl)
 * [colorTransformations]
     - [IColorTransformation](#icolortransformation)
     - [AbstractColorTransformation](#abstractcolortransformation)
     - [GrayscaleTransformation](#grayscaletransformation)
     - [SepiaTransformation](#sepiatransformation)
-
-- [fileReading]
-    - [IFileReader](#ifilereader)
-    - [PPMFileReader](#ppmfilereader)
-- [fileWriting]
-    - [IImageFileWriter](#iimagefilewriter)
-    - [PPMFileWriter](#ppmfilewriter)
 - [filters]
     - [IFilter](#ifilter)
     - [AbstractFilter](#abstractfilter)
@@ -153,6 +156,24 @@ Generating an image, with support only for creating a basic checkerboard.
     - [ImageImpl](imageimpl)
     - [ColorImpl](#colorimpl)
     - [PixelImpl](#pixelimpl)
+- [ImageProcessorController](#imageprocessorcontroller)
+- [ImageProcessorControllerImpl](#imageprocessorcontrollerimpl)
+- [fileReading]
+    - [IFileReader](#ifilereader)
+    - [IMultiLayerReader](#imultilayerreader)
+    - [MultiLayerReader](#multilayerreader)
+    - [ImageIOFileReader](#imageiofilereader)
+    - [PPMFileReader](#ppmfilereader)
+- [fileWriting]
+    - [IImageFileWriter](#iimagefilewriter)
+    - [IMultiLayerImageWriter](#imultilayerimagewriter)
+    - [MultiLayerImageWriter](#multilayerimagewriter)
+    - [AbstractImageIOWriter](#abstractimageiowriter)
+    - [JPEGImageIOWriter](#jpegimageiowriter)
+    - [PNGIOImageWriter](#pngimageiowriter)
+    - [PPMFileWriter](#ppmfilewriter)
+- [ImageProcessorView](#imageprocessorview)
+- [ImageProcessorTextView](#imageprocessortextview)
 
 &nbsp;
 
