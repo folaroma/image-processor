@@ -1,0 +1,12 @@
+create first add desert.ppm ppm
+remove first
+create first checkerboard 5 5 0 0 0 255 255 255
+current first
+sepia
+remove first
+addmulti bugs/bugs.txt
+current first
+grayscale
+hide
+show
+saveall png multiBugs

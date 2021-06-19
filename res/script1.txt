@@ -1,0 +1,12 @@
+create first add desert.ppm ppm
+create second add desert.ppm ppm
+current first
+blur
+save png blurredDesert
+current second
+sharpen
+save jpeg sharpenedDesert
+create third add desert.ppm ppm
+hide
+saveall ppm twoLayeredDesert
+

@@ -1,3 +1,0 @@
-png
-res\weirdbugs\first.png first visible
-res\weirdbugs\second.png second visible

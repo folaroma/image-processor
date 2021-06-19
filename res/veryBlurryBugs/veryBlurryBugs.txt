@@ -1,3 +1,0 @@
-jpeg
-res\veryBlurryBugs\first.jpeg first visible
-res\veryBlurryBugs\second.jpeg second visible

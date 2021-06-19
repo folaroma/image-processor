@@ -24,19 +24,19 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
       String imageFilename = "";
       switch (type) {
         case "png":
-          imageFilename = "res\\" + filename + "\\" + item.getKey() + ".png";
+          imageFilename = filename + "\\" + item.getKey() + ".png";
           new PNGImageIOWriter().writeFile(imageFilename, item.getValue());
           output.append(imageFilename).append(" ").append(item.getKey()).append(" ")
               .append(this.visibilityStatus(item.getKey(), visibility));
           break;
         case "jpeg":
-          imageFilename = "res\\" + filename + "\\" + item.getKey() + ".jpeg";
+          imageFilename = filename + "\\" + item.getKey() + ".jpeg";
           new JPEGImageIOWriter().writeFile(imageFilename, item.getValue());
           output.append(imageFilename).append(" ").append(item.getKey()).append(" ")
               .append(this.visibilityStatus(item.getKey(), visibility));
           break;
         case "ppm":
-          imageFilename = "res\\" + filename + "\\" + item.getKey() + ".ppm";
+          imageFilename = filename + "\\" + item.getKey() + ".ppm";
           new PPMFileWriter().writeFile(imageFilename, item.getValue());
           output.append(imageFilename).append(" ").append(item.getKey()).append(" ")
               .append(this.visibilityStatus(item.getKey(), visibility));
@@ -46,7 +46,7 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
       }
       output.append("\n");
     }
-    File textFile = new File("res\\" + filename + "\\" + filename + ".txt");
+    File textFile = new File(filename + "\\" + filename + ".txt");
     textFile.getParentFile().mkdirs();
     FileOutputStream stream = new FileOutputStream(textFile);
     stream.write(output.toString().getBytes());
