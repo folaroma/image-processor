@@ -24,12 +24,12 @@ Commands supported by the Image Processor program:
     ```
 
 
-3. `add [filename] [filetype]` - only used in `create`:
+3. `add [file directory]` - only used in `create`:
 
     Adds an image:
 
     ```
-    create desert add desert ppm
+    create desert add res/desert
     ```
 
 4. `remove [layer name]` - Removes the layer with given ID:
@@ -95,21 +95,21 @@ Commands supported by the Image Processor program:
     hide
     ```
 
-11. `save [type] [filename]` - saves the topmost visible layer as an image with the file types of PNG, JPEG, and PPM:
+11. `save [type] [file directory]` - saves the topmost visible layer as an image with the file types of PNG, JPEG, and PPM:
 
     ```
-    create first add desert ppm
-    create second add desert ppm
+    create first add res/desert
+    create second add res/desert
     current second
     hide
     save png oneLayerDesert
     ```
 
-12. `saveall [type] [filename]` - saves all of the layers into images of the given file type and creates a text file representing the whole image with the given file name:
+12. `saveall [type] [file directory]` - saves all of the layers into images of the given file type and creates a text file representing the whole image with the given file name:
 
     ```
-    create first add desert ppm
-    create second add desert ppm
+    create first add res/desert
+    create second add res/desert
     saveall jpeg twoLayerDesert
     ```
 
