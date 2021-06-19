@@ -1,0 +1,3 @@
+png
+res\bugs\first.png first visible
+res\bugs\second.png second visible
