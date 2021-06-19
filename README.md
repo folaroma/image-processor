@@ -32,6 +32,7 @@ The Model and Controller are now complete.
 ## Design Changes
 
 Only design change made was the addition of a `remove` method to the original Model.
+
 This is to add support for removing images in a Multi-Layer Model.
 
 &nbsp;
