@@ -13,7 +13,7 @@ public interface IMultiLayerReader {
    *
    * @param filename File path of the txt file.
    * @return The mapping of ids to the images they represent for the layers.
-   * @throws IllegalArgumentException If the file cannot be found, or the name is null.
+   * @throws IllegalArgumentException If the file cannot be found, the name is null, or the file is malformed.
    */
   Map<String, ImageInterface> readImages(String filename)
       throws IllegalArgumentException;

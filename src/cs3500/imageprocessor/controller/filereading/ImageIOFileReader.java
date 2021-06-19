@@ -29,6 +29,9 @@ public class ImageIOFileReader implements IFileReader {
     try {
       File imageFile = new File(filename);
       BufferedImage image = ImageIO.read(imageFile);
+      if (image == null) {
+        throw new IllegalArgumentException("File could not be read.");
+      }
       int imageHeight = image.getHeight();
       int imageWidth = image.getWidth();
 

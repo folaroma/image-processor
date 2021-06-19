@@ -2,10 +2,14 @@ import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.controller.filereading.IFileReader;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
+import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
+import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import cs3500.imageprocessor.model.images.Position2D;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
