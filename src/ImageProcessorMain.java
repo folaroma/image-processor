@@ -1,13 +1,5 @@
-import cs3500.imageprocessor.ImageProcessorControllerImpl;
-import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
-import cs3500.imageprocessor.controller.filereading.PPMFileReader;
-import cs3500.imageprocessor.controller.filewriting.PNGImageIOWriter;
-import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
-import cs3500.imageprocessor.model.ImageProcessorModel;
-import cs3500.imageprocessor.model.ImageProcessorModelImpl;
+import cs3500.imageprocessor.controller.ImageProcessorControllerImpl;
 import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
-import cs3500.imageprocessor.model.images.ImageInterface;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
