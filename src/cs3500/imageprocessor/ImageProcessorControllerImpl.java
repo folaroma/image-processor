@@ -58,71 +58,83 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
         case "create":
           if (command.length == 5) {
             if (command[2].equals("add")) {
-              if (command[4].equals("ppm")) {
-                try {
-                  this.model.addImage(command[1],
-                      new PPMFileReader()
-                          .readImageFromFile("res/" + command[3] + "." + command[4]));
-                } catch (IllegalArgumentException e) {
+              if (!this.model.getLayers().containsKey(command[1])) {
+                if (command[4].equals("ppm")) {
                   try {
-                    this.view.renderMessage("Incorrect file name or file type.\n");
-                  } catch (IOException io) {
-                    throw new IllegalStateException();
+                    this.model.addImage(command[1],
+                        new PPMFileReader()
+                            .readImageFromFile("res/" + command[3] + "." + command[4]));
+                  } catch (IllegalArgumentException e) {
+                    try {
+                      this.view.renderMessage("Incorrect file name or file type.\n");
+                    } catch (IOException io) {
+                      throw new IllegalStateException();
+                    }
+                  }
+                } else {
+                  try {
+                    this.model.addImage(command[1],
+                        new ImageIOFileReader()
+                            .readImageFromFile("res/" + command[3] + "." + command[4]));
+                  } catch (IllegalArgumentException e) {
+                    try {
+                      this.view.renderMessage("Incorrect file name or file type.\n");
+                    } catch (IOException io) {
+                      throw new IllegalStateException();
+                    }
                   }
                 }
               } else {
                 try {
-                  this.model.addImage(command[1],
-                      new ImageIOFileReader()
-                          .readImageFromFile("res/" + command[3] + "." + command[4]));
-                } catch (IllegalArgumentException e) {
-                  try {
-                    this.view.renderMessage("Incorrect file name or file type.\n");
-                  } catch (IOException io) {
-                    throw new IllegalStateException();
-                  }
+                  this.view.renderMessage("Layer with the same name already created.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
                 }
               }
+            } else {
+              try {
+                this.view.renderMessage("Third parameter must be \"add\" in a create command.\n");
+              } catch (IOException io) {
+                throw new IllegalStateException();
+              }
             }
-          } else if (command.length == 12) {
-            if (command[2].equals("add")) {
-              if (command[3].equals("checkerboard")
-                  && command[4].matches("-?\\d+")
-                  && command[5].matches("-?\\d+")
-                  && command[6].matches("\\(-?\\d+,")
-                  && command[7].matches("-?\\d+,")
-                  && command[8].matches("-?\\d+\\)")
-                  && command[9].matches("\\(-?\\d+,")
-                  && command[10].matches("-?\\d+,")
-                  && command[11].matches("-?\\d+\\)")) {
-                ImageInterface checkerboard = null;
+          } else if (command.length == 11) {
+            if (command[2].equals("checkerboard")
+                && command[3].matches("-?\\d+")
+                && command[4].matches("-?\\d+")
+                && command[5].matches("\\(-?\\d+,")
+                && command[6].matches("-?\\d+,")
+                && command[7].matches("-?\\d+\\)")
+                && command[8].matches("\\(-?\\d+,")
+                && command[9].matches("-?\\d+,")
+                && command[10].matches("-?\\d+\\)")) {
+              ImageInterface checkerboard = null;
 
+              try {
+                checkerboard = this.model
+                    .generateCheckerboard(Integer.parseInt(command[3]),
+                        Integer.parseInt(command[4]), new ArrayList<>(Arrays.asList(
+                            new ColorImpl(Integer.parseInt(command[5].replaceAll("[\\D]", "")),
+                                Integer.parseInt(command[6].replaceAll("[\\D]", "")),
+                                Integer.parseInt(command[7].replaceAll("[\\D]", ""))),
+                            new ColorImpl(Integer.parseInt(command[8].replaceAll("[\\D]", "")),
+                                Integer.parseInt(command[9].replaceAll("[\\D]", "")),
+                                Integer.parseInt(command[10].replaceAll("[\\D]", ""))))));
+              } catch (IllegalArgumentException e) {
                 try {
-                  checkerboard = this.model
-                      .generateCheckerboard(Integer.parseInt(command[4]),
-                          Integer.parseInt(command[5]), new ArrayList<>(Arrays.asList(
-                              new ColorImpl(Integer.parseInt(command[6].replaceAll("[\\D]", "")),
-                                  Integer.parseInt(command[7].replaceAll("[\\D]", "")),
-                                  Integer.parseInt(command[8].replaceAll("[\\D]", ""))),
-                              new ColorImpl(Integer.parseInt(command[9].replaceAll("[\\D]", "")),
-                                  Integer.parseInt(command[10].replaceAll("[\\D]", "")),
-                                  Integer.parseInt(command[11].replaceAll("[\\D]", ""))))));
-                } catch (IllegalArgumentException e) {
-                  try {
-                    this.view.renderMessage("Invalid checkerboard dimensions or colors.\n");
-                  } catch (IOException io) {
-                    throw new IllegalStateException();
-                  }
+                  this.view.renderMessage("Invalid checkerboard dimensions or colors.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
                 }
+              }
 
+              try {
+                this.model.addImage(command[1], checkerboard);
+              } catch (IllegalArgumentException e) {
                 try {
-                  this.model.addImage(command[1], checkerboard);
-                } catch (IllegalArgumentException e) {
-                  try {
-                    this.view.renderMessage("Incorrect file name or file type.");
-                  } catch (IOException io) {
-                    throw new IllegalStateException();
-                  }
+                  this.view.renderMessage("Incorrect file name or file type.");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
                 }
               }
             }
@@ -166,12 +178,10 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                   throw new IllegalStateException();
                 }
               }
-            }
-            else {
+            } else {
               try {
                 this.view.renderMessage("No layers created.\n");
-              }
-              catch (IOException io) {
+              } catch (IOException io) {
                 throw new IllegalStateException();
               }
             }
@@ -195,12 +205,10 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                   throw new IllegalStateException();
                 }
               }
-            }
-            else {
+            } else {
               try {
                 this.view.renderMessage("No current set.\n");
-              }
-              catch (IOException io) {
+              } catch (IOException io) {
                 throw new IllegalStateException();
               }
             }
@@ -224,12 +232,10 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                   throw new IllegalStateException();
                 }
               }
-            }
-            else {
+            } else {
               try {
                 this.view.renderMessage("No current set.\n");
-              }
-              catch (IOException io) {
+              } catch (IOException io) {
                 throw new IllegalStateException();
               }
             }
@@ -253,12 +259,10 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                   throw new IllegalStateException();
                 }
               }
-            }
-            else {
+            } else {
               try {
                 this.view.renderMessage("No current set.\n");
-              }
-              catch (IOException io) {
+              } catch (IOException io) {
                 throw new IllegalStateException();
               }
             }
@@ -282,12 +286,10 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                   throw new IllegalStateException();
                 }
               }
-            }
-            else {
+            } else {
               try {
                 this.view.renderMessage("No current set.\n");
-              }
-              catch (IOException io) {
+              } catch (IOException io) {
                 throw new IllegalStateException();
               }
             }
@@ -371,14 +373,13 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 }
               } else if (command[1].equals("jpeg")) {
                 try {
-                  new JPEGImageIOWriter().writeFile("res/" + command[2] + ".jpeg", this.model.getImage(
-                      current));
-                }
-                catch (IllegalArgumentException e) {
+                  new JPEGImageIOWriter()
+                      .writeFile("res/" + command[2] + ".jpeg", this.model.getImage(
+                          current));
+                } catch (IllegalArgumentException e) {
                   try {
                     this.view.renderMessage("Invalid layer ID.\n");
-                  }
-                  catch (IOException io) {
+                  } catch (IOException io) {
                     throw new IllegalStateException();
                   }
                 } catch (IOException io) {
@@ -386,14 +387,13 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 }
               } else if (command[1].equals("png")) {
                 try {
-                  new PNGImageIOWriter().writeFile("res/" + command[2] + ".png", this.model.getImage(
-                      current));
-                }
-                catch (IllegalArgumentException e) {
+                  new PNGImageIOWriter()
+                      .writeFile("res/" + command[2] + ".png", this.model.getImage(
+                          current));
+                } catch (IllegalArgumentException e) {
                   try {
                     this.view.renderMessage("Invalid layer ID.\n");
-                  }
-                  catch (IOException io) {
+                  } catch (IOException io) {
                     throw new IllegalStateException();
                   }
                 } catch (IOException io) {
@@ -402,8 +402,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
               } else {
                 try {
                   this.view.renderMessage("Invalid file type.\n");
-                }
-                catch (IOException io) {
+                } catch (IOException io) {
                   throw new IllegalStateException();
                 }
               }
@@ -418,20 +417,24 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
           break;
         case "saveall":
           if (command.length == 3) {
-            if (command[1].equals("ppm")) {
-              saveAllTry(command);
-            }
-            else if (command[1].equals("jpeg")) {
-              saveAllTry(command);
-            }
-            else if (command[1].equals("png")) {
-              saveAllTry(command);
-            }
-            else {
+            if (command[1].equals("jpeg") || command[1].equals("ppm") || command[1].equals("png")) {
+              try {
+                new MultiLayerImageWriter()
+                    .writeFile(command[2], command[1], this.model.getLayers(),
+                        this.model.getVisibility());
+              } catch (IllegalArgumentException e) {
+                try {
+                  this.view.renderMessage("Invalid file name.\n");
+                } catch (IOException io) {
+                  throw new IllegalStateException();
+                }
+              } catch (IOException io) {
+                throw new IllegalStateException();
+              }
+            } else {
               try {
                 this.view.renderMessage("Invalid file type.\n");
-              }
-              catch (IOException io) {
+              } catch (IOException io) {
                 throw new IllegalStateException();
               }
             }
@@ -450,53 +453,36 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
               Map<String, ImageInterface> newMultiImages = newMulti.readImages(command[1]);
               try {
                 this.model.addMultiLayer(newMultiImages, newMulti.readVisibility());
-              }
-              catch (IllegalArgumentException e) {
+              } catch (IllegalArgumentException e) {
                 try {
                   this.view.renderMessage("Invalid multi-layer file.\n");
-                }
-                catch (IOException io) {
+                } catch (IOException io) {
                   throw new IllegalStateException();
                 }
               }
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
               try {
                 this.view.renderMessage("Invalid file name.\n");
-              }
-              catch (IOException io) {
+              } catch (IOException io) {
                 throw new IllegalStateException();
               }
             }
-          }
-          else {
+          } else {
             try {
               this.view.renderMessage("Invalid addmulti command syntax.\n");
             } catch (IOException io) {
               throw new IllegalStateException();
             }
           }
+        default:
+          try {
+            this.view.renderMessage("Unrecognizable command.\n");
+          } catch (IOException io) {
+            throw new IllegalStateException();
+          }
       }
 
     }
 
-  }
-
-  private void saveAllTry(String[] command) {
-    try {
-      new MultiLayerImageWriter().writeFile("/res" + command[2] + "." + command[1], command[1],
-          this.model.getLayers(), this.model.getVisibility());
-    }
-    catch (IllegalArgumentException e) {
-      try {
-        this.view.renderMessage("Invalid file name.\n");
-      }
-      catch (IOException io) {
-        throw new IllegalStateException();
-      }
-    }
-    catch (IOException io) {
-      throw new IllegalStateException();
-    }
   }
 }

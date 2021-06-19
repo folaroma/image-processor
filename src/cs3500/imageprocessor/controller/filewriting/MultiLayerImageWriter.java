@@ -18,7 +18,7 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
     if (filename == null || type == null || layers == null || visibility == null) {
       throw new IllegalArgumentException("Null parameters.");
     }
-    StringBuilder output = new StringBuilder().append(type + "\n");
+    StringBuilder output = new StringBuilder().append(type).append("\n");
     for (Map.Entry<String, ImageInterface> item : layers.entrySet()) {
       String imageFilename = "";
       switch (type) {
@@ -53,7 +53,7 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
   }
 
   /**
-   * Sets the status of visiblity for the image.
+   * Sets the status of visibility for the image.
    *
    * @param key        Id for the image.
    * @param visibility List of invisible image ids.
