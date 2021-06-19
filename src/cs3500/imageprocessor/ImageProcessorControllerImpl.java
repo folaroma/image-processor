@@ -166,12 +166,22 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
         case "current":
           if (command.length == 2) {
             if (!this.model.getLayers().isEmpty()) {
-              try {
-                current = command[1];
-              } catch (IllegalArgumentException e) {
+              if (this.model.getLayers().containsKey(command[1])) {
                 try {
-                  this.view.renderMessage("Invalid layer ID.\n");
-                } catch (IOException io) {
+                  current = command[1];
+                } catch (IllegalArgumentException e) {
+                  try {
+                    this.view.renderMessage("Invalid layer ID.\n");
+                  } catch (IOException io) {
+                    throw new IllegalStateException();
+                  }
+                }
+              }
+              else {
+                try {
+                  this.view.renderMessage("This layer does not exist.\n");
+                }
+                catch (IOException io) {
                   throw new IllegalStateException();
                 }
               }
@@ -332,7 +342,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
                 this.model.hideLayer(current);
               } catch (IllegalArgumentException e) {
                 try {
-                  this.view.renderMessage("Invalid layer ID.\n");
+                  this.view.renderMessage("Invalid current layer.\n");
                 } catch (IOException io) {
                   throw new IllegalStateException();
                 }

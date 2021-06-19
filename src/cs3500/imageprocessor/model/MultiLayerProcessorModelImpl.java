@@ -142,7 +142,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
     if (id == null) {
       throw new IllegalArgumentException("String cannot be null.");
     }
-    if (this.hidden.contains(id)) {
+    if (!this.hidden.contains(id)) {
       throw new IllegalArgumentException("Layer with id is already visible.");
     }
     this.hidden.add(id);
@@ -153,7 +153,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
     if (id == null) {
       throw new IllegalArgumentException("String cannot be null.");
     }
-    if (!this.hidden.contains(id)) {
+    if (this.hidden.contains(id)) {
       throw new IllegalArgumentException("Layer with id is already hidden.");
     }
     this.hidden.remove(id);
