@@ -27,13 +27,15 @@ create image data from ASCII PPM files and also write image data into these file
 
 The Model and Controller are now complete.
 
+The controller added uses a multi layer image model that allows the creation, editing, and exporting of multi layer images with all of the same functionality from the last version of the model.
+
 &nbsp;
 
 ## Design Changes
 
 Only design change made was the addition of a `remove` method to the original Model.
 
-This is to add support for removing images in a Multi-Layer Model.
+This is to add support for removing images in a Multi-Layer Model, so we could then remove layers for when a new multi layer image is added.
 
 &nbsp;
 
