@@ -47,12 +47,16 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
     Scanner scan = new Scanner(this.stringReader);
 
+    if (!scan.hasNext()) {
+      throw new IllegalStateException();
+    }
+
     while (scan.hasNext()) {
       String str = scan.nextLine();
 
       String[] command = str.split("\\s+");
       if (command.length == 0) {
-        renderHandler("Avoid putting spaces before commands.");
+        renderHandler("Avoid putting spaces before commands.\n");
       } else {
 
         commandChecking(command);
@@ -185,7 +189,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
         renderHandler("No current set.");
       }
     } else {
-      renderHandler("Invalid blur command syntax.");
+      renderHandler("Invalid sharpen command syntax.");
     }
   }
 
@@ -197,7 +201,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
         renderHandler("No current set.");
       }
     } else {
-      renderHandler("Invalid blur command syntax.");
+      renderHandler("Invalid grayscale command syntax.");
     }
   }
 
@@ -209,7 +213,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
         renderHandler("No current set.");
       }
     } else {
-      renderHandler("Invalid blur command syntax.");
+      renderHandler("Invalid sepia command syntax.");
     }
   }
 
@@ -241,7 +245,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
         renderHandler("No layers created yet.");
       }
     } else {
-      renderHandler("Invalid show command syntax.");
+      renderHandler("Invalid hide command syntax.");
     }
   }
 
@@ -269,9 +273,6 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
   private void writeFileHandler(String s, IImageFileWriter writer, String type) {
     String id = this.getTopmostVisible();
-    if (id == null) {
-      renderHandler("No visible layers.");
-    } else {
       try {
         writer.writeFile(s + "." + type, this.model.getImage(id));
       } catch (IllegalArgumentException e) {
@@ -279,7 +280,6 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
       } catch (IOException io) {
         throw new IllegalStateException("Writing to file failed.");
       }
-    }
   }
 
   private String getTopmostVisible() {
