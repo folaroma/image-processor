@@ -1,8 +1,9 @@
 create first add desert.ppm ppm
 remove first
-create first checkerboard 5 5 0 0 0 255 255 255
+create first add desert.ppm ppm
 current first
 sepia
+save png sepiadesert
 remove first
 addmulti bugs/bugs.txt
 current first

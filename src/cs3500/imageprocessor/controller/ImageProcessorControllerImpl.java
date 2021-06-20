@@ -1,6 +1,5 @@
 package cs3500.imageprocessor.controller;
 
-import cs3500.imageprocessor.controller.ImageProcessorController;
 import cs3500.imageprocessor.controller.filereading.IMultiLayerReader;
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
 import cs3500.imageprocessor.controller.filereading.MultiLayerFileReader;
@@ -21,6 +20,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Class to represent the controller for the image processor. The controller uses the
+ * MultiImageProcessorModel implementation, and allows the creation of one multi layer image that
+ * can be edited and exported. PPN, Png, and JPEG files can be imported and exported. Each command
+ * must be on its own line.
+ */
 public class ImageProcessorControllerImpl implements ImageProcessorController {
 
   private final MultiLayerProcessorModel model;
@@ -29,6 +34,14 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
   private final ImageProcessorView view;
   private String current;
 
+  /**
+   * Creates an instance of the controller.
+   *
+   * @param model        Model for the controller to receive info from.
+   * @param stringReader Readable for which inputs are received.
+   * @param out          The appendable for which outputs are sent to.
+   * @throws IllegalArgumentException If any argument is null.
+   */
   public ImageProcessorControllerImpl(MultiLayerProcessorModel model, Readable stringReader,
       Appendable out) throws IllegalArgumentException {
     if (model == null || stringReader == null || out == null) {
@@ -65,6 +78,12 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Switches on the commands that are received and recognized. Unrecognized commnands result in a
+   * message being sent to the appendable.
+   *
+   * @param command Array of string on the line from input.
+   */
   private void commandChecking(String[] command) {
     switch (command[0]) {
       case "create":
@@ -115,7 +134,12 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
   }
 
-
+  /**
+   * Checks the syntax of the create commands and creates the layer if it is valid. Create can
+   * either work with the add command or the checkerboard command.
+   *
+   * @param command Line containing the command.
+   */
   private void createCommand(String[] command) {
     if (command.length == 5) {
       if (command[2].equals("add")) {
@@ -140,7 +164,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
-
+  /**
+   * Checks the systax for the remove command and removes the layer if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void removeCommand(String[] command) {
     if (command.length == 2) {
       try {
@@ -153,6 +181,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the current command, and then sets the current layer if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void currentCommand(String[] command) {
     if (command.length == 2) {
       if (!this.model.getLayers().isEmpty()) {
@@ -169,6 +202,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the blur command and blurs the current image if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void blurCommand(String[] command) {
     if (command.length == 1) {
       if (current != null) {
@@ -181,6 +219,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the sharpen command and sharpens the current image if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void sharpenCommand(String[] command) {
     if (command.length == 1) {
       if (this.current != null) {
@@ -193,6 +236,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the grayscale command and grayscales the current image if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void grayscaleCommand(String[] command) {
     if (command.length == 1) {
       if (this.current != null) {
@@ -205,6 +253,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the sepia command and sepia the current image if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void sepiaCommand(String[] command) {
     if (command.length == 1) {
       if (this.current != null) {
@@ -217,6 +270,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the show command and shows the current image if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void showCommand(String[] command) {
     if (command.length == 1) {
       if (!this.model.getLayers().isEmpty()) {
@@ -233,6 +291,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the hide command and hides the current image if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void hideCommand(String[] command) {
     if (command.length == 1) {
       if (!this.model.getLayers().isEmpty()) {
@@ -249,6 +312,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the save command and saves the given image if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void saveCommand(String[] command) {
     if (command.length == 3) {
       if (this.current != null) {
@@ -271,17 +339,29 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Handles writing the given image into an image file.
+   *
+   * @param s      Name of the written file.
+   * @param writer Writer object for the right file type.
+   * @param type   File type for the image file.
+   */
   private void writeFileHandler(String s, IImageFileWriter writer, String type) {
     String id = this.getTopmostVisible();
-      try {
-        writer.writeFile(s + "." + type, this.model.getImage(id));
-      } catch (IllegalArgumentException e) {
-        renderHandler(e.getMessage());
-      } catch (IOException io) {
-        throw new IllegalStateException("Writing to file failed.");
-      }
+    try {
+      writer.writeFile(s + "." + type, this.model.getImage(id));
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
+    } catch (IOException io) {
+      throw new IllegalStateException("Writing to file failed.");
+    }
   }
 
+  /**
+   * Gets the topmost visible layer in the multi layer image.
+   *
+   * @return Topmost visible layer.
+   */
   private String getTopmostVisible() {
     for (Map.Entry<String, ImageInterface> item : this.model.getLayers().entrySet()) {
       if (!this.model.getVisibility().contains(item.getKey())) {
@@ -291,6 +371,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     return null;
   }
 
+  /**
+   * Checks the syntax for the saveall command and saves all the layers if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void saveAllCommand(String[] command) {
     if (command.length == 3) {
       try {
@@ -307,6 +392,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the addMulti command and adds all the layers if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void addMultiCommand(String[] command) {
     if (command.length == 2) {
       try {
@@ -325,6 +415,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Checks the syntax for the checkerboard command, and creates and adds the image if it is valid.
+   *
+   * @param command Line containing the command.
+   */
   private void createCheckerboard(String[] command) {
     if (command[2].equals("checkerboard")
         && command[3].matches("-?\\d+")
@@ -356,6 +451,12 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Handles adding new layers to the model from the controller.
+   *
+   * @param fileName Name of the image to add
+   * @param image    Image to add to the model.
+   */
   private void addHandler(String fileName, ImageInterface image) {
     try {
       this.model.addImage(fileName, image);
@@ -364,6 +465,12 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Handles replacing the image associated with the id in the model with a new image.
+   *
+   * @param current Id of the current image.
+   * @param image   New image to set to that id.
+   */
   private void replaceHandler(String current, ImageInterface image) {
     try {
       this.model.replaceImage(current, image);
@@ -372,6 +479,11 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
   }
 
+  /**
+   * Handles rendering a message to the output appendable.
+   *
+   * @param message Messages to be rendered to the view.
+   */
   private void renderHandler(String message) {
     try {
       view.renderMessage(message + "\n");

@@ -5,22 +5,21 @@ import cs3500.imageprocessor.controller.ImageProcessorControllerImpl;
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
 import cs3500.imageprocessor.controller.filereading.MultiLayerFileReader;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
-import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
 import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
 import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.ImageImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
-import java.awt.Image;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.notification.RunListener.ThreadSafe;
 
+/**
+ * Testing class for the ccontroller.
+ */
 public class ImageProcessorControllerImplTest {
 
   private Appendable out;
@@ -29,12 +28,11 @@ public class ImageProcessorControllerImplTest {
   @Before
   public void init() {
     Readable stringReader = new StringReader("create first res/desert ppm");
-     this.out = new StringBuilder();
-     this.model = new MultiLayerProcessorModelImpl();
+    this.out = new StringBuilder();
+    this.model = new MultiLayerProcessorModelImpl();
     ImageProcessorController controller = new ImageProcessorControllerImpl(this.model, stringReader,
         this.out);
   }
-
 
   // CONSTRUCTOR TESTS
 
@@ -77,7 +75,6 @@ public class ImageProcessorControllerImplTest {
   public void imageProcessorControllerAllNullEx() {
     new ImageProcessorControllerImpl(null, null, null);
   }
-
 
   // -----------------------------------------------------------------------------------------------
 
@@ -154,7 +151,8 @@ public class ImageProcessorControllerImplTest {
   // testing message returned when creating a checkerboard with invalid checkerboard params
   @Test
   public void invalidCheckerboardParams() {
-    Readable invalidCheckerboard = new StringReader("create first checkerboard 5 4 0 0 0 256 255 255");
+    Readable invalidCheckerboard = new StringReader(
+        "create first checkerboard 5 4 0 0 0 256 255 255");
     ImageProcessorController invalidCheckerboardController = new ImageProcessorControllerImpl(
         this.model, invalidCheckerboard, this.out);
     invalidCheckerboardController.startEditor();
@@ -166,7 +164,8 @@ public class ImageProcessorControllerImplTest {
   // testing message returned when creating a checkerboard with invalid syntax
   @Test
   public void invalidCheckerboardSyntax() {
-    Readable invalidCheckerboardSyntax = new StringReader("create first checkerboard ad 4 0 0 0 255 255 255");
+    Readable invalidCheckerboardSyntax = new StringReader(
+        "create first checkerboard ad 4 0 0 0 255 255 255");
     ImageProcessorController invalidCheckerboardSyntaxController = new ImageProcessorControllerImpl(
         this.model, invalidCheckerboardSyntax, this.out);
     invalidCheckerboardSyntaxController.startEditor();
@@ -199,7 +198,8 @@ public class ImageProcessorControllerImplTest {
   // testing current command with a layer that does not exist
   @Test
   public void currentLayerNonexistent() {
-    Readable nonExistentLayer = new StringReader("create first add res/desert.ppm ppm\ncurrent second");
+    Readable nonExistentLayer = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent second");
     ImageProcessorController nonExistentLayerController = new ImageProcessorControllerImpl(
         this.model, nonExistentLayer, this.out);
     nonExistentLayerController.startEditor();
@@ -386,7 +386,8 @@ public class ImageProcessorControllerImplTest {
   // testing save command with invalid file type
   @Test
   public void invalidFileTypeSave() {
-    Readable invalidFileType = new StringReader("create first add res/desert.ppm ppm\ncurrent first\nsave abc desert1\n");
+    Readable invalidFileType = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nsave abc desert1\n");
     ImageProcessorController invalidFileTypeController = new ImageProcessorControllerImpl(
         this.model, invalidFileType, this.out);
     invalidFileTypeController.startEditor();
@@ -408,7 +409,8 @@ public class ImageProcessorControllerImplTest {
   // testing saveAll invalid file type
   @Test
   public void invalidFileTypeSaveAll() {
-    Readable invalidFileType = new StringReader("create first add res/desert.ppm ppm\ncurrent first\nsaveall abc desert1\n");
+    Readable invalidFileType = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nsaveall abc desert1\n");
     ImageProcessorController invalidFileTypeController = new ImageProcessorControllerImpl(
         this.model, invalidFileType, this.out);
     invalidFileTypeController.startEditor();
@@ -419,7 +421,8 @@ public class ImageProcessorControllerImplTest {
   // testing saveAll invalid command length
   @Test
   public void invalidLengthSaveAll() {
-    Readable invalidLength = new StringReader("create first add res/desert.ppm ppm\ncurrent first\nsaveall desert1\n");
+    Readable invalidLength = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nsaveall desert1\n");
     ImageProcessorController invalidLengthController = new ImageProcessorControllerImpl(
         this.model, invalidLength, this.out);
     invalidLengthController.startEditor();
@@ -494,7 +497,6 @@ public class ImageProcessorControllerImplTest {
     assertEquals(this.out.toString(), "Layers must all be the same dimensions.\n");
   }
 
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -513,7 +515,8 @@ public class ImageProcessorControllerImplTest {
         this.model, givenImage, this.out);
     givenImageController.startEditor();
 
-    assertEquals(this.model.getLayers().get("first"), new PPMFileReader().readImageFromFile("res/desert.ppm"));
+    assertEquals(this.model.getLayers().get("first"),
+        new PPMFileReader().readImageFromFile("res/desert.ppm"));
   }
 
   // testing create with a checkerboard
@@ -529,7 +532,6 @@ public class ImageProcessorControllerImplTest {
             new ColorImpl(0, 0, 0),
             new ColorImpl(255, 255, 255)))).generateImage());
   }
-
 
   // -----------------------------------------------------------------------------------------------
 
@@ -552,7 +554,6 @@ public class ImageProcessorControllerImplTest {
     assertTrue(this.model.getLayers().isEmpty());
   }
 
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -566,14 +567,14 @@ public class ImageProcessorControllerImplTest {
   // testing current
   @Test
   public void currentFunctionality() {
-    Readable currentHide = new StringReader("create first add res/desert.ppm ppm\ncurrent first\nhide");
+    Readable currentHide = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nhide");
     ImageProcessorController currentHideCheckController = new ImageProcessorControllerImpl(
         this.model, currentHide, this.out);
     currentHideCheckController.startEditor();
 
     assertEquals(this.model.getVisibility().size(), 1);
   }
-
 
   // -----------------------------------------------------------------------------------------------
 
@@ -585,7 +586,6 @@ public class ImageProcessorControllerImplTest {
   */
 
 
-  /*
   // testing blur
   @Test
   public void generalBlur() {
@@ -597,12 +597,16 @@ public class ImageProcessorControllerImplTest {
     ImageInterface desert = new PPMFileReader().readImageFromFile("res/desert.ppm");
     ImageProcessorModelImpl desertBlur = new ImageProcessorModelImpl();
     desertBlur.addImage("desert", desert);
-    desertBlur.replaceImage("desert", desertBlur.blur("blurredDesert"));
+    desertBlur.replaceImage("desert", desertBlur.blur("desert"));
 
-    assertEquals(this.model.getImage("first").getPixels().get(0).get(0).getColor().getRed(), desertBlur.getImage("blurredDesert").getPixels().get(0).get(0).getColor().getRed());
+    for (int i = 0; i < this.model.getImage("first").getPixels().size(); i++) {
+      for (int j = 0; j < this.model.getImage("first").getPixels().get(0).size(); j++) {
+        assertEquals(this.model.getImage("first").getPixels().get(i).get(j).getColor(),
+            desertBlur.getImage("desert").getPixels().get(i).get(j).getColor());
+      }
+    }
+
   }
-   */
-
 
   // -----------------------------------------------------------------------------------------------
 
@@ -613,9 +617,27 @@ public class ImageProcessorControllerImplTest {
         ---------------
   */
 
+  // testing sharpen
+  @Test
+  public void generalSharpen() {
+    Readable sharpen = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nsharpen\n");
+    ImageProcessorController sharpenController = new ImageProcessorControllerImpl(
+        this.model, sharpen, this.out);
+    sharpenController.startEditor();
 
+    ImageInterface desert = new PPMFileReader().readImageFromFile("res/desert.ppm");
+    ImageProcessorModelImpl desertSharpen = new ImageProcessorModelImpl();
+    desertSharpen.addImage("desert", desert);
+    desertSharpen.replaceImage("desert", desertSharpen.sharpen("desert"));
 
-
+    for (int i = 0; i < this.model.getImage("first").getPixels().size(); i++) {
+      for (int j = 0; j < this.model.getImage("first").getPixels().get(0).size(); j++) {
+        assertEquals(this.model.getImage("first").getPixels().get(i).get(j).getColor(),
+            desertSharpen.getImage("desert").getPixels().get(i).get(j).getColor());
+      }
+    }
+  }
 
   // -----------------------------------------------------------------------------------------------
 
@@ -626,9 +648,27 @@ public class ImageProcessorControllerImplTest {
         -----------------
   */
 
+  // testing grayscale
+  @Test
+  public void generalGrayscale() {
+    Readable grayscale = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\ngrayscale\n");
+    ImageProcessorController grayscaleController = new ImageProcessorControllerImpl(
+        this.model, grayscale, this.out);
+    grayscaleController.startEditor();
 
+    ImageInterface desert = new PPMFileReader().readImageFromFile("res/desert.ppm");
+    ImageProcessorModelImpl dessertGrayscale = new ImageProcessorModelImpl();
+    dessertGrayscale.addImage("desert", desert);
+    dessertGrayscale.replaceImage("desert", dessertGrayscale.grayscale("desert"));
 
-
+    for (int i = 0; i < this.model.getImage("first").getPixels().size(); i++) {
+      for (int j = 0; j < this.model.getImage("first").getPixels().get(0).size(); j++) {
+        assertEquals(this.model.getImage("first").getPixels().get(i).get(j).getColor(),
+            dessertGrayscale.getImage("desert").getPixels().get(i).get(j).getColor());
+      }
+    }
+  }
 
   // -----------------------------------------------------------------------------------------------
 
@@ -638,10 +678,27 @@ public class ImageProcessorControllerImplTest {
        | sepia Tests |
         -------------
   */
+  // testing sepia
+  @Test
+  public void generalSepia() {
+    Readable sepia = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nsepia\n");
+    ImageProcessorController sepiaController = new ImageProcessorControllerImpl(
+        this.model, sepia, this.out);
+    sepiaController.startEditor();
 
+    ImageInterface desert = new PPMFileReader().readImageFromFile("res/desert.ppm");
+    ImageProcessorModelImpl desertSepia = new ImageProcessorModelImpl();
+    desertSepia.addImage("desert", desert);
+    desertSepia.replaceImage("desert", desertSepia.sepia("desert"));
 
-
-
+    for (int i = 0; i < this.model.getImage("first").getPixels().size(); i++) {
+      for (int j = 0; j < this.model.getImage("first").getPixels().get(0).size(); j++) {
+        assertEquals(this.model.getImage("first").getPixels().get(i).get(j).getColor(),
+            desertSepia.getImage("desert").getPixels().get(i).get(j).getColor());
+      }
+    }
+  }
 
   // -----------------------------------------------------------------------------------------------
 
@@ -656,14 +713,14 @@ public class ImageProcessorControllerImplTest {
   // show general test
   @Test
   public void showLayer() {
-    Readable show = new StringReader("create first add res/desert.ppm ppm\ncurrent first\nhide\nshow\n");
+    Readable show = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nhide\nshow\n");
     ImageProcessorController showController = new ImageProcessorControllerImpl(
         this.model, show, this.out);
     showController.startEditor();
 
     assertTrue(this.model.getVisibility().isEmpty());
   }
-
 
   // -----------------------------------------------------------------------------------------------
 
@@ -686,7 +743,6 @@ public class ImageProcessorControllerImplTest {
     assertEquals(this.model.getVisibility().size(), 1);
   }
 
-
   // -----------------------------------------------------------------------------------------------
 
 
@@ -697,18 +753,45 @@ public class ImageProcessorControllerImplTest {
   */
 
 
-  // save general test
+  // save general test png
   @Test
-  public void saveImage() {
-    Readable generalImage = new StringReader("create first add res/desert.ppm ppm\ncurrent first\nsave jpeg res/desert2");
+  public void saveImagePNG() {
+    Readable generalImage = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nsave png test\\testreaderfiles\\desert2");
     ImageProcessorController generalImageController = new ImageProcessorControllerImpl(
         this.model, generalImage, this.out);
     generalImageController.startEditor();
 
-    assertEquals(new ImageIOFileReader().readImageFromFile("res/desert2.jpeg").getClass(), ImageImpl.class);
+    assertEquals(new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert2.png"),
+        this.model.getImage("first"));
   }
 
+  // save general test ppm
+  @Test
+  public void saveImagePPM() {
+    Readable generalImage = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nsave ppm test\\testreaderfiles\\desert2");
+    ImageProcessorController generalImageController = new ImageProcessorControllerImpl(
+        this.model, generalImage, this.out);
+    generalImageController.startEditor();
 
+    assertEquals(new PPMFileReader().readImageFromFile("test\\testreaderfiles\\desert2.ppm"),
+        this.model.getImage("first"));
+  }
+
+  // save general test jpeg
+  @Test
+  public void saveImageJPEG() {
+    Readable generalImage = new StringReader(
+        "create first add res/desert.ppm ppm\ncurrent first\nsave jpeg test\\testreaderfiles\\desert2");
+    ImageProcessorController generalImageController = new ImageProcessorControllerImpl(
+        this.model, generalImage, this.out);
+    generalImageController.startEditor();
+
+    assertEquals(
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert2.jpeg").getClass(),
+        ImageImpl.class);
+  }
 
   // -----------------------------------------------------------------------------------------------
 
@@ -723,14 +806,21 @@ public class ImageProcessorControllerImplTest {
   // saveAll general test
   @Test
   public void saveAllImage() {
-    Readable generalImage = new StringReader("create first add res/desert.ppm ppm\ncreate second add res/desert.ppm ppm\ncurrent first\nsaveall jpeg res/desert3\n");
+    Readable generalImage = new StringReader(
+        "create first add res/desert.ppm ppm\ncreate second add res/desert.ppm ppm\ncurrent first\nsaveall jpeg test\\testreaderfiles\\desert3\n");
     ImageProcessorController generalImageController = new ImageProcessorControllerImpl(
         this.model, generalImage, this.out);
     generalImageController.startEditor();
 
-    assertEquals(new MultiLayerFileReader().readImages("res/desert3/desert3.txt").getClass(), Map.class);
+    assertEquals(new MultiLayerFileReader()
+            .readImages("test\\testreaderfiles\\desert3\\test\\testreaderfiles\\desert3.txt")
+            .get("first"),
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert3\\first.jpeg"));
+    assertEquals(new MultiLayerFileReader()
+            .readImages("test\\testreaderfiles\\desert3\\test\\testreaderfiles\\desert3.txt")
+            .get("second"),
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert3\\second.jpeg"));
   }
-
 
   // -----------------------------------------------------------------------------------------------
 
@@ -740,9 +830,21 @@ public class ImageProcessorControllerImplTest {
        | addmulti Tests |
         ----------------
   */
+  // general add multi test
+  @Test
+  public void generatAddMultiTest() {
+    Readable generalImage = new StringReader(
+        "addmulti test\\testreaderfiles\\bugs\\bugs.txt");
+    ImageProcessorController addMultiController = new ImageProcessorControllerImpl(
+        this.model, generalImage, this.out);
+    addMultiController.startEditor();
 
-
-
+    assertEquals(this.model.getImage("first"),
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\bugs\\first.png"));
+    assertEquals(this.model.getImage("second"),
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\bugs\\second.png"));
+    assertEquals(this.model.getVisibility().size(), 0);
+  }
 
 
 }

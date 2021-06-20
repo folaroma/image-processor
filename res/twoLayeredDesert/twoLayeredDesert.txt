@@ -1,4 +1,4 @@
 ppm
 twoLayeredDesert\third.ppm third visible
-twoLayeredDesert\first.ppm first visible
+twoLayeredDesert\first.ppm first invisible
 twoLayeredDesert\second.ppm second invisible

@@ -3,10 +3,18 @@ create second add desert.ppm ppm
 current first
 blur
 save png blurredDesert
+hide
 current second
 sharpen
 save jpeg sharpenedDesert
 create third add desert.ppm ppm
 hide
 saveall ppm twoLayeredDesert
+remove first
+remove second
+remove third
+create fourth add checkerboard.png png
+current fourth
+grayscale
+save ppm grayboard
 
