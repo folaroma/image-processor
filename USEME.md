@@ -102,10 +102,10 @@ Commands supported by the Image Processor program:
     create second add res/desert.ppm ppm
     current second
     hide
-    save png res/oneLayerDesert
+    save png res/oneLayerDesert #this is the "first" layer as it is topmost and visible
     ```
 
-12. `saveall [type] [file directory]` - saves all of the layers into images of the given file type and creates a text file representing the whole image with the given file name:
+12. `saveall [type] [file directory]` - saves all of the layers into images of the given file type and creates a text file representing the whole image with the given file name. This and the images are then put into a folder:
 
     ```
     create first add res/desert.ppm ppm
