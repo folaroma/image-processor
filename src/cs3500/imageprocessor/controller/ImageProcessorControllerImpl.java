@@ -37,7 +37,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     this.model = model;
     this.stringReader = stringReader;
     this.out = out;
-    this.view = new ImageProcessorTextView(this.model, this.out);
+    this.view = new ImageProcessorTextView(this.out);
 
   }
 

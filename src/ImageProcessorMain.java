@@ -17,7 +17,6 @@ public class ImageProcessorMain {
       if (args[0].equals("script")) {
         new ImageProcessorControllerImpl(new MultiLayerProcessorModelImpl(),
             new FileReader(args[1]), System.out).startEditor();
-        return;
       }
     } else if (args.length == 1 && args[0].equals("interactive")) {
       new ImageProcessorControllerImpl(new MultiLayerProcessorModelImpl(),

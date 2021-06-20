@@ -3,16 +3,22 @@ package cs3500.imageprocessor.view;
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import java.io.IOException;
 
+/**
+ * Class to represent a textual view for the image program to display messages to the user.
+ */
 public class ImageProcessorTextView implements ImageProcessorView {
-  private final ImageProcessorModel model;
   private Appendable ap;
 
-  public ImageProcessorTextView(ImageProcessorModel model, Appendable ap)
+  /**
+   * Creates a new view.
+   * @param ap Appendable for the view.
+   * @throws IllegalArgumentException IF appendable is null.
+   */
+  public ImageProcessorTextView(Appendable ap)
       throws IllegalArgumentException {
-    if (model == null || ap == null) {
+    if (ap == null) {
       throw new IllegalArgumentException("Null parameter.");
     }
-    this.model = model;
     this.ap = ap;
 
   }

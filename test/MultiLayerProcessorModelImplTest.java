@@ -1,47 +1,36 @@
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
+import cs3500.imageprocessor.model.MultiLayerProcessorModel;
+import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
 import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Testing class for ImageProcessorModel.
- */
-public class ImageProcessorModelImplTest {
-
-  private ImageProcessorModel testModel;
+public class MultiLayerProcessorModelImplTest {
+private MultiLayerProcessorModel testModel;
+private ImageInterface blackRedCheckerBoard;
+private ImageInterface greenRedCheckerBoard;
 
   @Before
   public void setUp() throws Exception {
-    testModel = new ImageProcessorModelImpl();
+    this.testModel = new MultiLayerProcessorModelImpl();
     testModel.addImage("checkerboard", testModel.generateCheckerboard(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0)))));
-    ImageInterface blackRedCheckerBoard = new CheckerboardGenerator(2, 2,
+     blackRedCheckerBoard = new CheckerboardGenerator(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))))
         .generateImage();
-    ImageInterface greenRedCheckerBoard = new CheckerboardGenerator(2, 2,
+     greenRedCheckerBoard = new CheckerboardGenerator(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 255, 0))))
         .generateImage();
-    testModel.addImage("blackRedCheckerBoard", blackRedCheckerBoard);
-    testModel.addImage("greenRedCheckerBoard", greenRedCheckerBoard);
+
   }
-
-  // CONSTRUCTOR TESTS
-
-  // -----------------------------------------------------------------------------------------------
-
-
-  /*
-        -----------------------------
-       | Constructor Exception Tests |
-        -----------------------------
-  */
 
   // test exception in replace image when the id is null
   @Test(expected = IllegalArgumentException.class)
@@ -68,11 +57,40 @@ public class ImageProcessorModelImplTest {
   // tests replacing an image in the map
   @Test
   public void testReplaceImage() {
+    testModel.replaceImage("checkerboard", new CheckerboardGenerator(2, 2,
+        new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))))
+        .generateImage());
+    assertEquals(2, testModel.getImage("checkerboard").getPixels().size());
+    assertEquals(2, testModel.getImage("checkerboard").getPixels().get(0).size());
+  }
+
+  // tests replacing an image in the map with bad dimensions
+  @Test(expected = IllegalArgumentException.class)
+  public void testReplaceImageBadDimension() {
     testModel.replaceImage("checkerboard", new CheckerboardGenerator(4, 4,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))))
         .generateImage());
     assertEquals(4, testModel.getImage("checkerboard").getPixels().size());
     assertEquals(4, testModel.getImage("checkerboard").getPixels().get(0).size());
+  }
+
+
+  // test null parameter in constructor
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullDelegate() {
+    new MultiLayerProcessorModelImpl(null, new ArrayList<>(), new ArrayList<>());
+  }
+
+  // test null parameter in constructor
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullLayers() {
+    new MultiLayerProcessorModelImpl(new ImageProcessorModelImpl(), null, new ArrayList<>());
+  }
+
+  // test null parameter in constructor
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullVisibilityList() {
+    new MultiLayerProcessorModelImpl(new ImageProcessorModelImpl(), new ArrayList<>(), null);
   }
 
   // tests exception if the id is null in getimage
@@ -153,38 +171,20 @@ public class ImageProcessorModelImplTest {
     testModel.addImage("checkerboard", this.testModel.getImage("checkerboard"));
   }
 
+  //test adding an image with bad dimensions
+  @Test(expected = IllegalArgumentException.class)
+  public void addImageBadDimensions() {
+    ImageInterface blackRedCheckerBoard = new CheckerboardGenerator(4, 4,
+        new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))))
+        .generateImage();
+    testModel.addImage("blackRedCheckerBoard", blackRedCheckerBoard);
+  }
+
   //tests generating a checkerboard with null colors
   @Test(expected = IllegalArgumentException.class)
   public void testNullColorsCheckerboard() {
     testModel.generateCheckerboard(4, 4, null);
   }
-
-  //tests generating a checkerboard with more than 2 colors
-  @Test(expected = IllegalArgumentException.class)
-  public void testMoreThan2ColorsCheckerboard() {
-    testModel.generateCheckerboard(4, 4,
-        new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0),
-            new ColorImpl(0, 255, 255))));
-  }
-
-  //tests generating a checkerboard with more than less than 2 rows
-  @Test(expected = IllegalArgumentException.class)
-  public void testLessThan2RowsCheckerboard() {
-    testModel.generateCheckerboard(1, 4,
-        new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))));
-  }
-
-  //tests generating a checkerboard with more than less than 2 columns
-  @Test(expected = IllegalArgumentException.class)
-  public void testLessThan2ColumnsCheckerboard() {
-    testModel.generateCheckerboard(2, 1,
-        new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))));
-  }
-
-  // GENERAL TESTS
-
-  // -----------------------------------------------------------------------------------------------
-
 
   //tests getting the image using its id
   @Test
@@ -197,7 +197,7 @@ public class ImageProcessorModelImplTest {
   // tests adding an image to the map
   @Test
   public void testAddImage() {
-    ImageInterface otherCheckerboard = testModel.generateCheckerboard(4, 4,
+    ImageInterface otherCheckerboard = testModel.generateCheckerboard(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))));
     testModel.addImage("checkerboard2", otherCheckerboard);
     assertEquals(testModel.getImage("checkerboard2"), otherCheckerboard);
@@ -373,6 +373,7 @@ public class ImageProcessorModelImplTest {
   // Checks if the rgb values are good.
   @Test
   public void testGrayscaleBlackRedCheckerboard() {
+    testModel.addImage("blackRedCheckerBoard", blackRedCheckerBoard);
     ImageInterface grayCheckerboard = testModel.grayscale("blackRedCheckerBoard");
     assertEquals(54, grayCheckerboard.getPixels().get(0).get(0).getColor().getRed());
     assertEquals(54, grayCheckerboard.getPixels().get(0).get(0).getColor().getGreen());
@@ -396,6 +397,7 @@ public class ImageProcessorModelImplTest {
   // Checks if the rgb values are good.
   @Test
   public void testGrayscaleGreenRedCheckerboard() {
+    testModel.addImage("greenRedCheckerBoard", greenRedCheckerBoard);
     ImageInterface grayCheckerboard = testModel.grayscale("greenRedCheckerBoard");
     assertEquals(54, grayCheckerboard.getPixels().get(0).get(0).getColor().getRed());
     assertEquals(54, grayCheckerboard.getPixels().get(0).get(0).getColor().getGreen());
@@ -418,6 +420,7 @@ public class ImageProcessorModelImplTest {
   //tests that stacking grayscale on top of each other and that it stays the same.
   @Test
   public void testGrayscaleStacking() {
+    testModel.addImage("blackRedCheckerBoard", blackRedCheckerBoard);
     ImageInterface grayCheckerboard = testModel.grayscale("blackRedCheckerBoard");
     testModel.addImage("gray", grayCheckerboard);
     ImageInterface grayCheckerboard2 = testModel.grayscale("gray");
@@ -445,6 +448,7 @@ public class ImageProcessorModelImplTest {
   // Checks if the rgb values are good.
   @Test
   public void testSepiaBlackRedCheckerboard() {
+    testModel.addImage("blackRedCheckerBoard", blackRedCheckerBoard);
     ImageInterface sepiaCheckerboard = testModel.sepia("blackRedCheckerBoard");
     assertEquals(100, sepiaCheckerboard.getPixels().get(0).get(0).getColor().getRed());
     assertEquals(88, sepiaCheckerboard.getPixels().get(0).get(0).getColor().getGreen());
@@ -469,6 +473,7 @@ public class ImageProcessorModelImplTest {
   // Checks if the rgb values are good.
   @Test
   public void testSepiaGreenRedCheckerboard() {
+    testModel.addImage("greenRedCheckerBoard", greenRedCheckerBoard);
     ImageInterface sepiaCheckerboard = testModel.sepia("greenRedCheckerBoard");
 
     assertEquals(100, sepiaCheckerboard.getPixels().get(0).get(0).getColor().getRed());
@@ -492,6 +497,7 @@ public class ImageProcessorModelImplTest {
   //tests that stacking sepia on top of each other.
   @Test
   public void testSepiaStacking() {
+    testModel.addImage("blackRedCheckerBoard", blackRedCheckerBoard);
     ImageInterface sepiaCheckerboard = testModel.sepia("blackRedCheckerBoard");
     testModel.addImage("sepia", sepiaCheckerboard);
     ImageInterface sepia2Checkerboard = testModel.sepia("sepia");
@@ -568,5 +574,81 @@ public class ImageProcessorModelImplTest {
     testModel.removeImage("asdadfsdfsdf");
   }
 
+  // test null id with showLayer
+  @Test(expected = IllegalArgumentException.class)
+  public void testShowNullId() {
+    testModel.showLayer(null);
+  }
 
+  // test show layer on an already shown layer
+  @Test(expected = IllegalArgumentException.class)
+  public void testShowAlreadyShownId() {
+    testModel.showLayer("checkerboard");
+  }
+
+  // test show layer on an bad id
+  @Test(expected = IllegalArgumentException.class)
+  public void testShowLayerNoId() {
+    testModel.showLayer("asdasdasdasd");
+  }
+
+  // test null id with hide
+  @Test(expected = IllegalArgumentException.class)
+  public void testHideNullId() {
+    testModel.hideLayer(null);
+  }
+
+  // test hide layer on an already hidden layer
+  @Test(expected = IllegalArgumentException.class)
+  public void testHideAlreadyHiddenId() {
+    testModel.hideLayer("checkerboard");
+    testModel.hideLayer("checkerboard");
+  }
+
+  // test hide layer on an bad id
+  @Test(expected = IllegalArgumentException.class)
+  public void testHideLayerNoId() {
+    testModel.hideLayer("asdasdasdasd");
+  }
+
+  // test null map for add multilayer
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddMultiLayerNullMap() {
+    testModel.addMultiLayer(null, new ArrayList<>());
+  }
+
+  // test null list for add multilayer
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddMultiLayerNullList() {
+    testModel.addMultiLayer(new HashMap<>(), null);
+  }
+
+  // tests that adding a multi layer image works and clears the last image.
+  @Test
+  public void testAddMultiLayerWorks() {
+    testModel.hideLayer("checkerboard");
+    Map<String, ImageInterface> layers = new HashMap<>();
+    layers.put("blackRedCheckerBoard", blackRedCheckerBoard);
+    testModel.addMultiLayer(layers, new ArrayList<>());
+
+    assertEquals(testModel.getLayers().size(), 1);
+    assertEquals(testModel.getImage("blackRedCheckerBoard"), blackRedCheckerBoard);
+    assertEquals(testModel.getVisibility().size(), 0);
+  }
+
+  // tests that getting the visibility list works
+  @Test
+  public void testGetVisibilityWorks() {
+    testModel.hideLayer("checkerboard");
+    assertEquals(testModel.getVisibility().size(), 1);
+    assertEquals(testModel.getVisibility().get(0), "checkerboard");
+  }
+
+  // test getLayers works
+  @Test
+  public void testGetLayersWorks() {
+    Map<String, ImageInterface> layers = testModel.getLayers();
+    assertEquals(layers.size(), 1);
+    assertEquals(layers.get("checkerboard"), testModel.getImage("checkerboard"));
+  }
 }

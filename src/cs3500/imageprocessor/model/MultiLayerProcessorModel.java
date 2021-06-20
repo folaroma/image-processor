@@ -16,7 +16,7 @@ public interface MultiLayerProcessorModel extends ImageProcessorModel {
    * Gets the layer represented by the given id and marks it as visible.
    *
    * @param id String of layer to mark.
-   * @throws IllegalArgumentException If the id is null or no layer with the id exists.
+   * @throws IllegalArgumentException If the id is null, the id is already shown, or no layer with the id exists.
    */
   void showLayer(String id) throws IllegalArgumentException;
 
@@ -24,7 +24,7 @@ public interface MultiLayerProcessorModel extends ImageProcessorModel {
    * Gets the layer represented by the given id and marks it as invisible.
    *
    * @param id String of layer to mark.
-   * @throws IllegalArgumentException If the id is null or no layer with the id exists.
+   * @throws IllegalArgumentException If the id is null, the id is already hidden,  or no layer with the id exists.
    */
   void hideLayer(String id) throws IllegalArgumentException;
 
