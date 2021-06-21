@@ -95,7 +95,7 @@ Commands supported by the Image Processor program:
     hide
     ```
 
-11. `save [type] [file directory]` - saves the topmost visible layer as an image with the file types of PNG, JPEG, and PPM:
+11. `save [type] [file directory]` - saves the topmost visible layer as an image with the file types of PNG, JPEG, and PPM. Paths do not need file extensions:
 
     ```
     create first add res/desert.ppm ppm
@@ -105,7 +105,7 @@ Commands supported by the Image Processor program:
     save png res/oneLayerDesert #this is the "first" layer as it is topmost and visible
     ```
 
-12. `saveall [type] [file directory]` - saves all of the layers into images of the given file type and creates a text file representing the whole image with the given file name. This and the images are then put into a folder:
+12. `saveall [type] [file directory]` - saves all of the layers into images of the given file type and creates a text file representing the whole image with the given file name. This and the images are then put into a folder. Paths do not need file extensions:
 
     ```
     create first add res/desert.ppm ppm
