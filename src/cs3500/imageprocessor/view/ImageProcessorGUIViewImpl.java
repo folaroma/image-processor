@@ -11,11 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -37,6 +40,8 @@ import swingdemo.SwingFeaturesFrame;
 
 public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorGUIView,
     ActionListener {
+  private BufferedImage currentImage;
+
   private JPanel mainPanel;
   private JMenuBar menuBar;
   private JPanel rightPanel;
@@ -48,7 +53,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   private JMenu layer;
 
   private JMenuItem newImage;
-  private JMenuItem open;
   private JMenuItem load;
   private JMenuItem save;
   private JMenuItem saveAs;
@@ -62,9 +66,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   private JMenuItem sepia;
 
   private JMenuItem selectLayer;
-  private JMenuItem addLayer;
+  private JMenu addLayer;
+  private JMenuItem loadImage;
+  private JMenuItem loadCheckerboard;
   private JMenuItem deleteLayer;
-  private JMenuItem replaceLayer;
 
   private JMenuItem showLayer;
   private JMenuItem hideLayer;
@@ -80,9 +85,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
   private final ArrayList<IViewListener> listeners;
 
-  public ImageProcessorGUIViewImpl() {
+  public ImageProcessorGUIViewImpl(IViewListener listener) {
     super();
     this.listeners = new ArrayList<>();
+    this.addViewListener(listener);
     setTitle("Image Processor");
     setSize(1200, 800);
 
@@ -99,16 +105,16 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     file.getAccessibleContext().setAccessibleDescription(
         "File Menu");
 
-    newImage = new JMenuItem("New...");
-    newImage.getAccessibleContext().setAccessibleDescription("New Image");
+    newImage = new JMenuItem("Open Multi-Layer Image");
+    newImage.getAccessibleContext().setAccessibleDescription("Open Multi");
+    newImage.setActionCommand("Load Multi");
+    newImage.addActionListener(this);
     file.add(newImage);
-
-    open = new JMenuItem("Open...");
-    open.getAccessibleContext().setAccessibleDescription("Open Image");
-    file.add(open);
 
     load = new JMenuItem("Load Script...");
     load.getAccessibleContext().setAccessibleDescription("Load a Script");
+    load.setActionCommand("Load Script");
+    load.addActionListener(this);
     file.add(load);
 
     JSeparator s1 = new JSeparator();
@@ -116,12 +122,16 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     file.add(s1);
 
-    save = new JMenuItem("Save");
+    save = new JMenuItem("Save Topmost Visible Layer");
     save.getAccessibleContext().setAccessibleDescription("Save Image");
+    save.setActionCommand("Save Layer");
+    save.addActionListener(this);
     file.add(save);
 
-    saveAs = new JMenuItem("Save As...");
-    saveAs.getAccessibleContext().setAccessibleDescription("Save Image As...");
+    saveAs = new JMenuItem("Save Whole Image");
+    saveAs.getAccessibleContext().setAccessibleDescription("Save Whole Image");
+    saveAs.setActionCommand("Save All Layers");
+    saveAs.addActionListener(this);
     file.add(saveAs);
 
     menuBar.add(file);
@@ -132,21 +142,33 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     filters = new JMenu("Filters");
     filters.getAccessibleContext().setAccessibleDescription("Filters");
+
     blur = new JMenuItem("Blur");
     blur.getAccessibleContext().setAccessibleDescription("Blur");
+    blur.setActionCommand("Blur");
+    blur.addActionListener(this);
     filters.add(blur);
+
     sharpen = new JMenuItem("Sharpen");
     sharpen.getAccessibleContext().setAccessibleDescription("Sharpen");
+    sharpen.setActionCommand("Sharpen");
+    sharpen.addActionListener(this);
     filters.add(sharpen);
     edit.add(filters);
 
     transformations = new JMenu("Transform");
     transformations.getAccessibleContext().setAccessibleDescription("Color Transformations");
+
     grayscale = new JMenuItem("Grayscale");
     grayscale.getAccessibleContext().setAccessibleDescription("Grayscale");
+    grayscale.setActionCommand("Grayscale");
+    grayscale.addActionListener(this);
     transformations.add(grayscale);
+
     sepia = new JMenuItem("Sepia");
     sepia.getAccessibleContext().setAccessibleDescription("Sepia");
+    sepia.setActionCommand("Sepia");
+    sepia.addActionListener(this);
     transformations.add(sepia);
     edit.add(transformations);
 
@@ -156,21 +178,34 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     layer = new JMenu("Layer");
     layer.getAccessibleContext().setAccessibleDescription("Layer Menu");
 
-    addLayer = new JMenuItem("Add Layers...");
+    addLayer = new JMenu("Add Layers...");
     addLayer.getAccessibleContext().setAccessibleDescription("Add a Layer or Layers");
+
+    loadImage = new JMenuItem("Load PNG/JPEG/PPM");
+    loadImage.getAccessibleContext().setAccessibleDescription("Load in an image file");
+    loadImage.setActionCommand("Load Image");
+    loadImage.addActionListener(this);
+
+    loadCheckerboard = new JMenuItem("Load a Generated Checkerboard");
+    loadCheckerboard.getAccessibleContext().setAccessibleDescription("Load a checkerboard");
+    loadCheckerboard.setActionCommand("Checkerboard");
+    loadCheckerboard.addActionListener(this);
+    addLayer.add(loadImage);
+    addLayer.add(loadCheckerboard);
     layer.add(addLayer);
 
     deleteLayer = new JMenuItem("Delete Layer...");
     deleteLayer.getAccessibleContext().setAccessibleDescription("Delete a Layer or Layers");
+    deleteLayer.setActionCommand("Delete Layer");
+    deleteLayer.addActionListener(this);
     layer.add(deleteLayer);
 
     selectLayer = new JMenuItem("Select Layer...");
     selectLayer.getAccessibleContext().setAccessibleDescription("Select a Layer");
+    selectLayer.setActionCommand("Select Layer");
+    selectLayer.addActionListener(this);
     layer.add(selectLayer);
 
-    replaceLayer = new JMenuItem("Replace Layer...");
-    replaceLayer.getAccessibleContext().setAccessibleDescription("Replace a Layer");
-    layer.add(replaceLayer);
 
     JSeparator s2 = new JSeparator();
     s2.setOrientation(SwingConstants.HORIZONTAL);
@@ -178,10 +213,14 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     showLayer = new JMenuItem("Show Layer");
     showLayer.getAccessibleContext().setAccessibleDescription("Show Selected Layer");
+    showLayer.setActionCommand("Show");
+    showLayer.addActionListener(this);
     layer.add(showLayer);
 
     hideLayer = new JMenuItem("Hide Layer");
     hideLayer.getAccessibleContext().setAccessibleDescription("Hide Selected Layer");
+    hideLayer.setActionCommand("Hide");
+    hideLayer.addActionListener(this);
     layer.add(hideLayer);
 
     menuBar.add(layer);
@@ -196,6 +235,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     imagePanel.setLayout(new GridLayout(1, 0, 10, 10));
     //imagePanel.setMaximumSize(null);
     mainPanel.add(imagePanel, BorderLayout.CENTER);
+
+    JLabel imageLabel = new JLabel(new ImageIcon(this.getCurrentImage()));
+    JScrollPane imageScrollPane = new JScrollPane(imageLabel);
+    imagePanel.add(imageScrollPane);
 
 
     JPanel operationsPanel = new JPanel();
@@ -273,6 +316,21 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
   }
 
+  private BufferedImage getCurrentImage() {
+    for(IViewListener listener: listeners) {
+      return listener.getCurrentImage();
+    }
+    throw new IllegalArgumentException("No listeners.");
+  }
+
+  @Override
+  public void runGUI() {
+    ImageProcessorGUIViewImpl.setDefaultLookAndFeelDecorated(false);
+
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setVisible(true);
+  }
+
   @Override
   public void addViewListener(IViewListener listener) {
     this.listeners.add(listener);
@@ -280,8 +338,13 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   }
 
   @Override
-  public void renderMessage(String msg) throws IllegalArgumentException, IOException {
+  public void setCurrentImage() {
 
+  }
+
+  @Override
+  public void renderMessage(String msg) throws IllegalArgumentException, IOException {
+    throw new UnsupportedOperationException("This method is not supported.");
   }
 
   @Override

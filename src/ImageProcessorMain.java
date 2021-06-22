@@ -1,6 +1,12 @@
+import cs3500.imageprocessor.controller.ImageProcessorController;
 import cs3500.imageprocessor.controller.ImageProcessorGUIController;
+import cs3500.imageprocessor.model.MultiLayerProcessorModel;
+import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
+import cs3500.imageprocessor.model.images.ColorImpl;
 import cs3500.imageprocessor.view.ImageProcessorGUIViewImpl;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.JFrame;
 
 /**
@@ -24,10 +30,10 @@ public class ImageProcessorMain {
 //      throw new IllegalArgumentException("Bad arguments for program.");
 //    }
 //  }
-    ImageProcessorGUIViewImpl.setDefaultLookAndFeelDecorated(false);
-    ImageProcessorGUIViewImpl frame = new ImageProcessorGUIViewImpl();
-
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setVisible(true);
+    MultiLayerProcessorModel testModel = new MultiLayerProcessorModelImpl();
+    testModel.addImage("checkerboard", testModel.generateCheckerboard(100, 100, new ArrayList<>(
+        Arrays.asList(new ColorImpl(255, 0,0), new ColorImpl(0, 0, 0)))));
+    ImageProcessorController controller = new ImageProcessorGUIController(testModel);
+    controller.startEditor();
   }
 }

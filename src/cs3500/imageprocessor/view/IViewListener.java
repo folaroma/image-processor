@@ -15,4 +15,22 @@ public interface IViewListener {
   void handleSaveAllLayerEvent();
 
   void handleLoadAllLayerEvent();
+
+  void handleBlurEvent();
+
+  void handleSharpenEvent();
+
+  void handleGrayscaleEvent();
+
+  void handleSepiaEvent();
+
+  void showEvent();
+
+  void hideEvent();
+
+  void removeLayerEvent();
+
+  void setCurrentLayerEvent();
+
+  void runScriptEvent();
 }

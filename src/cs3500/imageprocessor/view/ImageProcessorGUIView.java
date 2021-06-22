@@ -1,7 +1,11 @@
 package cs3500.imageprocessor.view;
 
-public interface ImageProcessorGUIView extends ImageProcessorView{
+public interface ImageProcessorGUIView extends ImageProcessorView {
 
-void addViewListener(IViewListener listener);
+  void runGUI();
+
+  void addViewListener(IViewListener listener);
+
+  void setCurrentImage();
 
 }
