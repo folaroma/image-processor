@@ -6,6 +6,8 @@ public interface IViewListener {
 
   BufferedImage getCurrentImage();
 
+  BufferedImage loadImage();
+
   void handleSaveLayerEvent();
 
   void handleLoadLayerEvent();

@@ -163,7 +163,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
   }
 
   /**
-   * Checks the systax for the remove command and removes the layer if it is valid.
+   * Checks the syntax for the remove command and removes the layer if it is valid.
    *
    * @param command Line containing the command.
    */

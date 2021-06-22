@@ -45,7 +45,7 @@ public interface MultiLayerProcessorModel extends ImageProcessorModel {
   /**
    * Returns the list of ids of invisible layers for this multi layer image.
    *
-   * @return The lsit of invisible image ids.
+   * @return The list of invisible image ids.
    */
   List<String> getVisibility();
 

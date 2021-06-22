@@ -16,6 +16,11 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
   }
 
   @Override
+  public BufferedImage loadImage() {
+    return null;
+  }
+
+  @Override
   public void handleSaveLayerEvent() {
 
   }
