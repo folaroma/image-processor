@@ -1,7 +1,10 @@
 package cs3500.imageprocessor.view;
 
 import cs3500.imageprocessor.controller.ImageProcessorGUIController;
+import cs3500.imageprocessor.model.images.ImageInterface;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +19,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -23,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -32,6 +39,9 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     ActionListener {
   private JPanel mainPanel;
   private JMenuBar menuBar;
+  private JPanel rightPanel;
+
+  private JLabel layers;
 
   private JMenu file;
   private JMenu edit;
@@ -60,14 +70,14 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   private JMenuItem hideLayer;
 
   private JScrollPane mainScrollPane;
-  private JButton loadImageButton;
-  private JButton saveImageButton;
-  private JButton loadLayersButton;
-  private JButton saveLayersButton;
   private JButton blurButton;
   private JButton sharpenButton;
   private JButton grayscaleButton;
   private JButton sepiaButton;
+
+  private JButton showButton;
+  private JButton hideButton;
+
   private final ArrayList<IViewListener> listeners;
 
   public ImageProcessorGUIViewImpl() {
@@ -101,10 +111,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     load.getAccessibleContext().setAccessibleDescription("Load a Script");
     file.add(load);
 
-    JSeparator s = new JSeparator();
-    s.setOrientation(SwingConstants.HORIZONTAL);
+    JSeparator s1 = new JSeparator();
+    s1.setOrientation(SwingConstants.HORIZONTAL);
 
-    file.add(s);
+    file.add(s1);
 
     save = new JMenuItem("Save");
     save.getAccessibleContext().setAccessibleDescription("Save Image");
@@ -162,7 +172,9 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     replaceLayer.getAccessibleContext().setAccessibleDescription("Replace a Layer");
     layer.add(replaceLayer);
 
-    layer.add(s);
+    JSeparator s2 = new JSeparator();
+    s2.setOrientation(SwingConstants.HORIZONTAL);
+    layer.add(s2);
 
     showLayer = new JMenuItem("Show Layer");
     showLayer.getAccessibleContext().setAccessibleDescription("Show Selected Layer");
@@ -174,7 +186,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     menuBar.add(layer);
 
-    mainPanel.add(menuBar, BorderLayout.NORTH);
+    mainPanel.add(menuBar, BorderLayout.PAGE_START);
 
 
     //show an image with a scrollbar
@@ -188,30 +200,41 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     JPanel operationsPanel = new JPanel();
     operationsPanel.setBorder(BorderFactory.createTitledBorder("Image Operations"));
-    mainPanel.add(operationsPanel, BorderLayout.SOUTH);
+    mainPanel.add(operationsPanel, BorderLayout.PAGE_END);
 
     // Panel for import/export commands.
     JPanel IOPanel = new JPanel();
-    IOPanel.setLayout(new GridLayout(2, 4, 10, 10));
+    IOPanel.setLayout(new GridLayout(1, 6, 10, 10));
     operationsPanel.add(IOPanel);
 
 
+    JLayeredPane labels = new JLayeredPane();
+    labels.setLayout(new FlowLayout());
+    labels.setPreferredSize(new Dimension(200, 400));
+
+    JLabel layers = new JLabel();
+    layers.setText("1");
+    layers.setPreferredSize(new Dimension(150, 50));
+    layers.setHorizontalAlignment(JLabel.CENTER);
+    layers.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    labels.add(layers, 1,0);
+
+    JLabel layers2 = new JLabel();
+    layers2.setText("2");
+    layers2.setPreferredSize(new Dimension(150, 50));
+    layers2.setHorizontalAlignment(JLabel.CENTER);
+    layers2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    labels.add(layers2, 2,0);
+
+    JScrollPane labelScroll = new JScrollPane(labels);
+
+    mainPanel.add(labelScroll, BorderLayout.LINE_END);
+
+
+
+
+
     //Buttons
-    loadImageButton = new JButton("Load Image");
-    loadImageButton.setActionCommand("Open image");
-    loadImageButton.addActionListener(this);
-
-    saveImageButton = new JButton("Save Image");
-    saveImageButton.setActionCommand("Save image");
-    saveImageButton.addActionListener(this);
-
-    loadLayersButton = new JButton("Load Multi-Layer Image");
-    loadLayersButton.setActionCommand("Open image text");
-    loadLayersButton.addActionListener(this);
-
-    saveLayersButton = new JButton("Save Multi-Layer Image");
-    saveLayersButton.setActionCommand("Save image text");
-    saveLayersButton.addActionListener(this);
 
     blurButton = new JButton("Blur");
     blurButton.setActionCommand("Blur");
@@ -229,16 +252,22 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     sepiaButton.setActionCommand("Sepia");
     sepiaButton.addActionListener(this);
 
+    showButton = new JButton("Show");
+    showButton.setActionCommand("Show");
+    showButton.addActionListener(this);
+
+    hideButton = new JButton("Hide");
+    hideButton.setActionCommand("Hide");
+    hideButton.addActionListener(this);
 
 
-    IOPanel.add(loadImageButton);
-    IOPanel.add(saveImageButton);
-    IOPanel.add(loadLayersButton);
-    IOPanel.add(saveLayersButton);
     IOPanel.add(blurButton);
     IOPanel.add(sharpenButton);
     IOPanel.add(grayscaleButton);
     IOPanel.add(sepiaButton);
+
+    IOPanel.add(showButton);
+    IOPanel.add(hideButton);
 
 
 
