@@ -30,7 +30,6 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
 
   private final MultiLayerProcessorModel model;
   private final Readable stringReader;
-  private final Appendable out;
   private final ImageProcessorView view;
   private String current;
 
@@ -49,8 +48,7 @@ public class ImageProcessorControllerImpl implements ImageProcessorController {
     }
     this.model = model;
     this.stringReader = stringReader;
-    this.out = out;
-    this.view = new ImageProcessorTextView(this.out);
+    this.view = new ImageProcessorTextView(out);
 
   }
 

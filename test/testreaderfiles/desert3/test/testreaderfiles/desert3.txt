@@ -1,3 +1,0 @@
-jpeg
-test\testreaderfiles\desert3\first.jpeg first visible
-test\testreaderfiles\desert3\second.jpeg second visible

@@ -1,3 +1,0 @@
-png
-test\testreaderfiles\bugs\first.png first visible
-test\testreaderfiles\bugs\second.png second visible

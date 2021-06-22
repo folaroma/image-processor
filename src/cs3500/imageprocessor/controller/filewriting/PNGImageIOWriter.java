@@ -3,13 +3,12 @@ package cs3500.imageprocessor.controller.filewriting;
 /**
  * Function object to facilitate the writing of png files.
  */
-public class PNGImageIOWriter extends AbstractImageIOWriter{
+public class PNGImageIOWriter extends AbstractImageIOWriter {
 
   /**
    * Creates a new instance of the object using the "png" filetype string.
-   * @throws IllegalArgumentException
    */
-  public PNGImageIOWriter() throws IllegalArgumentException {
+  public PNGImageIOWriter() {
     super("png");
   }
 }

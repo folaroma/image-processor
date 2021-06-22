@@ -116,7 +116,7 @@ public class ImageProcessorModelImpl implements ImageProcessorModel {
   }
 
   @Override
-  public void removeImage(String id) throws IllegalArgumentException{
+  public void removeImage(String id) throws IllegalArgumentException {
     if (id == null) {
       throw new IllegalArgumentException("Arguments cannot be null.");
     }

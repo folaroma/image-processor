@@ -1,3 +1,0 @@
-png
-multiBugs\first.png first visible
-multiBugs\second.png second visible

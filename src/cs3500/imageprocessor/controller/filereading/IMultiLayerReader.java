@@ -4,6 +4,9 @@ import cs3500.imageprocessor.model.images.ImageInterface;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface for function objects that can read in a text file representing a multi layer image.
+ */
 public interface IMultiLayerReader {
 
   /**
@@ -13,13 +16,15 @@ public interface IMultiLayerReader {
    *
    * @param filename File path of the txt file.
    * @return The mapping of ids to the images they represent for the layers.
-   * @throws IllegalArgumentException If the file cannot be found, the name is null, or the file is malformed.
+   * @throws IllegalArgumentException If the file cannot be found, the name is null, or the file is
+   *                                  malformed.
    */
   Map<String, ImageInterface> readImages(String filename)
       throws IllegalArgumentException;
 
   /**
    * Returns the list of invisible ids for the multi layer image.
+   *
    * @return List of ids of invisible images.
    */
   List<String> readVisibility();

@@ -1,2 +1,0 @@
-png
-test\testreaderfiles\checkerboard\1.png 1 invisible

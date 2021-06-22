@@ -13,13 +13,16 @@ import java.util.Map;
 public interface IMultiLayerImageWriter {
 
   /**
-   * Writes the txt file and image files representing the given multi layer image. Valid file types are "png", "jpeg", and ppm.
-   * @param filename Name of the txt file.
-   * @param type File type for the images to be exported into.
-   * @param layers Map of ids to images for the layers in the image.
+   * Writes the txt file and image files representing the given multi layer image. Valid file types
+   * are "png", "jpeg", and ppm.
+   *
+   * @param filename   Name of the txt file.
+   * @param type       File type for the images to be exported into.
+   * @param layers     Map of ids to images for the layers in the image.
    * @param visibility List of ids of invisible images.
-   * @throws IllegalArgumentException If any argument is null, or the given file type is not supported.
-   * @throws IOException If writing fails at any time.
+   * @throws IllegalArgumentException If any argument is null, or the given file type is not
+   *                                  supported.
+   * @throws IOException              If writing fails at any time.
    */
   void writeFile(String filename, String type, Map<String, ImageInterface> layers,
       List<String> visibility)

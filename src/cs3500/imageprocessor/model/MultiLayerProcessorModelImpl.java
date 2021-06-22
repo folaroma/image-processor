@@ -21,9 +21,10 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
 
   /**
    * Creates an instance of the multi layer model.
+   *
    * @param delegate ImageProcessor model containing the map of ids to images.
-   * @param layers List of ids of the layers.
-   * @param hidden List of ids of invisible layers.
+   * @param layers   List of ids of the layers.
+   * @param hidden   List of ids of invisible layers.
    * @throws IllegalArgumentException If any argument is null.
    */
   public MultiLayerProcessorModelImpl(ImageProcessorModel delegate, List<String> layers,
@@ -82,6 +83,7 @@ public class MultiLayerProcessorModelImpl implements MultiLayerProcessorModel {
 
   /**
    * Checks if the given image has the same dimensions as the first added layer.
+   *
    * @param image Image to check.
    * @throws IllegalArgumentException If the image does not have the same dimensions.
    */
