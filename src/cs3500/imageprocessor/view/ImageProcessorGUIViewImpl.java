@@ -46,7 +46,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
   private JPanel mainPanel;
   private JMenuBar menuBar;
-  private JPanel rightPanel;
   private JScrollPane imageScrollPane;
   private JLabel imageLabel;
 
@@ -57,9 +56,9 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   private JMenu layer;
 
   private JMenuItem newImage;
+  private JMenuItem open;
   private JMenuItem load;
   private JMenuItem save;
-  private JMenuItem saveAs;
 
   private JMenu filters;
   private JMenu transformations;
@@ -70,7 +69,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   private JMenuItem sepia;
 
   private JMenuItem selectLayer;
-  private JMenu addLayer;
+  private JMenuItem addLayer;
   private JMenuItem loadImage;
   private JMenuItem loadCheckerboard;
   private JMenuItem deleteLayer;
@@ -109,9 +108,9 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     file.getAccessibleContext().setAccessibleDescription(
         "File Menu");
 
-    newImage = new JMenuItem("Open Multi-Layer Image");
-    newImage.getAccessibleContext().setAccessibleDescription("Open Multi");
-    newImage.setActionCommand("Load Multi");
+    newImage = new JMenuItem("New...");
+    newImage.getAccessibleContext().setAccessibleDescription("New Image");
+    newImage.setActionCommand("New");
     newImage.addActionListener(this);
     file.add(newImage);
 
@@ -121,22 +120,11 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     load.addActionListener(this);
     file.add(load);
 
-    JSeparator s1 = new JSeparator();
-    s1.setOrientation(SwingConstants.HORIZONTAL);
-
-    file.add(s1);
-
-    save = new JMenuItem("Save Topmost Visible Layer");
+    save = new JMenuItem("Save...");
     save.getAccessibleContext().setAccessibleDescription("Save Image");
-    save.setActionCommand("Save Layer");
+    save.setActionCommand("Save Image");
     save.addActionListener(this);
     file.add(save);
-
-    saveAs = new JMenuItem("Save Whole Image");
-    saveAs.getAccessibleContext().setAccessibleDescription("Save Whole Image");
-    saveAs.setActionCommand("Save All Layers");
-    saveAs.addActionListener(this);
-    file.add(saveAs);
 
     menuBar.add(file);
 
@@ -180,20 +168,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     layer = new JMenu("Layer");
     layer.getAccessibleContext().setAccessibleDescription("Layer Menu");
 
-    addLayer = new JMenu("Add Layers...");
+    addLayer = new JMenuItem("Add Layers...");
     addLayer.getAccessibleContext().setAccessibleDescription("Add a Layer or Layers");
-
-    loadImage = new JMenuItem("Load PNG/JPEG/PPM");
-    loadImage.getAccessibleContext().setAccessibleDescription("Load in an image file");
-    loadImage.setActionCommand("Load Image");
-    loadImage.addActionListener(this);
-
-    loadCheckerboard = new JMenuItem("Load a Generated Checkerboard");
-    loadCheckerboard.getAccessibleContext().setAccessibleDescription("Load a checkerboard");
-    loadCheckerboard.setActionCommand("Checkerboard");
-    loadCheckerboard.addActionListener(this);
-    addLayer.add(loadImage);
-    addLayer.add(loadCheckerboard);
+    addLayer.setActionCommand("Add Layer");
+    addLayer.addActionListener(this);
     layer.add(addLayer);
 
     deleteLayer = new JMenuItem("Delete Layer...");
@@ -338,30 +316,76 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   @Override
   public void actionPerformed(ActionEvent e) {
     switch (e.getActionCommand()) {
-      case "Load Image":
+      case "New":
+        emitNewImageEvent();
+      case "Add Layer":
         emitLoadImageEvent();
     }
   }
 
-  private void emitLoadImageEvent() {
-    String[] options = {"PNG", "JPEG", "PPM"};
-    int filetypeValue = JOptionPane
-        .showOptionDialog(this, "Please choose filetype to import", "Filetypes",
-            JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[2]);
+  private void emitNewImageEvent() {
+    String[] optionsImage = {"Load Image", "Generate Checkerboard"};
+    int imageValue = JOptionPane.showOptionDialog(this, null, "New Image",
+        JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsImage, null);
 
-    String layerName = JOptionPane.showInputDialog("Please the name of the layer.");
+    if (imageValue == 0) {
+      String[] optionsFileType = {"PPM", "PNG", "JPEG"};
+      int filetypeValue = JOptionPane
+          .showOptionDialog(this, "Please choose filetype to import", "Filetypes",
+              JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsFileType,
+              null);
 
-    final JFileChooser fileChooser = new JFileChooser(".");
-    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-        "JPEG, PNG, & PPM Images", "jpg", "png", "ppm");
-    fileChooser.setFileFilter(filter);
-    int retvalue = fileChooser.showOpenDialog(ImageProcessorGUIViewImpl.this);
-    if (retvalue == JFileChooser.APPROVE_OPTION) {
-      File f = fileChooser.getSelectedFile();
-      listener.handleLoadLayerEvent(f.getAbsolutePath(), options[filetypeValue], layerName);
-      this.setCurrentImage();
+      String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
+
+      final JFileChooser fileChooser = new JFileChooser(".");
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          "JPEG, PNG, & PPM Images", "jpeg", "png", "ppm");
+      fileChooser.setFileFilter(filter);
+      int retvalue = fileChooser.showOpenDialog(ImageProcessorGUIViewImpl.this);
+      if (retvalue == JFileChooser.APPROVE_OPTION) {
+        File f = fileChooser.getSelectedFile();
+        listener
+            .handleNewImageEvent(f.getAbsolutePath(), optionsFileType[filetypeValue], layerName);
+        this.setCurrentImage();
+      }
     }
 
+    else {
+
+    }
+
+  }
+
+  private void emitLoadImageEvent() {
+    String[] optionsTypeImage = {"Add Image", "Generate Checkerboard"};
+    int typeImageValue = JOptionPane.showOptionDialog(this, "Choose Type of Image to Add", "Add Layer",
+        JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsTypeImage, null);
+
+    if (typeImageValue == 0) {
+      String[] optionsFileType = {"PPM", "PNG", "JPEG"};
+      int filetypeValue = JOptionPane
+          .showOptionDialog(this, "Please choose filetype to import", "Filetypes",
+              JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsFileType,
+              null);
+
+      String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
+
+      final JFileChooser fileChooser = new JFileChooser(".");
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          "JPEG, PNG, & PPM Images", "jpeg", "png", "ppm");
+      fileChooser.setFileFilter(filter);
+      int retvalue = fileChooser.showOpenDialog(ImageProcessorGUIViewImpl.this);
+      if (retvalue == JFileChooser.APPROVE_OPTION) {
+        File f = fileChooser.getSelectedFile();
+        listener
+            .handleLoadLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue], layerName);
+        this.setCurrentImage();
+      }
+    }
+
+    else {
+
+    }
 
   }
 }

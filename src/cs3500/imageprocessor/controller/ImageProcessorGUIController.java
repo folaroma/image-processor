@@ -70,7 +70,12 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
   }
 
   @Override
-  public void handleLoadLayerEvent(String filename, String filetype, String layerName) {
+  public void handleNewImageEvent(String filename, String filetype, String layerName) {
+    this.model.getLayers().clear();
+    fileTypeHandler(filename, filetype, layerName);
+  }
+
+  private void fileTypeHandler(String filename, String filetype, String layerName) {
     switch ((filetype)) {
       case "PNG":
       case "JPEG":
@@ -90,6 +95,11 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
         }
         break;
     }
+  }
+
+  @Override
+  public void handleLoadLayerEvent(String filename, String filetype, String layerName) {
+    fileTypeHandler(filename, filetype, layerName);
   }
 
   private void addHandler(String fileName, ImageInterface image){

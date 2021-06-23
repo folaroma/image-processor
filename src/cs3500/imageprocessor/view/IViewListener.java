@@ -8,6 +8,8 @@ public interface IViewListener {
 
   void handleSaveLayerEvent();
 
+  void handleNewImageEvent(String filename, String filetype, String layerName);
+
   void handleLoadLayerEvent(String filename, String filetype, String layerName);
 
   void handleSaveAllLayerEvent();
