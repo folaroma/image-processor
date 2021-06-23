@@ -1,5 +1,7 @@
 package cs3500.imageprocessor.controller;
 
+import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
+import cs3500.imageprocessor.controller.filereading.PPMFileReader;
 import cs3500.imageprocessor.model.MultiLayerProcessorModel;
 import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
@@ -8,6 +10,7 @@ import cs3500.imageprocessor.view.ImageProcessorGUIView;
 import cs3500.imageprocessor.view.ImageProcessorGUIViewImpl;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Map;
 
 
@@ -38,7 +41,7 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
         return this.generateImage(layer.getValue());
       }
     }
-    return new BufferedImage(0, 0, BufferedImage.TYPE_INT_RGB);
+    return new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
   }
 
   private BufferedImage generateImage(ImageInterface image) {
@@ -60,10 +63,6 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
     return outputImage;
   }
 
-  @Override
-  public BufferedImage loadImage() {
-    return null;
-  }
 
   @Override
   public void handleSaveLayerEvent() {
@@ -71,8 +70,43 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
   }
 
   @Override
-  public void handleLoadLayerEvent() {
+  public void handleLoadLayerEvent(String filename, String filetype, String layerName) {
+    switch ((filetype)) {
+      case "PNG":
+      case "JPEG":
+        try {
+          addHandler(layerName, new ImageIOFileReader().readImageFromFile(filename));
+        }
+        catch (IllegalArgumentException e) {
+          renderHandler(e.getMessage());
+        }
+        break;
+      case "PPM":
+        try {
+          addHandler(layerName, new PPMFileReader().readImageFromFile(filename));
+        }
+        catch (IllegalArgumentException e) {
+          renderHandler(e.getMessage());
+        }
+        break;
+    }
+  }
 
+  private void addHandler(String fileName, ImageInterface image){
+    try {
+      this.model.addImage(fileName, image);
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
+    }
+  }
+
+  private void renderHandler(String msg) {
+    try {
+      this.view.renderMessage(msg);
+    }
+    catch(IOException e) {
+      throw new IllegalStateException();
+    }
   }
 
   @Override

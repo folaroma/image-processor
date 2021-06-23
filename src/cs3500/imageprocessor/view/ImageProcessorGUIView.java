@@ -4,8 +4,6 @@ public interface ImageProcessorGUIView extends ImageProcessorView {
 
   void runGUI();
 
-  void addViewListener(IViewListener listener);
-
   void setCurrentImage();
 
 }

@@ -28,6 +28,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -40,11 +41,14 @@ import swingdemo.SwingFeaturesFrame;
 
 public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorGUIView,
     ActionListener {
+
   private BufferedImage currentImage;
 
   private JPanel mainPanel;
   private JMenuBar menuBar;
   private JPanel rightPanel;
+  private JScrollPane imageScrollPane;
+  private JLabel imageLabel;
 
   private JLabel layers;
 
@@ -83,12 +87,12 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   private JButton showButton;
   private JButton hideButton;
 
-  private final ArrayList<IViewListener> listeners;
+  private final IViewListener listener;
 
   public ImageProcessorGUIViewImpl(IViewListener listener) {
     super();
-    this.listeners = new ArrayList<>();
-    this.addViewListener(listener);
+    this.listener = listener;
+    this.currentImage = listener.getCurrentImage();
     setTitle("Image Processor");
     setSize(1200, 800);
 
@@ -136,7 +140,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     menuBar.add(file);
 
-
     edit = new JMenu("Edit");
     edit.getAccessibleContext().setAccessibleDescription("Edit Menu");
 
@@ -174,7 +177,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     menuBar.add(edit);
 
-
     layer = new JMenu("Layer");
     layer.getAccessibleContext().setAccessibleDescription("Layer Menu");
 
@@ -206,7 +208,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     selectLayer.addActionListener(this);
     layer.add(selectLayer);
 
-
     JSeparator s2 = new JSeparator();
     s2.setOrientation(SwingConstants.HORIZONTAL);
     layer.add(s2);
@@ -227,7 +228,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     mainPanel.add(menuBar, BorderLayout.PAGE_START);
 
-
     //show an image with a scrollbar
     JPanel imagePanel = new JPanel();
     //a border around the panel with a caption
@@ -236,10 +236,11 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     //imagePanel.setMaximumSize(null);
     mainPanel.add(imagePanel, BorderLayout.CENTER);
 
-    JLabel imageLabel = new JLabel(new ImageIcon(this.getCurrentImage()));
-    JScrollPane imageScrollPane = new JScrollPane(imageLabel);
+    imageLabel = new JLabel();
+    imageLabel.setIcon(new ImageIcon(this.currentImage));
+    imageScrollPane = new JScrollPane(imageLabel);
+    imageScrollPane.setPreferredSize(new Dimension(100, 600));
     imagePanel.add(imageScrollPane);
-
 
     JPanel operationsPanel = new JPanel();
     operationsPanel.setBorder(BorderFactory.createTitledBorder("Image Operations"));
@@ -250,7 +251,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     IOPanel.setLayout(new GridLayout(1, 6, 10, 10));
     operationsPanel.add(IOPanel);
 
-
     JLayeredPane labels = new JLayeredPane();
     labels.setLayout(new FlowLayout());
     labels.setPreferredSize(new Dimension(200, 400));
@@ -260,22 +260,18 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     layers.setPreferredSize(new Dimension(150, 50));
     layers.setHorizontalAlignment(JLabel.CENTER);
     layers.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-    labels.add(layers, 1,0);
+    labels.add(layers, 1, 0);
 
     JLabel layers2 = new JLabel();
     layers2.setText("2");
     layers2.setPreferredSize(new Dimension(150, 50));
     layers2.setHorizontalAlignment(JLabel.CENTER);
     layers2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-    labels.add(layers2, 2,0);
+    labels.add(layers2, 2, 0);
 
     JScrollPane labelScroll = new JScrollPane(labels);
 
     mainPanel.add(labelScroll, BorderLayout.LINE_END);
-
-
-
-
 
     //Buttons
 
@@ -303,7 +299,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     hideButton.setActionCommand("Hide");
     hideButton.addActionListener(this);
 
-
     IOPanel.add(blurButton);
     IOPanel.add(sharpenButton);
     IOPanel.add(grayscaleButton);
@@ -313,14 +308,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     IOPanel.add(hideButton);
 
 
-
   }
 
   private BufferedImage getCurrentImage() {
-    for(IViewListener listener: listeners) {
-      return listener.getCurrentImage();
-    }
-    throw new IllegalArgumentException("No listeners.");
+    return this.listener.getCurrentImage();
   }
 
   @Override
@@ -332,32 +323,45 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   }
 
   @Override
-  public void addViewListener(IViewListener listener) {
-    this.listeners.add(listener);
-
-  }
-
-  @Override
   public void setCurrentImage() {
-
+    this.currentImage = listener.getCurrentImage();
+    this.imageLabel.setIcon(new ImageIcon(this.currentImage));
+    repaint();
+    revalidate();
   }
 
   @Override
-  public void renderMessage(String msg) throws IllegalArgumentException, IOException {
-    throw new UnsupportedOperationException("This method is not supported.");
+  public void renderMessage(String msg) throws IllegalArgumentException {
+    JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (e.getActionCommand().equals("Open image")) {
-      final JFileChooser fileChooser = new JFileChooser(".");
-      FileNameExtensionFilter filter = new FileNameExtensionFilter(
-          "JPEG, PNG, & PPM Images", "jpg", "png", "ppm");
-      fileChooser.setFileFilter(filter);
-      int retvalue = fileChooser.showOpenDialog(ImageProcessorGUIViewImpl.this);
-      if (retvalue == JFileChooser.APPROVE_OPTION) {
-        File f = fileChooser.getSelectedFile();
-      }
+    switch (e.getActionCommand()) {
+      case "Load Image":
+        emitLoadImageEvent();
     }
+  }
+
+  private void emitLoadImageEvent() {
+    String[] options = {"PNG", "JPEG", "PPM"};
+    int filetypeValue = JOptionPane
+        .showOptionDialog(this, "Please choose filetype to import", "Filetypes",
+            JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[2]);
+
+    String layerName = JOptionPane.showInputDialog("Please the name of the layer.");
+
+    final JFileChooser fileChooser = new JFileChooser(".");
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "JPEG, PNG, & PPM Images", "jpg", "png", "ppm");
+    fileChooser.setFileFilter(filter);
+    int retvalue = fileChooser.showOpenDialog(ImageProcessorGUIViewImpl.this);
+    if (retvalue == JFileChooser.APPROVE_OPTION) {
+      File f = fileChooser.getSelectedFile();
+      listener.handleLoadLayerEvent(f.getAbsolutePath(), options[filetypeValue], layerName);
+      this.setCurrentImage();
+    }
+
+
   }
 }

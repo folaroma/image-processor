@@ -31,8 +31,8 @@ public class ImageProcessorMain {
 //    }
 //  }
     MultiLayerProcessorModel testModel = new MultiLayerProcessorModelImpl();
-    testModel.addImage("checkerboard", testModel.generateCheckerboard(100, 100, new ArrayList<>(
-        Arrays.asList(new ColorImpl(255, 0,0), new ColorImpl(0, 0, 0)))));
+//    testModel.addImage("checkerboard", testModel.generateCheckerboard(100, 100, new ArrayList<>(
+//        Arrays.asList(new ColorImpl(255, 0,0), new ColorImpl(0, 0, 0)))));
     ImageProcessorController controller = new ImageProcessorGUIController(testModel);
     controller.startEditor();
   }

@@ -6,11 +6,9 @@ public interface IViewListener {
 
   BufferedImage getCurrentImage();
 
-  BufferedImage loadImage();
-
   void handleSaveLayerEvent();
 
-  void handleLoadLayerEvent();
+  void handleLoadLayerEvent(String filename, String filetype, String layerName);
 
   void handleSaveAllLayerEvent();
 
