@@ -218,7 +218,8 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     imageLabel.setIcon(new ImageIcon(this.currentImage));
     imageScrollPane = new JScrollPane(imageLabel);
     imageScrollPane.setPreferredSize(new Dimension(100, 600));
-    imagePanel.add(imageScrollPane);
+    imageLabel.setHorizontalAlignment(imageScrollPane.getWidth()/2);
+    imagePanel.add(imageScrollPane, BorderLayout.CENTER);
 
     JPanel operationsPanel = new JPanel();
     operationsPanel.setBorder(BorderFactory.createTitledBorder("Image Operations"));
