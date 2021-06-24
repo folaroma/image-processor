@@ -2,8 +2,11 @@ package cs3500.imageprocessor.controller;
 
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
+import cs3500.imageprocessor.controller.filewriting.JPEGImageIOWriter;
+import cs3500.imageprocessor.controller.filewriting.MultiLayerImageWriter;
+import cs3500.imageprocessor.controller.filewriting.PNGImageIOWriter;
+import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
 import cs3500.imageprocessor.model.MultiLayerProcessorModel;
-import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import cs3500.imageprocessor.view.IViewListener;
 import cs3500.imageprocessor.view.ImageProcessorGUIView;
@@ -15,13 +18,14 @@ import java.util.Map;
 
 
 public class ImageProcessorGUIController implements ImageProcessorController, IViewListener {
+
   private final MultiLayerProcessorModel model;
   private final ImageProcessorGUIView view;
-  private final String current;
+  private String current;
 
   public ImageProcessorGUIController(MultiLayerProcessorModel model) {
     this.model = model;
-    this.view = new ImageProcessorGUIViewImpl( this);
+    this.view = new ImageProcessorGUIViewImpl(this);
     this.current = null;
   }
 
@@ -31,12 +35,8 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
   }
 
   @Override
-  public BufferedImage getCurrentImage() {
-    return this.getTopmostVisibleLayer();
-  }
-
-  private BufferedImage getTopmostVisibleLayer() {
-    for(Map.Entry<String, ImageInterface> layer : this.model.getLayers().entrySet()) {
+  public BufferedImage getTopVisibleLayer() {
+    for (Map.Entry<String, ImageInterface> layer : this.model.getLayers().entrySet()) {
       if (!this.model.getVisibility().contains(layer.getKey())) {
         return this.generateImage(layer.getValue());
       }
@@ -63,46 +63,73 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
     return outputImage;
   }
 
-
   @Override
-  public void handleSaveLayerEvent() {
-
+  public String getCurrentLayerID() {
+    return this.current;
   }
 
   @Override
-  public void handleNewImageEvent(String filename, String filetype, String layerName) {
-    this.model.getLayers().clear();
-    fileTypeHandler(filename, filetype, layerName);
-  }
-
-  private void fileTypeHandler(String filename, String filetype, String layerName) {
+  public void handleSaveLayerEvent(String filename, String filetype) {
     switch ((filetype)) {
       case "PNG":
+        try {
+          new PNGImageIOWriter().writeFile(filename + ".png",
+              this.model.getImage(getTopmostVisibleLayerID()));
+        } catch (IOException e) {
+          throw new IllegalStateException();
+        }
+        break;
       case "JPEG":
         try {
-          addHandler(layerName, new ImageIOFileReader().readImageFromFile(filename));
-        }
-        catch (IllegalArgumentException e) {
-          renderHandler(e.getMessage());
+          new JPEGImageIOWriter()
+              .writeFile(filename + ".jpeg", this.model.getImage(getTopmostVisibleLayerID()));
+        } catch (IOException e) {
+          throw new IllegalStateException();
         }
         break;
       case "PPM":
         try {
-          addHandler(layerName, new PPMFileReader().readImageFromFile(filename));
-        }
-        catch (IllegalArgumentException e) {
-          renderHandler(e.getMessage());
+          new PPMFileWriter()
+              .writeFile(filename + ".ppm", this.model.getImage(getTopmostVisibleLayerID()));
+        } catch (IOException e) {
+          throw new IllegalStateException();
         }
         break;
     }
   }
 
   @Override
-  public void handleLoadLayerEvent(String filename, String filetype, String layerName) {
-    fileTypeHandler(filename, filetype, layerName);
+  public String getTopmostVisibleLayerID() {
+    for (Map.Entry<String, ImageInterface> item : this.model.getLayers().entrySet()) {
+      if (!this.model.getVisibility().contains(item.getKey())) {
+        return item.getKey();
+      }
+    }
+    return null;
   }
 
-  private void addHandler(String fileName, ImageInterface image){
+  @Override
+  public void handleLoadLayerEvent(String filename, String filetype, String layerName) {
+    switch ((filetype)) {
+      case "PNG":
+      case "JPEG":
+        try {
+          addHandler(layerName, new ImageIOFileReader().readImageFromFile(filename));
+        } catch (IllegalArgumentException e) {
+          renderHandler(e.getMessage());
+        }
+        break;
+      case "PPM":
+        try {
+          addHandler(layerName, new PPMFileReader().readImageFromFile(filename));
+        } catch (IllegalArgumentException e) {
+          renderHandler(e.getMessage());
+        }
+        break;
+    }
+  }
+
+  private void addHandler(String fileName, ImageInterface image) {
     try {
       this.model.addImage(fileName, image);
     } catch (IllegalArgumentException e) {
@@ -110,17 +137,26 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
     }
   }
 
+
   private void renderHandler(String msg) {
     try {
       this.view.renderMessage(msg);
-    }
-    catch(IOException e) {
+    } catch (IOException e) {
       throw new IllegalStateException();
     }
   }
 
   @Override
-  public void handleSaveAllLayerEvent() {
+  public void handleSaveAllLayerEvent(String fileName, String fileType) {
+    try {
+      new MultiLayerImageWriter()
+          .writeFile(fileName, fileType, this.model.getLayers(),
+              this.model.getVisibility());
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
+    } catch (IOException io) {
+      throw new IllegalStateException();
+    }
 
   }
 
@@ -130,47 +166,92 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
   }
 
   @Override
-  public void handleBlurEvent() {
-
+  public void handleBlurEvent(String current) {
+    if (this.model.getLayers().containsKey(current)) {
+      try {
+        this.model.replaceImage(current, this.model.blur(current));
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
+    }
   }
 
   @Override
-  public void handleSharpenEvent() {
-
+  public void handleSharpenEvent(String current) {
+    if (this.model.getLayers().containsKey(current)) {
+      try {
+        this.model.replaceImage(current, this.model.sharpen(current));
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
+    }
   }
 
   @Override
-  public void handleGrayscaleEvent() {
-
+  public void handleGrayscaleEvent(String current) {
+    if (this.model.getLayers().containsKey(current)) {
+      try {
+        this.model.replaceImage(current, this.model.grayscale(current));
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
+    }
   }
 
   @Override
-  public void handleSepiaEvent() {
-
+  public void handleSepiaEvent(String current) {
+    if (this.model.getLayers().containsKey(current)) {
+      try {
+        this.model.replaceImage(current, this.model.sepia(current));
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
+    }
   }
 
   @Override
   public void showEvent() {
+    if (this.model.getLayers().containsKey(current)) {
+      this.model.showLayer(this.current);
+    }
 
   }
 
   @Override
   public void hideEvent() {
-
+    if (this.model.getLayers().containsKey(current)) {
+      this.model.hideLayer(this.current);
+    }
   }
 
   @Override
   public void removeLayerEvent() {
-
+    this.model.removeImage(this.current);
   }
 
   @Override
-  public void setCurrentLayerEvent() {
-
+  public void setCurrentLayerEvent(String layerID) {
+    if (this.model.getLayers().containsKey(layerID)) {
+      this.current = layerID;
+    } else {
+      renderHandler("This layer does not exist");
+    }
   }
 
   @Override
   public void runScriptEvent() {
 
   }
+
+  @Override
+  public boolean noneHidden() {
+    return this.model.getVisibility().isEmpty();
+  }
+
+  @Override
+  public boolean layerExists(String layerID) {
+    return this.model.getLayers().containsKey(layerID);
+  }
+
+
 }

@@ -1,5 +1,3 @@
-import static org.junit.Assert.*;
-
 import cs3500.imageprocessor.controller.filewriting.IImageFileWriter;
 import cs3500.imageprocessor.model.imagegenerating.CheckerboardGenerator;
 import cs3500.imageprocessor.model.images.ColorImpl;
@@ -11,12 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 public abstract class AbstractImageIOWriterTest {
+
   protected IImageFileWriter writer;
   protected ImageInterface testCheckerboard;
 
 
   /**
    * Factory method for writer.
+   *
    * @return The associated writer.
    */
   public abstract IImageFileWriter makeWriter();

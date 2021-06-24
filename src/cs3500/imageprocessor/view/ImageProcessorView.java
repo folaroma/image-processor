@@ -10,9 +10,10 @@ public interface ImageProcessorView {
 
   /**
    * Appends the given message to the appendable.
+   *
    * @param msg Message to be added.
    * @throws IllegalArgumentException If the message is null.
-   * @throws IOException If writing fails.
+   * @throws IOException              If writing fails.
    */
   void renderMessage(String msg) throws IllegalArgumentException, IOException;
 

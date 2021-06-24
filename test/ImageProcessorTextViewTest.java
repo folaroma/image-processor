@@ -1,15 +1,13 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
 import cs3500.imageprocessor.view.ImageProcessorTextView;
 import cs3500.imageprocessor.view.ImageProcessorView;
 import java.io.IOException;
-import org.junit.Before;
 import org.junit.Test;
 
 public class ImageProcessorTextViewTest {
-  private ImageProcessorView view;
 
+  private ImageProcessorView view;
 
 
   // tests writing to appendable.

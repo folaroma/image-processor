@@ -1,12 +1,15 @@
 # USEME
 
-To run the program, either double-click the JAR file, or open a terminal and navigate to the folder it's in. Then from there, enter `java -jar image-processor.jar interactive` or `java -jar image-processor.jar script [filename]`and the program should run accordingly.
+To run the program, either double-click the JAR file, or open a terminal and navigate to the folder
+it's in. Then from there, enter `java -jar image-processor.jar interactive`
+or `java -jar image-processor.jar script [filename]`and the program should run accordingly.
 
 Commands supported by the Image Processor program:
 
 1. `create [layer name] [layer image]`
 
-    Creates a new layer with the name and the image. Image can either be a generated checkerboard or an added image:
+   Creates a new layer with the name and the image. Image can either be a generated checkerboard or
+   an added image:
 
     ```
     create first add res/desert.ppm ppm
@@ -17,7 +20,7 @@ Commands supported by the Image Processor program:
 
 2. `checkerboard [rows] [columns] [r] [g] [b] [r] [g] [b]` - only used in `create`
 
-    Generates a checkerboard image:
+   Generates a checkerboard image:
 
     ```
     create cb checkerboard 5 5 0 0 0 255 255 255
@@ -26,7 +29,7 @@ Commands supported by the Image Processor program:
 
 3. `add [file directory] [file type]` - only used in `create`:
 
-    Adds an image:
+   Adds an image:
 
     ```
     create desert add res/desert.ppm ppm
@@ -95,7 +98,8 @@ Commands supported by the Image Processor program:
     hide
     ```
 
-11. `save [type] [file directory]` - saves the topmost visible layer as an image with the file types of PNG, JPEG, and PPM. Paths do not need file extensions:
+11. `save [type] [file directory]` - saves the topmost visible layer as an image with the file types
+    of PNG, JPEG, and PPM. Paths do not need file extensions:
 
     ```
     create first add res/desert.ppm ppm
@@ -105,7 +109,9 @@ Commands supported by the Image Processor program:
     save png res/oneLayerDesert #this is the "first" layer as it is topmost and visible
     ```
 
-12. `saveall [type] [file directory]` - saves all of the layers into images of the given file type and creates a text file representing the whole image with the given file name. This and the images are then put into a folder. Paths do not need file extensions:
+12. `saveall [type] [file directory]` - saves all of the layers into images of the given file type
+    and creates a text file representing the whole image with the given file name. This and the
+    images are then put into a folder. Paths do not need file extensions:
 
     ```
     create first add res/desert.ppm ppm
@@ -114,7 +120,8 @@ Commands supported by the Image Processor program:
     ```
 
 
-13. `addmulti [file directory]` - Adds a new multi layer image from the given text file and replaces the currernt multi layer with this one:
+13. `addmulti [file directory]` - Adds a new multi layer image from the given text file and replaces
+    the currernt multi layer with this one:
 
     ```
     create first add res/desert.ppm ppm

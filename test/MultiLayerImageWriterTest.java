@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
 import cs3500.imageprocessor.controller.filewriting.IMultiLayerImageWriter;

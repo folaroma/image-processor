@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
 import cs3500.imageprocessor.controller.filewriting.IImageFileWriter;
@@ -9,7 +9,7 @@ import cs3500.imageprocessor.model.images.Position2D;
 import java.io.IOException;
 import org.junit.Test;
 
-public class PNGImageIOWriterTest extends AbstractImageIOWriterTest{
+public class PNGImageIOWriterTest extends AbstractImageIOWriterTest {
 
   @Override
   public IImageFileWriter makeWriter() {

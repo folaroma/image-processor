@@ -82,7 +82,7 @@ public class MultiLayerFileReader implements IMultiLayerReader {
   /**
    * Adds the id of the image to the internal list if it is marked as invisible in the txt file.
    *
-   * @param id Id of the image.
+   * @param id     Id of the image.
    * @param status Visibility status, either invisible or visible.
    */
   private void checkVisibility(String id, String status) {

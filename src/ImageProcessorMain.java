@@ -2,12 +2,7 @@ import cs3500.imageprocessor.controller.ImageProcessorController;
 import cs3500.imageprocessor.controller.ImageProcessorGUIController;
 import cs3500.imageprocessor.model.MultiLayerProcessorModel;
 import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
-import cs3500.imageprocessor.model.images.ColorImpl;
-import cs3500.imageprocessor.view.ImageProcessorGUIViewImpl;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import javax.swing.JFrame;
 
 /**
  * Main class to work with the model of the image processor.

@@ -17,17 +17,18 @@ A project for CS3500 at Northeastern University.
 Many applications use color images. A good number of these applications provide a way to change
 their appearance in different ways. For example, Instagram has ''filters" that convert a picture
 into something more interesting. They do this by editing the colors of individual dots in the
-image (called pixels). In this design, the model for the program allows the user to apply 
-certain filters and transformations to the images held in the model, specifically through a
-map with String ids for each image. Images are not mutated by the filters in order to preserve
-the original versions, and images themselves are represented by a 2D arraylist of pixels in order
-to apply the filter pixel by pixel. The application also supports programmatically generating images,
-specifically the checkerboard for this assigment. IO work is done outside of the model, and can read and 
-create image data from ASCII PPM files and also write image data into these files.
+image (called pixels). In this design, the model for the program allows the user to apply certain
+filters and transformations to the images held in the model, specifically through a map with String
+ids for each image. Images are not mutated by the filters in order to preserve the original
+versions, and images themselves are represented by a 2D arraylist of pixels in order to apply the
+filter pixel by pixel. The application also supports programmatically generating images,
+specifically the checkerboard for this assigment. IO work is done outside of the model, and can read
+and create image data from ASCII PPM files and also write image data into these files.
 
 The Model and Controller are now complete.
 
-The controller added uses a multi layer image model that allows the creation, editing, and exporting of multi layer images with all of the same functionality from the last version of the model.
+The controller added uses a multi layer image model that allows the creation, editing, and exporting
+of multi layer images with all of the same functionality from the last version of the model.
 
 &nbsp;
 
@@ -35,7 +36,8 @@ The controller added uses a multi layer image model that allows the creation, ed
 
 Only design change made was the addition of a `remove` method to the original Model.
 
-This is to add support for removing images in a Multi-Layer Model, so we could then remove layers for when a new multi layer image is added.
+This is to add support for removing images in a Multi-Layer Model, so we could then remove layers
+for when a new multi layer image is added.
 
 &nbsp;
 
@@ -52,9 +54,9 @@ Filtering images, with support only for blurring or sharpening.
     ```Java
     ImageProcessorModel testModel = new ImageProcessorModelImpl();
     ```
-    
+
 2. Add a new <code>ImageInterface</code> to the model:
-    
+
     ```Java
     testmodel.addImage("res/Koala.ppm", new PPMFileReader().readImageFromFile("res/Koala.ppm"));
     ```
@@ -92,9 +94,9 @@ Transforming an image's color, with support only for grayscale and sepia.
     ```Java
     ImageProcessorModel testModel = new ImageProcessorModelImpl();
     ```
-    
+
 2. Add a new <code>ImageInterface</code> to the model:
-    
+
     ```Java
     testmodel.addImage("res/Koala.ppm", new PPMFileReader().readImageFromFile("res/Koala.ppm"));
     ```
@@ -143,6 +145,7 @@ Generating an image, with support only for creating a basic checkerboard.
     - [AbstractColorTransformation](#abstractcolortransformation)
     - [GrayscaleTransformation](#grayscaletransformation)
     - [SepiaTransformation](#sepiatransformation)
+
 - [filters]
     - [IFilter](#ifilter)
     - [AbstractFilter](#abstractfilter)
@@ -182,21 +185,29 @@ Generating an image, with support only for creating a basic checkerboard.
 
 ### ImageProcessorModel
 
-The interface to represent the image processing program. At this time, the model has support for blurring, sharpening, grayscale, and sepia, along with generating a checkerboard.
+The interface to represent the image processing program. At this time, the model has support for
+blurring, sharpening, grayscale, and sepia, along with generating a checkerboard.
 
 Contains the methods for replacing, adding, getting, filtering, and transforming images.
 
 ### ImageProcessorModelImpl
 
-The implemenation of the ImageProcessorModel interface. Images are stored in a map with a String id. These images can then be retrieved and edited with the given filters and transformations to make new images.
+The implemenation of the ImageProcessorModel interface. Images are stored in a map with a String id.
+These images can then be retrieved and edited with the given filters and transformations to make new
+images.
 
 ### MultiLayerProcessorModel
 
-The interface to represent the multi-layer image processing programming. At this time, the model has support for blurring, sharpening, grayscale, and sepia, along with generating a checkerboard and support for creating multiple layers of an image.
+The interface to represent the multi-layer image processing programming. At this time, the model has
+support for blurring, sharpening, grayscale, and sepia, along with generating a checkerboard and
+support for creating multiple layers of an image.
 
 ### MultiLayerProcessorModelImpl
 
-The implementation of the MultiLayerProcessorModel interface. Images are stored in a delegate of ImageProcessorModel, which are stored in a map with a String id. These images can then be retrieved and edited with the given filters and transformations to make new images, as well as creating multiple layers of images, which can be hidden or shown.
+The implementation of the MultiLayerProcessorModel interface. Images are stored in a delegate of
+ImageProcessorModel, which are stored in a map with a String id. These images can then be retrieved
+and edited with the given filters and transformations to make new images, as well as creating
+multiple layers of images, which can be hidden or shown.
 
 &nbsp;
 
@@ -204,7 +215,8 @@ The implementation of the MultiLayerProcessorModel interface. Images are stored 
 
 The interface to represent image color transformations.
 
-Contains the method to apply the transformation. Valid color transformations are done using a 3 x 3 matrix.
+Contains the method to apply the transformation. Valid color transformations are done using a 3 x 3
+matrix.
 
 ### AbstractColorTransformation
 
@@ -215,11 +227,13 @@ surpass the limits.
 
 ### GrayscaleTransformation
 
-Function object for grayscale color transformations. Given an image, it will return the grayscaled version.
+Function object for grayscale color transformations. Given an image, it will return the grayscaled
+version.
 
 ### SepiaTransformation
 
-Function object for sepia color transformations. Given an image, it will return the sepia version of that image.
+Function object for sepia color transformations. Given an image, it will return the sepia version of
+that image.
 
 &nbsp;
 
@@ -231,23 +245,27 @@ Contains the method to read an image from a file.
 
 ### IMultiLayerReader
 
-The interface to represent reading from an image file with multiple layers. File read can be of various file types.
+The interface to represent reading from an image file with multiple layers. File read can be of
+various file types.
 
 Contains the method to read the images from a multi-layer image file.
 
 ### MultiLayerReader
 
-The implementation of the IMultiLayerReader interface. Handles the reading of the multi-layer image and contains the visibility of each layer.
+The implementation of the IMultiLayerReader interface. Handles the reading of the multi-layer image
+and contains the visibility of each layer.
 
 ### ImageIOFileReader
 
-The implementation of the IFileReader interface that handles the reading of images that are supported by the ImageIO library. 
+The implementation of the IFileReader interface that handles the reading of images that are
+supported by the ImageIO library.
 
 For our program specifically, this handles reading JPEG and PNG formats.
 
 ### PPMFileReader
 
-Function object to read a PPM image file. PPM must bein in the ASCII format, or else the reading will fail.
+Function object to read a PPM image file. PPM must bein in the ASCII format, or else the reading
+will fail.
 
 &nbsp;
 
@@ -259,29 +277,34 @@ Contains the method to write an image with a given filename and image.
 
 ### IMultiLayerImageWriter
 
-The interface to represent writing a multi-layer image file. File can be written to multiple file types.
+The interface to represent writing a multi-layer image file. File can be written to multiple file
+types.
 
 Contains the method to write a multi-layer image with a given filename and image.
 
 ### MultiLayerImageWriter
 
-The implementation of the IMultiLayerImageWriter interface. Handles the writing of the multi-layer image.
+The implementation of the IMultiLayerImageWriter interface. Handles the writing of the multi-layer
+image.
 
 ### AbstractImageIOWriter
 
-An abstraction of file writing that supports file types from the ImageIO library. Holds the file type to designate what type of file to write.
+An abstraction of file writing that supports file types from the ImageIO library. Holds the file
+type to designate what type of file to write.
 
 ### JPEGImageIOWriter
 
-Function object that extends the abstract class AbstractImageIOWriter to facilitate the writing of JPEG images.
+Function object that extends the abstract class AbstractImageIOWriter to facilitate the writing of
+JPEG images.
 
 ### PNGIOImageWriter
 
-Function object that extends the abstract class AbstractImageIOWriter to facilitate the writing of PNG images.
+Function object that extends the abstract class AbstractImageIOWriter to facilitate the writing of
+PNG images.
 
 ### PPMFileWriter
 
-Function object to write a PPM image file. Will specifically write the PPM ASCII file type. 
+Function object to write a PPM image file. Will specifically write the PPM ASCII file type.
 
 &nbsp;
 
@@ -289,7 +312,8 @@ Function object to write a PPM image file. Will specifically write the PPM ASCII
 
 The interface to represent filtering an image.
 
-Contains the method to apply a filter to a given image. Filters must use an odd-dimension square matrix.
+Contains the method to apply a filter to a given image. Filters must use an odd-dimension square
+matrix.
 
 ### AbstractFilter
 
@@ -316,25 +340,30 @@ Contains the method to generate an image.
 
 ### CheckerboardGenerator
 
-Function object for generating a checkerboard image. Checkerboards are specified by the number of row, columns, and colors to choose from. Each square is 1 pixel and the board can have a max of two distinct colors.
+Function object for generating a checkerboard image. Checkerboards are specified by the number of
+row, columns, and colors to choose from. Each square is 1 pixel and the board can have a max of two
+distinct colors.
 
 &nbsp;
 
 ### ImageInterface
 
-The interface to represent an image. Images must be rectangular and are made up of pixels of the IPixel implementation.
+The interface to represent an image. Images must be rectangular and are made up of pixels of the
+IPixel implementation.
 
 Contains the method to get the pixels of an image.
 
 ### IColor
 
-The interface to represent colors. Colors are stored in 3 8-bit channels and can have values from 0-255 inclusive in each channel.
+The interface to represent colors. Colors are stored in 3 8-bit channels and can have values from
+0-255 inclusive in each channel.
 
 Contains the methods to get the red, green, and blue values of a color.
 
 ### IPixel
 
-The interface to represent pixels. Pixels have a color and a position using the IColor and Position2D impelementations.
+The interface to represent pixels. Pixels have a color and a position using the IColor and
+Position2D impelementations.
 
 Contains the methods to get the position and color of a pixel.
 
@@ -344,11 +373,13 @@ Represents a 2D point represented in Cartesian coordinates.
 
 ### ImageImpl
 
-The implementation of the image interface, which is a 2D array of pixels. Images are rectangular, and each pixel uses the IPixel implementation.
+The implementation of the image interface, which is a 2D array of pixels. Images are rectangular,
+and each pixel uses the IPixel implementation.
 
 ### ColorImpl
 
-The implementation of the color interface, which has 3 8-bit channels for red, green, and blue. Valid color values can only be from 0-255 inclusive. 
+The implementation of the color interface, which has 3 8-bit channels for red, green, and blue.
+Valid color values can only be from 0-255 inclusive.
 
 ### PixelImpl
 
@@ -358,21 +389,26 @@ The implementation of the pixel interface, which has a position and color.
 
 ### ImageProcessorController
 
-The interface to represent the controller for the image processing program. It handles the inputs and outputs of the programming, and keeps the model and view separate.
+The interface to represent the controller for the image processing program. It handles the inputs
+and outputs of the programming, and keeps the model and view separate.
 
 ### ImageProcessorControllerImpl
 
-The implementation of the ImageProcessorController interface. This handles all the commands inputted into the program, determining whether they are valid or not. If valid, it executes the change on the model.
+The implementation of the ImageProcessorController interface. This handles all the commands inputted
+into the program, determining whether they are valid or not. If valid, it executes the change on the
+model.
 
 &nbsp;
 
 ### ImageProcessorView
 
-The interface to represent the view of the image processing program. Represents the visualization of the program.
+The interface to represent the view of the image processing program. Represents the visualization of
+the program.
 
 ### ImageProcessorTextView
 
-The implementation of the ImageProcessorView interface in text form. Handles all the text visualizations that are shown to the user.
+The implementation of the ImageProcessorView interface in text form. Handles all the text
+visualizations that are shown to the user.
 
 &nbsp;
 

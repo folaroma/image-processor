@@ -12,6 +12,7 @@ public interface ImageProcessorController {
    * add, remove, current, blur, sharpen, grayscale, sepia, show, hide, save, saveall, addmulti.
    * Inputs can be taken through the console or read through a script file. See the USEME for all
    * instructions of commands.
+   *
    * @throws IllegalStateException If there is no input.
    */
   void startEditor() throws IllegalStateException;

@@ -1,30 +1,26 @@
 package cs3500.imageprocessor.view;
 
-import cs3500.imageprocessor.controller.ImageProcessorGUIController;
-import cs3500.imageprocessor.model.images.ImageInterface;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -32,68 +28,56 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.KeyStroke;
-import javax.swing.ScrollPaneLayout;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
-import swingdemo.SwingFeaturesFrame;
 
 public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorGUIView,
     ActionListener {
 
-  private BufferedImage currentImage;
-
-  private JPanel mainPanel;
-  private JMenuBar menuBar;
-  private JScrollPane imageScrollPane;
-  private JLabel imageLabel;
-
-  private JLabel layers;
-
-  private JMenu file;
-  private JMenu edit;
-  private JMenu layer;
-
-  private JMenuItem newImage;
-  private JMenuItem open;
-  private JMenuItem load;
-  private JMenuItem save;
-
-  private JMenu filters;
-  private JMenu transformations;
-
-  private JMenuItem blur;
-  private JMenuItem sharpen;
-  private JMenuItem grayscale;
-  private JMenuItem sepia;
-
-  private JMenuItem selectLayer;
-  private JMenuItem addLayer;
-  private JMenuItem loadImage;
-  private JMenuItem loadCheckerboard;
-  private JMenuItem deleteLayer;
-
-  private JMenuItem showLayer;
-  private JMenuItem hideLayer;
-
-  private JScrollPane mainScrollPane;
-  private JButton blurButton;
-  private JButton sharpenButton;
-  private JButton grayscaleButton;
-  private JButton sepiaButton;
-
-  private JButton showButton;
-  private JButton hideButton;
-
+  private final JPanel mainPanel;
+  private final JMenuBar menuBar;
+  private final JScrollPane imageScrollPane;
+  private final JLabel imageLabel;
+  private final List<JTextField> layers;
+  private final JMenu file;
+  private final JMenu edit;
+  private final JMenu layer;
+  private final JMenuItem load;
+  private final JMenuItem save;
+  private final JMenu filters;
+  private final JMenu transformations;
+  private final JMenuItem blur;
+  private final JMenuItem sharpen;
+  private final JMenuItem grayscale;
+  private final JMenuItem sepia;
+  private final JMenuItem selectLayer;
+  private final JMenuItem addLayer;
+  private final JMenuItem loadMulti;
+  private final JMenuItem deleteLayer;
+  private final JMenuItem showLayer;
+  private final JMenuItem hideLayer;
+  private final JScrollPane mainScrollPane;
+  private final JButton blurButton;
+  private final JButton sharpenButton;
+  private final JButton grayscaleButton;
+  private final JButton sepiaButton;
+  private final JButton showButton;
+  private final JButton hideButton;
   private final IViewListener listener;
+  private final JPanel imagePanel;
+  private final JPanel operationsPanel;
+  private final JPanel ioPanel;
+  private final JLayeredPane labels;
+  private BufferedImage topImage;
 
   public ImageProcessorGUIViewImpl(IViewListener listener) {
     super();
     this.listener = listener;
-    this.currentImage = listener.getCurrentImage();
+    this.topImage = listener.getTopVisibleLayer();
     setTitle("Image Processor");
     setSize(1200, 800);
+    this.layers = new ArrayList<>();
 
     mainPanel = new JPanel();
     //for elements to be arranged vertically within this panel
@@ -108,11 +92,11 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     file.getAccessibleContext().setAccessibleDescription(
         "File Menu");
 
-    newImage = new JMenuItem("New...");
-    newImage.getAccessibleContext().setAccessibleDescription("New Image");
-    newImage.setActionCommand("New");
-    newImage.addActionListener(this);
-    file.add(newImage);
+    loadMulti = new JMenuItem("Load Layered Image...");
+    loadMulti.getAccessibleContext().setAccessibleDescription("Load a Multi-Layered Image");
+    loadMulti.setActionCommand("Load Multi");
+    loadMulti.addActionListener(this);
+    file.add(loadMulti);
 
     load = new JMenuItem("Load Script...");
     load.getAccessibleContext().setAccessibleDescription("Load a Script");
@@ -122,8 +106,9 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     save = new JMenuItem("Save...");
     save.getAccessibleContext().setAccessibleDescription("Save Image");
-    save.setActionCommand("Save Image");
+    save.setActionCommand("Save");
     save.addActionListener(this);
+    save.setEnabled(false);
     file.add(save);
 
     menuBar.add(file);
@@ -133,6 +118,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     filters = new JMenu("Filters");
     filters.getAccessibleContext().setAccessibleDescription("Filters");
+    filters.setEnabled(false);
 
     blur = new JMenuItem("Blur");
     blur.getAccessibleContext().setAccessibleDescription("Blur");
@@ -149,6 +135,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     transformations = new JMenu("Transform");
     transformations.getAccessibleContext().setAccessibleDescription("Color Transformations");
+    transformations.setEnabled(false);
 
     grayscale = new JMenuItem("Grayscale");
     grayscale.getAccessibleContext().setAccessibleDescription("Grayscale");
@@ -168,22 +155,24 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     layer = new JMenu("Layer");
     layer.getAccessibleContext().setAccessibleDescription("Layer Menu");
 
-    addLayer = new JMenuItem("Add Layers...");
-    addLayer.getAccessibleContext().setAccessibleDescription("Add a Layer or Layers");
+    addLayer = new JMenuItem("Add Layer...");
+    addLayer.getAccessibleContext().setAccessibleDescription("Add a Layer");
     addLayer.setActionCommand("Add Layer");
     addLayer.addActionListener(this);
     layer.add(addLayer);
 
-    deleteLayer = new JMenuItem("Delete Layer...");
-    deleteLayer.getAccessibleContext().setAccessibleDescription("Delete a Layer or Layers");
+    deleteLayer = new JMenuItem("Delete Layer");
+    deleteLayer.getAccessibleContext().setAccessibleDescription("Delete Current Layer");
     deleteLayer.setActionCommand("Delete Layer");
     deleteLayer.addActionListener(this);
+    deleteLayer.setEnabled(false);
     layer.add(deleteLayer);
 
     selectLayer = new JMenuItem("Select Layer...");
     selectLayer.getAccessibleContext().setAccessibleDescription("Select a Layer");
     selectLayer.setActionCommand("Select Layer");
     selectLayer.addActionListener(this);
+    selectLayer.setEnabled(false);
     layer.add(selectLayer);
 
     JSeparator s2 = new JSeparator();
@@ -194,12 +183,14 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     showLayer.getAccessibleContext().setAccessibleDescription("Show Selected Layer");
     showLayer.setActionCommand("Show");
     showLayer.addActionListener(this);
+    showLayer.setEnabled(false);
     layer.add(showLayer);
 
     hideLayer = new JMenuItem("Hide Layer");
     hideLayer.getAccessibleContext().setAccessibleDescription("Hide Selected Layer");
     hideLayer.setActionCommand("Hide");
     hideLayer.addActionListener(this);
+    hideLayer.setEnabled(false);
     layer.add(hideLayer);
 
     menuBar.add(layer);
@@ -207,7 +198,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     mainPanel.add(menuBar, BorderLayout.PAGE_START);
 
     //show an image with a scrollbar
-    JPanel imagePanel = new JPanel();
+    imagePanel = new JPanel();
     //a border around the panel with a caption
     imagePanel.setBorder(BorderFactory.createTitledBorder("Showing an image"));
     imagePanel.setLayout(new GridLayout(1, 0, 10, 10));
@@ -215,38 +206,24 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     mainPanel.add(imagePanel, BorderLayout.CENTER);
 
     imageLabel = new JLabel();
-    imageLabel.setIcon(new ImageIcon(this.currentImage));
+    imageLabel.setIcon(new ImageIcon(this.topImage));
     imageScrollPane = new JScrollPane(imageLabel);
     imageScrollPane.setPreferredSize(new Dimension(100, 600));
-    imageLabel.setHorizontalAlignment(imageScrollPane.getWidth()/2);
+    imageLabel.setHorizontalAlignment(imageScrollPane.getWidth() / 2);
     imagePanel.add(imageScrollPane, BorderLayout.CENTER);
 
-    JPanel operationsPanel = new JPanel();
+    operationsPanel = new JPanel();
     operationsPanel.setBorder(BorderFactory.createTitledBorder("Image Operations"));
     mainPanel.add(operationsPanel, BorderLayout.PAGE_END);
 
     // Panel for import/export commands.
-    JPanel IOPanel = new JPanel();
-    IOPanel.setLayout(new GridLayout(1, 6, 10, 10));
-    operationsPanel.add(IOPanel);
+    ioPanel = new JPanel();
+    ioPanel.setLayout(new GridLayout(1, 6, 10, 10));
+    operationsPanel.add(ioPanel);
 
-    JLayeredPane labels = new JLayeredPane();
+    labels = new JLayeredPane();
     labels.setLayout(new FlowLayout());
     labels.setPreferredSize(new Dimension(200, 400));
-
-    JLabel layers = new JLabel();
-    layers.setText("1");
-    layers.setPreferredSize(new Dimension(150, 50));
-    layers.setHorizontalAlignment(JLabel.CENTER);
-    layers.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-    labels.add(layers, 1, 0);
-
-    JLabel layers2 = new JLabel();
-    layers2.setText("2");
-    layers2.setPreferredSize(new Dimension(150, 50));
-    layers2.setHorizontalAlignment(JLabel.CENTER);
-    layers2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-    labels.add(layers2, 2, 0);
 
     JScrollPane labelScroll = new JScrollPane(labels);
 
@@ -278,19 +255,15 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     hideButton.setActionCommand("Hide");
     hideButton.addActionListener(this);
 
-    IOPanel.add(blurButton);
-    IOPanel.add(sharpenButton);
-    IOPanel.add(grayscaleButton);
-    IOPanel.add(sepiaButton);
+    ioPanel.add(blurButton);
+    ioPanel.add(sharpenButton);
+    ioPanel.add(grayscaleButton);
+    ioPanel.add(sepiaButton);
 
-    IOPanel.add(showButton);
-    IOPanel.add(hideButton);
+    ioPanel.add(showButton);
+    ioPanel.add(hideButton);
 
 
-  }
-
-  private BufferedImage getCurrentImage() {
-    return this.listener.getCurrentImage();
   }
 
   @Override
@@ -302,91 +275,302 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   }
 
   @Override
-  public void setCurrentImage() {
-    this.currentImage = listener.getCurrentImage();
-    this.imageLabel.setIcon(new ImageIcon(this.currentImage));
+  public void setTopLayer() {
+    this.topImage = listener.getTopVisibleLayer();
+    this.imageLabel.setIcon(new ImageIcon(this.topImage));
+    save.setEnabled(true);
     repaint();
     revalidate();
   }
 
   @Override
   public void renderMessage(String msg) throws IllegalArgumentException {
-    JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+    JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
     switch (e.getActionCommand()) {
-      case "New":
-        emitNewImageEvent();
+      case "Load Script":
+        emitLoadScriptEvent();
+        break;
+      case "Save":
+        emitSaveEvent();
+        break;
+      case "Blur":
+        emitBlurLayerEvent();
+        break;
+      case "Sharpen":
+        emitSharpenLayerEvent();
+        break;
+      case "Grayscale":
+        emitGrayscaleLayerEvent();
+        break;
+      case "Sepia":
+        emitSepiaLayerEvent();
+        break;
       case "Add Layer":
         emitLoadImageEvent();
+        break;
+      case "Delete Layer":
+        emitDeleteLayerEvent();
+        break;
+      case "Select Layer":
+        emitSelectLayerEvent();
+        break;
+      case "Show":
+        emitShowLayerEvent();
+        break;
+      case "Hide":
+        emitHideLayerEvent();
+        break;
     }
   }
 
-  private void emitNewImageEvent() {
-    String[] optionsImage = {"Load Image", "Generate Checkerboard"};
-    int imageValue = JOptionPane.showOptionDialog(this, null, "New Image",
-        JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsImage, null);
+  private void emitLoadScriptEvent() {
+    listener.runScriptEvent();
+  }
 
-    if (imageValue == 0) {
-      String[] optionsFileType = {"PPM", "PNG", "JPEG"};
-      int filetypeValue = JOptionPane
-          .showOptionDialog(this, "Please choose filetype to import", "Filetypes",
-              JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsFileType,
-              null);
+  private void emitSaveEvent() {
+    if (!this.layers.isEmpty()) {
+      String[] optionsSaveType = {"Save Topmost Visible Layer", "Save Entire Image"};
+      int typeSaveValue = JOptionPane.showOptionDialog(this, "Choose Save Type", "Save",
+          JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsSaveType,
+          null);
 
-      String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
+      if (typeSaveValue != -1) {
 
-      final JFileChooser fileChooser = new JFileChooser(".");
-      FileNameExtensionFilter filter = new FileNameExtensionFilter(
-          "JPEG, PNG, & PPM Images", "jpeg", "png", "ppm");
-      fileChooser.setFileFilter(filter);
-      int retvalue = fileChooser.showOpenDialog(ImageProcessorGUIViewImpl.this);
-      if (retvalue == JFileChooser.APPROVE_OPTION) {
-        File f = fileChooser.getSelectedFile();
-        listener
-            .handleNewImageEvent(f.getAbsolutePath(), optionsFileType[filetypeValue], layerName);
-        this.setCurrentImage();
+        if (typeSaveValue == 0) {
+          if (listener.noneHidden()) {
+            String[] optionsFileType = {"PPM", "PNG", "JPEG"};
+            int filetypeValue = JOptionPane
+                .showOptionDialog(this, "Choose the file type to save as", "File Types",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+                    optionsFileType,
+                    null);
+
+            if (filetypeValue != -1) {
+              String layerName = JOptionPane.showInputDialog("Save Name");
+              if (layerName != null) {
+                if (filetypeValue == 0) {
+                  listener.handleSaveLayerEvent(layerName, "PPM");
+                } else if (filetypeValue == 1) {
+                  listener.handleSaveLayerEvent(layerName, "PNG");
+                } else if (filetypeValue == 2) {
+                  listener.handleSaveLayerEvent(layerName, "JPEG");
+                }
+              }
+            }
+          } else {
+            JOptionPane.showMessageDialog(null, "There must be a layer visible to save");
+          }
+        } else {
+          if (listener.noneHidden()) {
+            String[] optionsFileType = {"PPM", "PNG", "JPEG"};
+            int filetypeValue = JOptionPane
+                .showOptionDialog(this, "Choose the file type to save as", "File Types",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+                    optionsFileType,
+                    null);
+
+            if (filetypeValue != -1) {
+              String layerName = JOptionPane.showInputDialog("Save Name");
+              if (layerName != null) {
+                if (filetypeValue == 0) {
+                  listener.handleSaveAllLayerEvent(layerName, "ppm");
+                } else if (filetypeValue == 1) {
+                  listener.handleSaveAllLayerEvent(layerName, "png");
+                } else if (filetypeValue == 2) {
+                  listener.handleSaveAllLayerEvent(layerName, "jpeg");
+                }
+              }
+            }
+          } else {
+            JOptionPane.showMessageDialog(null, "There must be a layer visible to save");
+          }
+        }
+      }
+
+    } else {
+      JOptionPane.showMessageDialog(null, "Add an image before saving");
+    }
+
+  }
+
+  private void emitBlurLayerEvent() {
+    listener.handleBlurEvent(listener.getCurrentLayerID());
+    repaint();
+    revalidate();
+  }
+
+  private void emitSharpenLayerEvent() {
+    listener.handleSharpenEvent(listener.getCurrentLayerID());
+    repaint();
+    revalidate();
+  }
+
+  private void emitGrayscaleLayerEvent() {
+    listener.handleGrayscaleEvent(listener.getCurrentLayerID());
+    repaint();
+    revalidate();
+  }
+
+  private void emitSepiaLayerEvent() {
+    listener.handleSepiaEvent(listener.getCurrentLayerID());
+    repaint();
+    revalidate();
+  }
+
+  private void emitDeleteLayerEvent() {
+    listener.removeLayerEvent();
+    this.layers.removeIf(jtf -> jtf.getText().equals(this.listener.getCurrentLayerID()));
+    this.labels.removeAll();
+
+    for (JTextField jtf : this.layers) {
+      this.labels.add(jtf);
+    }
+
+    this.deleteLayer.setEnabled(false);
+    this.filters.setEnabled(false);
+    this.transformations.setEnabled(false);
+    this.showLayer.setEnabled(false);
+    this.hideLayer.setEnabled(false);
+
+    if (this.layers.isEmpty()) {
+      this.selectLayer.setEnabled(false);
+    }
+
+    this.setTopLayer();
+
+  }
+
+  private void emitSelectLayerEvent() {
+    String layerName = JOptionPane.showInputDialog("Layer Name");
+    if (!layerName.equals("")) {
+      listener.setCurrentLayerEvent(layerName);
+      for (JTextField jtf : this.layers) {
+        if (!jtf.getText().equals(layerName)) {
+          jtf.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        } else {
+          jtf.setBorder(BorderFactory.createLineBorder(Color.RED));
+        }
       }
     }
+    this.deleteLayer.setEnabled(true);
+    this.filters.setEnabled(true);
+    this.transformations.setEnabled(true);
+    this.showLayer.setEnabled(true);
+    this.hideLayer.setEnabled(true);
+  }
 
-    else {
-
+  private void emitShowLayerEvent() {
+    listener.showEvent();
+    this.topImage = listener.getTopVisibleLayer();
+    this.imageLabel.setIcon(new ImageIcon(listener.getTopVisibleLayer()));
+    if (listener.getTopmostVisibleLayerID() != null) {
+      this.save.setEnabled(true);
     }
+    repaint();
+    revalidate();
+  }
 
+  private void emitHideLayerEvent() {
+    listener.hideEvent();
+    this.topImage = listener.getTopVisibleLayer();
+    this.imageLabel.setIcon(new ImageIcon(listener.getTopVisibleLayer()));
+    if (listener.getTopmostVisibleLayerID() == null) {
+      this.save.setEnabled(false);
+    }
+    repaint();
+    revalidate();
   }
 
   private void emitLoadImageEvent() {
     String[] optionsTypeImage = {"Add Image", "Generate Checkerboard"};
-    int typeImageValue = JOptionPane.showOptionDialog(this, "Choose Type of Image to Add", "Add Layer",
-        JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsTypeImage, null);
+    int typeImageValue = JOptionPane
+        .showOptionDialog(this, "Choose Type of Image to Add", "Add Layer",
+            JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsTypeImage,
+            null);
 
     if (typeImageValue == 0) {
       String[] optionsFileType = {"PPM", "PNG", "JPEG"};
       int filetypeValue = JOptionPane
-          .showOptionDialog(this, "Please choose filetype to import", "Filetypes",
-              JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsFileType,
+          .showOptionDialog(this, "Please choose the file type to import", "File Types",
+              JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsFileType,
               null);
 
-      String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
+      if (filetypeValue != -1) {
+        String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
 
-      final JFileChooser fileChooser = new JFileChooser(".");
-      FileNameExtensionFilter filter = new FileNameExtensionFilter(
-          "JPEG, PNG, & PPM Images", "jpeg", "png", "ppm");
-      fileChooser.setFileFilter(filter);
-      int retvalue = fileChooser.showOpenDialog(ImageProcessorGUIViewImpl.this);
-      if (retvalue == JFileChooser.APPROVE_OPTION) {
-        File f = fileChooser.getSelectedFile();
-        listener
-            .handleLoadLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue], layerName);
-        this.setCurrentImage();
+        if (!listener.layerExists(layerName)) {
+          if (layerName != null) {
+            final JFileChooser fileChooser = new JFileChooser(".");
+
+            if (filetypeValue == 0) {
+              FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                  "PPM", "ppm");
+              fileChooser.setFileFilter(filter);
+            } else if (filetypeValue == 1) {
+              FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                  "PNG", "png");
+              fileChooser.setFileFilter(filter);
+            } else if (filetypeValue == 2) {
+              FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                  "JPEG", "jpeg");
+              fileChooser.setFileFilter(filter);
+            }
+
+            int retvalue = fileChooser.showOpenDialog(this);
+
+            if (retvalue == JFileChooser.APPROVE_OPTION) {
+              File f = fileChooser.getSelectedFile();
+              listener
+                  .handleLoadLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue],
+                      layerName);
+
+              this.setTopLayer();
+
+              JTextField layerLabel = new JTextField();
+              layerLabel.setText(layerName);
+              layerLabel.setPreferredSize(new Dimension(150, 50));
+              layerLabel.setHorizontalAlignment(JLabel.CENTER);
+              layerLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+              layerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+              layerLabel.setEditable(false);
+
+              this.layers.add(layerLabel);
+              selectLayer.setEnabled(true);
+
+              layerLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                  listener.setCurrentLayerEvent(layerName);
+                  deleteLayer.setEnabled(true);
+                  showLayer.setEnabled(true);
+                  hideLayer.setEnabled(true);
+                  filters.setEnabled(true);
+                  transformations.setEnabled(true);
+
+                  for (JTextField jtf : layers) {
+                    if (!jtf.equals(layerLabel)) {
+                      jtf.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                    } else {
+                      jtf.setBorder(BorderFactory.createLineBorder(Color.RED));
+                    }
+                  }
+
+
+                }
+              });
+
+              labels.add(layerLabel, labels.getComponentCount() + 1, 0);
+
+            }
+          }
+        }
       }
     }
 
-    else {
-
-    }
-
   }
+
 }

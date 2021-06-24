@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import cs3500.imageprocessor.model.ImageProcessorModelImpl;
 import cs3500.imageprocessor.model.MultiLayerProcessorModel;
@@ -14,19 +14,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class MultiLayerProcessorModelImplTest {
-private MultiLayerProcessorModel testModel;
-private ImageInterface blackRedCheckerBoard;
-private ImageInterface greenRedCheckerBoard;
+
+  private MultiLayerProcessorModel testModel;
+  private ImageInterface blackRedCheckerBoard;
+  private ImageInterface greenRedCheckerBoard;
 
   @Before
   public void setUp() throws Exception {
     this.testModel = new MultiLayerProcessorModelImpl();
     testModel.addImage("checkerboard", testModel.generateCheckerboard(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0)))));
-     blackRedCheckerBoard = new CheckerboardGenerator(2, 2,
+    blackRedCheckerBoard = new CheckerboardGenerator(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 0, 0))))
         .generateImage();
-     greenRedCheckerBoard = new CheckerboardGenerator(2, 2,
+    greenRedCheckerBoard = new CheckerboardGenerator(2, 2,
         new ArrayList<>(Arrays.asList(new ColorImpl(255, 0, 0), new ColorImpl(0, 255, 0))))
         .generateImage();
 

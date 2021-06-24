@@ -4,25 +4,25 @@ import java.awt.image.BufferedImage;
 
 public interface IViewListener {
 
-  BufferedImage getCurrentImage();
+  BufferedImage getTopVisibleLayer();
 
-  void handleSaveLayerEvent();
+  String getCurrentLayerID();
 
-  void handleNewImageEvent(String filename, String filetype, String layerName);
+  void handleSaveLayerEvent(String fileName, String fileType);
 
-  void handleLoadLayerEvent(String filename, String filetype, String layerName);
+  void handleLoadLayerEvent(String fileName, String fileType, String layerName);
 
-  void handleSaveAllLayerEvent();
+  void handleSaveAllLayerEvent(String fileName, String fileType);
 
   void handleLoadAllLayerEvent();
 
-  void handleBlurEvent();
+  void handleBlurEvent(String current);
 
-  void handleSharpenEvent();
+  void handleSharpenEvent(String current);
 
-  void handleGrayscaleEvent();
+  void handleGrayscaleEvent(String current);
 
-  void handleSepiaEvent();
+  void handleSepiaEvent(String current);
 
   void showEvent();
 
@@ -30,7 +30,14 @@ public interface IViewListener {
 
   void removeLayerEvent();
 
-  void setCurrentLayerEvent();
+  void setCurrentLayerEvent(String layerID);
 
   void runScriptEvent();
+
+  boolean noneHidden();
+
+  String getTopmostVisibleLayerID();
+
+  boolean layerExists(String layerID);
+
 }
