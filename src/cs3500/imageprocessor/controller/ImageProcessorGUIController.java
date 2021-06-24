@@ -105,7 +105,7 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
         return item.getKey();
       }
     }
-    return null;
+    throw new IllegalArgumentException("No visible layers.");
   }
 
   @Override
@@ -167,66 +167,65 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
 
   @Override
   public void handleBlurEvent(String current) {
-    if (this.model.getLayers().containsKey(current)) {
-      try {
-        this.model.replaceImage(current, this.model.blur(current));
-      } catch (IllegalArgumentException e) {
-        renderHandler(e.getMessage());
-      }
+    try {
+      this.model.replaceImage(current, this.model.blur(current));
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
     }
   }
 
   @Override
   public void handleSharpenEvent(String current) {
-    if (this.model.getLayers().containsKey(current)) {
-      try {
-        this.model.replaceImage(current, this.model.sharpen(current));
-      } catch (IllegalArgumentException e) {
-        renderHandler(e.getMessage());
-      }
+    try {
+      this.model.replaceImage(current, this.model.sharpen(current));
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
     }
   }
 
   @Override
   public void handleGrayscaleEvent(String current) {
-    if (this.model.getLayers().containsKey(current)) {
-      try {
-        this.model.replaceImage(current, this.model.grayscale(current));
-      } catch (IllegalArgumentException e) {
-        renderHandler(e.getMessage());
-      }
+    try {
+      this.model.replaceImage(current, this.model.grayscale(current));
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
     }
   }
 
   @Override
   public void handleSepiaEvent(String current) {
-    if (this.model.getLayers().containsKey(current)) {
-      try {
-        this.model.replaceImage(current, this.model.sepia(current));
-      } catch (IllegalArgumentException e) {
-        renderHandler(e.getMessage());
-      }
+    try {
+      this.model.replaceImage(current, this.model.sepia(current));
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
     }
   }
 
   @Override
   public void showEvent() {
-    if (this.model.getLayers().containsKey(current)) {
-      this.model.showLayer(this.current);
+    try {
+      this.model.showLayer(current);
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
     }
-
   }
 
   @Override
   public void hideEvent() {
-    if (this.model.getLayers().containsKey(current)) {
-      this.model.hideLayer(this.current);
+    try {
+      this.model.hideLayer(current);
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
     }
   }
 
   @Override
   public void removeLayerEvent() {
-    this.model.removeImage(this.current);
+    try {
+      this.model.removeImage(this.current);
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
+    }
   }
 
   @Override

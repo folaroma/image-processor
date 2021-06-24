@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -22,7 +23,7 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
     StringBuilder output = new StringBuilder().append(type).append("\n");
     for (Map.Entry<String, ImageInterface> item : layers.entrySet()) {
       String imageFilename = "";
-      switch (type) {
+      switch (type.toLowerCase()) {
         case "png":
           imageFilename = filename + "\\" + item.getKey() + ".png";
           new PNGImageIOWriter().writeFile(imageFilename, item.getValue());
@@ -46,7 +47,8 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
       }
       output.append("\n");
     }
-    File textFile = new File(filename + "\\" + filename + ".txt");
+    String[] tokens = filename.split("\\\\");
+    File textFile = new File(filename + "\\" + tokens[tokens.length - 1] + ".txt");
     textFile.getParentFile().mkdirs();
     FileOutputStream stream = new FileOutputStream(textFile);
     stream.write(output.toString().getBytes());

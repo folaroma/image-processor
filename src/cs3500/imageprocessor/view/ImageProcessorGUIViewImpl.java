@@ -197,12 +197,9 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
     mainPanel.add(menuBar, BorderLayout.PAGE_START);
 
-    //show an image with a scrollbar
     imagePanel = new JPanel();
-    //a border around the panel with a caption
     imagePanel.setBorder(BorderFactory.createTitledBorder("Showing an image"));
     imagePanel.setLayout(new GridLayout(1, 0, 10, 10));
-    //imagePanel.setMaximumSize(null);
     mainPanel.add(imagePanel, BorderLayout.CENTER);
 
     imageLabel = new JLabel();
@@ -275,7 +272,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   }
 
   @Override
-  public void setTopLayer() {
+  public void updateImage() {
     this.topImage = listener.getTopVisibleLayer();
     this.imageLabel.setIcon(new ImageIcon(this.topImage));
     save.setEnabled(true);
@@ -339,86 +336,72 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
           null);
 
       if (typeSaveValue != -1) {
-
+        String[] optionsFileType = {"PPM", "PNG", "JPEG"};
+        int filetypeValue = JOptionPane
+            .showOptionDialog(this, "Choose the file type to save as", "File Types",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+                optionsFileType,
+                null);
+        final JFileChooser fileChooser = new JFileChooser(".");
         if (typeSaveValue == 0) {
-          if (listener.noneHidden()) {
-            String[] optionsFileType = {"PPM", "PNG", "JPEG"};
-            int filetypeValue = JOptionPane
-                .showOptionDialog(this, "Choose the file type to save as", "File Types",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-                    optionsFileType,
-                    null);
-
-            if (filetypeValue != -1) {
-              String layerName = JOptionPane.showInputDialog("Save Name");
-              if (layerName != null) {
-                if (filetypeValue == 0) {
-                  listener.handleSaveLayerEvent(layerName, "PPM");
-                } else if (filetypeValue == 1) {
-                  listener.handleSaveLayerEvent(layerName, "PNG");
-                } else if (filetypeValue == 2) {
-                  listener.handleSaveLayerEvent(layerName, "JPEG");
-                }
-              }
+          if (filetypeValue != -1) {
+            if (filetypeValue == 0) {
+              FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                  "PPM", "ppm");
+              fileChooser.setFileFilter(filter);
+            } else if (filetypeValue == 1) {
+              FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                  "PNG", "png");
+              fileChooser.setFileFilter(filter);
+            } else if (filetypeValue == 2) {
+              FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                  "JPEG", "jpeg");
+              fileChooser.setFileFilter(filter);
             }
-          } else {
-            JOptionPane.showMessageDialog(null, "There must be a layer visible to save");
+
+            int retvalue = fileChooser.showOpenDialog(this);
+
+            if (retvalue == JFileChooser.APPROVE_OPTION) {
+              File f = fileChooser.getSelectedFile();
+              listener.handleSaveLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue]);
+            }
           }
         } else {
-          if (listener.noneHidden()) {
-            String[] optionsFileType = {"PPM", "PNG", "JPEG"};
-            int filetypeValue = JOptionPane
-                .showOptionDialog(this, "Choose the file type to save as", "File Types",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-                    optionsFileType,
-                    null);
-
-            if (filetypeValue != -1) {
-              String layerName = JOptionPane.showInputDialog("Save Name");
-              if (layerName != null) {
-                if (filetypeValue == 0) {
-                  listener.handleSaveAllLayerEvent(layerName, "ppm");
-                } else if (filetypeValue == 1) {
-                  listener.handleSaveAllLayerEvent(layerName, "png");
-                } else if (filetypeValue == 2) {
-                  listener.handleSaveAllLayerEvent(layerName, "jpeg");
-                }
-              }
+          if (filetypeValue != -1) {
+              FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                  "TXT", "txt");
+              fileChooser.setFileFilter(filter);
+            int retvalue = fileChooser.showOpenDialog(this);
+            if (retvalue == JFileChooser.APPROVE_OPTION) {
+              File f = fileChooser.getSelectedFile();
+              listener.handleSaveAllLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue]);
             }
-          } else {
-            JOptionPane.showMessageDialog(null, "There must be a layer visible to save");
           }
         }
       }
-
     } else {
       JOptionPane.showMessageDialog(null, "Add an image before saving");
     }
-
   }
 
   private void emitBlurLayerEvent() {
     listener.handleBlurEvent(listener.getCurrentLayerID());
-    repaint();
-    revalidate();
+    this.updateImage();
   }
 
   private void emitSharpenLayerEvent() {
     listener.handleSharpenEvent(listener.getCurrentLayerID());
-    repaint();
-    revalidate();
+    this.updateImage();
   }
 
   private void emitGrayscaleLayerEvent() {
     listener.handleGrayscaleEvent(listener.getCurrentLayerID());
-    repaint();
-    revalidate();
+    this.updateImage();
   }
 
   private void emitSepiaLayerEvent() {
     listener.handleSepiaEvent(listener.getCurrentLayerID());
-    repaint();
-    revalidate();
+    this.updateImage();
   }
 
   private void emitDeleteLayerEvent() {
@@ -440,7 +423,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
       this.selectLayer.setEnabled(false);
     }
 
-    this.setTopLayer();
+    this.updateImage();
 
   }
 
@@ -465,24 +448,12 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
   private void emitShowLayerEvent() {
     listener.showEvent();
-    this.topImage = listener.getTopVisibleLayer();
-    this.imageLabel.setIcon(new ImageIcon(listener.getTopVisibleLayer()));
-    if (listener.getTopmostVisibleLayerID() != null) {
-      this.save.setEnabled(true);
-    }
-    repaint();
-    revalidate();
+    this.updateImage();
   }
 
   private void emitHideLayerEvent() {
     listener.hideEvent();
-    this.topImage = listener.getTopVisibleLayer();
-    this.imageLabel.setIcon(new ImageIcon(listener.getTopVisibleLayer()));
-    if (listener.getTopmostVisibleLayerID() == null) {
-      this.save.setEnabled(false);
-    }
-    repaint();
-    revalidate();
+    this.updateImage();
   }
 
   private void emitLoadImageEvent() {
@@ -502,70 +473,67 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
       if (filetypeValue != -1) {
         String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
 
-        if (!listener.layerExists(layerName)) {
-          if (layerName != null) {
-            final JFileChooser fileChooser = new JFileChooser(".");
+        if (layerName != null) {
+          final JFileChooser fileChooser = new JFileChooser(".");
 
-            if (filetypeValue == 0) {
-              FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                  "PPM", "ppm");
-              fileChooser.setFileFilter(filter);
-            } else if (filetypeValue == 1) {
-              FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                  "PNG", "png");
-              fileChooser.setFileFilter(filter);
-            } else if (filetypeValue == 2) {
-              FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                  "JPEG", "jpeg");
-              fileChooser.setFileFilter(filter);
-            }
+          if (filetypeValue == 0) {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "PPM", "ppm");
+            fileChooser.setFileFilter(filter);
+          } else if (filetypeValue == 1) {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "PNG", "png");
+            fileChooser.setFileFilter(filter);
+          } else if (filetypeValue == 2) {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "JPEG", "jpeg");
+            fileChooser.setFileFilter(filter);
+          }
 
-            int retvalue = fileChooser.showOpenDialog(this);
+          int retvalue = fileChooser.showOpenDialog(this);
 
-            if (retvalue == JFileChooser.APPROVE_OPTION) {
-              File f = fileChooser.getSelectedFile();
-              listener
-                  .handleLoadLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue],
-                      layerName);
+          if (retvalue == JFileChooser.APPROVE_OPTION) {
+            File f = fileChooser.getSelectedFile();
+            listener
+                .handleLoadLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue],
+                    layerName);
 
-              this.setTopLayer();
+            this.updateImage();
 
-              JTextField layerLabel = new JTextField();
-              layerLabel.setText(layerName);
-              layerLabel.setPreferredSize(new Dimension(150, 50));
-              layerLabel.setHorizontalAlignment(JLabel.CENTER);
-              layerLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-              layerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-              layerLabel.setEditable(false);
+            JTextField layerLabel = new JTextField();
+            layerLabel.setText(layerName);
+            layerLabel.setPreferredSize(new Dimension(150, 50));
+            layerLabel.setHorizontalAlignment(JLabel.CENTER);
+            layerLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            layerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            layerLabel.setEditable(false);
 
-              this.layers.add(layerLabel);
-              selectLayer.setEnabled(true);
+            this.layers.add(layerLabel);
+            selectLayer.setEnabled(true);
 
-              layerLabel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                  listener.setCurrentLayerEvent(layerName);
-                  deleteLayer.setEnabled(true);
-                  showLayer.setEnabled(true);
-                  hideLayer.setEnabled(true);
-                  filters.setEnabled(true);
-                  transformations.setEnabled(true);
 
-                  for (JTextField jtf : layers) {
-                    if (!jtf.equals(layerLabel)) {
-                      jtf.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    } else {
-                      jtf.setBorder(BorderFactory.createLineBorder(Color.RED));
-                    }
+            layerLabel.addMouseListener(new MouseAdapter() {
+              @Override
+              public void mousePressed(MouseEvent e) {
+                listener.setCurrentLayerEvent(layerName);
+                deleteLayer.setEnabled(true);
+                showLayer.setEnabled(true);
+                hideLayer.setEnabled(true);
+                filters.setEnabled(true);
+                transformations.setEnabled(true);
+
+                for (JTextField jtf : layers) {
+                  if (!jtf.equals(layerLabel)) {
+                    jtf.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                  } else {
+                    jtf.setBorder(BorderFactory.createLineBorder(Color.RED));
                   }
-
-
                 }
-              });
-
-              labels.add(layerLabel, labels.getComponentCount() + 1, 0);
-
-            }
+              }
+            });
+            labels.add(layerLabel, labels.getComponentCount() + 1, 0);
+            repaint();
+            revalidate();
           }
         }
       }

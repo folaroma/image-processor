@@ -4,6 +4,6 @@ public interface ImageProcessorGUIView extends ImageProcessorView {
 
   void runGUI();
 
-  void setTopLayer();
+  void updateImage();
 
 }
