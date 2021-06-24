@@ -1,8 +1,10 @@
 # USEME
 
 To run the program, either double-click the JAR file, or open a terminal and navigate to the folder
-it's in. Then from there, enter `java -jar image-processor.jar interactive`
-or `java -jar image-processor.jar script [filename]`and the program should run accordingly.
+it's in. Then from there, enter `java -jar image-processor.jar -interactive` if you wish to open 
+the interactive GUI, `java -jar image-processor.jar -text` if you wish to open an 
+interactive text mode, and `java -jar image-processor.jar -script [path-of-script-file]` if you wish
+to run a script file.
 
 Commands supported by the Image Processor program:
 
@@ -13,8 +15,10 @@ Commands supported by the Image Processor program:
 
     ```
     create first add res/desert.ppm ppm
+   
+   or
 
-    create second checkerboard 5 5 0 0 0 255 255 255
+    create first checkerboard 5 5 0 0 0 255 255 255
     ```
 
 
@@ -128,3 +132,52 @@ Commands supported by the Image Processor program:
     create second add res/desert.ppm ppm
     addmulti res/bugs/bugs.txt
     ```
+    
+&nbsp;
+
+## Using the GUI
+
+Instructions on how to use the interactive GUI for this program:
+
+&nbsp;
+
+### Buttons:
+
+![Buttons](buttons.png)
+
+There are 6 buttons at the bottom of the main menu which handle the filters, transformations, 
+and basic layer operations. A layer must be added and selected before these can be used.
+
+&nbsp;
+
+### Image Display:
+
+![Image Display](image%20display.png)
+
+In the center is where the image you add is displayed. This will display any images you wish to add,
+and any filters or transformations you apply. All layer operations will also be visible here,
+including showing, hiding, deleting, adding layers, etc.
+
+Example Display:
+![Example Display](example%20display.png)
+
+&nbsp;
+
+### Layer Menu:
+
+![Layer Menu](layer%20menu.png)
+
+On the right side of the main menu, there is a menu which displays all the layers.
+These blocks are selectable via click, and once clicked you are able to apply any layer/image
+operations that you wish. When a layer is selected, it will be outlined in red as shown.
+
+&nbsp;
+
+### Menu Bar:
+
+![Menu Bar](menu%20bar.png)
+
+Shown is the menu bar that is displayed at the top of the GUI.
+These contain the submenus shown below:
+
+
