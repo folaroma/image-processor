@@ -1,19 +1,28 @@
 package cs3500.imageprocessor.controller;
 
+import cs3500.imageprocessor.controller.filereading.IMultiLayerReader;
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
+import cs3500.imageprocessor.controller.filereading.MultiLayerFileReader;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
 import cs3500.imageprocessor.controller.filewriting.JPEGImageIOWriter;
 import cs3500.imageprocessor.controller.filewriting.MultiLayerImageWriter;
 import cs3500.imageprocessor.controller.filewriting.PNGImageIOWriter;
 import cs3500.imageprocessor.controller.filewriting.PPMFileWriter;
 import cs3500.imageprocessor.model.MultiLayerProcessorModel;
+import cs3500.imageprocessor.model.images.ColorImpl;
+import cs3500.imageprocessor.model.images.IColor;
 import cs3500.imageprocessor.model.images.ImageInterface;
 import cs3500.imageprocessor.view.IViewListener;
 import cs3500.imageprocessor.view.ImageProcessorGUIView;
 import cs3500.imageprocessor.view.ImageProcessorGUIViewImpl;
+import cs3500.imageprocessor.view.ImageProcessorTextView;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,6 +53,11 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
     return new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
   }
 
+  @Override
+  public String getCurrentLayerID() {
+    return this.current;
+  }
+
   private BufferedImage generateImage(ImageInterface image) {
     int height = image.getPixels().size();
     int width = image.getPixels().get(0).size();
@@ -61,11 +75,6 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
       }
     }
     return outputImage;
-  }
-
-  @Override
-  public String getCurrentLayerID() {
-    return this.current;
   }
 
   @Override
@@ -129,6 +138,18 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
     }
   }
 
+  @Override
+  public void handleCheckerboardEvent(String layerName, int rows, int columns, Color color1, Color color2) {
+    try {
+      List<IColor> colors = new ArrayList<>();
+      colors.add(new ColorImpl(color1.getRed(), color1.getGreen(), color1.getBlue()));
+      colors.add(new ColorImpl(color2.getRed(), color2.getGreen(), color2.getBlue()));
+      addHandler(layerName, this.model.generateCheckerboard(rows, columns, colors));
+    } catch (IllegalArgumentException e) {
+      renderHandler(e.getMessage());
+    }
+  }
+
   private void addHandler(String fileName, ImageInterface image) {
     try {
       this.model.addImage(fileName, image);
@@ -161,70 +182,107 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
   }
 
   @Override
-  public void handleLoadAllLayerEvent() {
-
+  public List<String> handleLoadAllLayerEvent(String filename) {
+    try {
+      IMultiLayerReader reader = new MultiLayerFileReader();
+     Map<String, ImageInterface> layers =  reader.readImages(filename);
+     List<String> visibility = reader.readVisibility();
+     this.model.addMultiLayer(layers, visibility);
+     return new ArrayList<>(this.model.getLayers().keySet());
+    } catch(IllegalArgumentException e) {
+      renderHandler(e.getMessage());
+    }
+    throw new IllegalStateException("Loading all images failed.");
   }
 
   @Override
-  public void handleBlurEvent(String current) {
-    try {
-      this.model.replaceImage(current, this.model.blur(current));
-    } catch (IllegalArgumentException e) {
-      renderHandler(e.getMessage());
+  public void handleBlurEvent() {
+    if (this.current == null) {
+      renderHandler("There is no current layer selected.");
+    } else {
+      try {
+        this.model.replaceImage(current, this.model.blur(current));
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
     }
   }
 
   @Override
-  public void handleSharpenEvent(String current) {
-    try {
-      this.model.replaceImage(current, this.model.sharpen(current));
-    } catch (IllegalArgumentException e) {
-      renderHandler(e.getMessage());
+  public void handleSharpenEvent() {
+    if (this.current == null) {
+      renderHandler("There is no current layer selected.");
+    } else {
+      try {
+        this.model.replaceImage(current, this.model.sharpen(current));
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
     }
   }
 
   @Override
-  public void handleGrayscaleEvent(String current) {
-    try {
-      this.model.replaceImage(current, this.model.grayscale(current));
-    } catch (IllegalArgumentException e) {
-      renderHandler(e.getMessage());
+  public void handleGrayscaleEvent() {
+    if (this.current == null) {
+      renderHandler("There is no current layer selected.");
+    } else {
+      try {
+        this.model.replaceImage(current, this.model.grayscale(current));
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
     }
   }
 
   @Override
-  public void handleSepiaEvent(String current) {
-    try {
-      this.model.replaceImage(current, this.model.sepia(current));
-    } catch (IllegalArgumentException e) {
-      renderHandler(e.getMessage());
+  public void handleSepiaEvent() {
+    if (this.current == null) {
+      renderHandler("There is no current layer selected.");
+    } else {
+      try {
+        this.model.replaceImage(current, this.model.sepia(current));
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
     }
   }
 
   @Override
   public void showEvent() {
-    try {
-      this.model.showLayer(current);
-    } catch (IllegalArgumentException e) {
-      renderHandler(e.getMessage());
+    if (this.current == null) {
+      renderHandler("There is no current layer selected.");
+    } else {
+      try {
+        this.model.showLayer(current);
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
     }
   }
 
   @Override
   public void hideEvent() {
-    try {
-      this.model.hideLayer(current);
-    } catch (IllegalArgumentException e) {
-      renderHandler(e.getMessage());
+    if (this.current == null) {
+      renderHandler("There is no current layer selected.");
+    } else {
+      try {
+        this.model.hideLayer(current);
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
     }
   }
 
   @Override
   public void removeLayerEvent() {
-    try {
-      this.model.removeImage(this.current);
-    } catch (IllegalArgumentException e) {
-      renderHandler(e.getMessage());
+    if (this.current == null) {
+      renderHandler("There is no current layer selected.");
+    } else {
+      try {
+        this.model.removeImage(this.current);
+      } catch (IllegalArgumentException e) {
+        renderHandler(e.getMessage());
+      }
     }
   }
 
@@ -238,18 +296,12 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
   }
 
   @Override
-  public void runScriptEvent() {
-
-  }
-
-  @Override
-  public boolean noneHidden() {
-    return this.model.getVisibility().isEmpty();
-  }
-
-  @Override
-  public boolean layerExists(String layerID) {
-    return this.model.getLayers().containsKey(layerID);
+  public void runScriptEvent(String filename) {
+    try {
+      new ImageProcessorControllerImpl(this.model, new FileReader(filename), System.out).startEditor();
+    } catch (IOException e) {
+      renderHandler("Running the script failed.");
+    }
   }
 
 
