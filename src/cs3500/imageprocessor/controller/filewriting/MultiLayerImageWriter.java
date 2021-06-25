@@ -4,9 +4,12 @@ import cs3500.imageprocessor.model.images.ImageInterface;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Function object to facilitate the writing of txt files and images representing a multi layer
@@ -47,7 +50,8 @@ public class MultiLayerImageWriter implements IMultiLayerImageWriter {
       }
       output.append("\n");
     }
-    String[] tokens = filename.split("\\\\");
+    String pattern = Pattern.quote(System.getProperty("file.separator"));
+    String[] tokens = filename.split(pattern);
     File textFile = new File(filename + "\\" + tokens[tokens.length - 1] + ".txt");
     textFile.getParentFile().mkdirs();
     FileOutputStream stream = new FileOutputStream(textFile);
