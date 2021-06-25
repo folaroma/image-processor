@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,6 +32,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import swingdemo.SwingFeaturesFrame;
 
 public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorGUIView,
     ActionListener {
@@ -104,10 +106,20 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     load.addActionListener(this);
     file.add(load);
 
-    save = new JMenuItem("Save...");
-    save.getAccessibleContext().setAccessibleDescription("Save Image");
-    save.setActionCommand("Save");
-    save.addActionListener(this);
+    save = new JMenu("Save...");
+
+    JMenuItem saveLayer = new JMenuItem("Save the Topmost Visible Layer");
+    saveLayer.getAccessibleContext().setAccessibleDescription("Save Topmost Visible Image");
+    saveLayer.setActionCommand("Save");
+    saveLayer.addActionListener(this);
+    save.add(saveLayer);
+
+    JMenuItem saveAllLayers = new JMenuItem("Save All Layers");
+    saveAllLayers.getAccessibleContext().setAccessibleDescription("Save all Layers");
+    saveAllLayers.setActionCommand("Save All");
+    saveAllLayers.addActionListener(this);
+    save.add(saveAllLayers);
+
     save.setEnabled(false);
     file.add(save);
 
@@ -155,10 +167,19 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     layer = new JMenu("Layer");
     layer.getAccessibleContext().setAccessibleDescription("Layer Menu");
 
-    addLayer = new JMenuItem("Add Layer...");
+    addLayer = new JMenu("Add Layer...");
     addLayer.getAccessibleContext().setAccessibleDescription("Add a Layer");
-    addLayer.setActionCommand("Add Layer");
-    addLayer.addActionListener(this);
+
+    JMenuItem loadLayer = new JMenuItem("Load a PPM/PNG/JPEG File");
+    loadLayer.setActionCommand("Add Layer");
+    loadLayer.addActionListener(this);
+    addLayer.add(loadLayer);
+
+    JMenuItem loadCheckerboard = new JMenuItem("Generate a Checkerboard");
+    loadCheckerboard.setActionCommand("Checkerboard");
+    loadCheckerboard.addActionListener(this);
+    addLayer.add(loadCheckerboard);
+
     layer.add(addLayer);
 
     deleteLayer = new JMenuItem("Delete Layer");
@@ -321,62 +342,63 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
       case "Hide":
         emitHideLayerEvent();
         break;
+      case "Checkerboard":
+        emitCheckerboardEvent();
+        break;
+      case "Save All":
+        emitSaveAllEvent();
+        break;
+      case "Load Multi":
+        emitLoadAllEvent();
+    }
+  }
+
+  private void emitLoadAllEvent() {
+    final JFileChooser fileChooser = new JFileChooser(".");
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "TXT", "txt");
+    fileChooser.setFileFilter(filter);
+    int retvalue = fileChooser.showOpenDialog(this);
+    if (retvalue == JFileChooser.APPROVE_OPTION) {
+      File f = fileChooser.getSelectedFile();
+      List<String> layers = listener.handleLoadAllLayerEvent(f.getAbsolutePath());
+      this.layers.clear();
+      this.labels.removeAll();
+      this.updateImage();
+      for (String layer : layers) {
+        this.updateLayers(layer);
+      }
     }
   }
 
   private void emitLoadScriptEvent() {
-    listener.runScriptEvent();
+    final JFileChooser fileChooser = new JFileChooser(".");
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "TXT", "txt");
+    fileChooser.setFileFilter(filter);
+    int retvalue = fileChooser.showOpenDialog(this);
+    if (retvalue == JFileChooser.APPROVE_OPTION) {
+      File f = fileChooser.getSelectedFile();
+      listener.runScriptEvent(f.getAbsolutePath());
+    }
   }
 
   private void emitSaveEvent() {
     if (!this.layers.isEmpty()) {
-      String[] optionsSaveType = {"Save Topmost Visible Layer", "Save Entire Image"};
-      int typeSaveValue = JOptionPane.showOptionDialog(this, "Choose Save Type", "Save",
-          JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsSaveType,
-          null);
+      String[] optionsFileType = {"PPM", "PNG", "JPEG"};
+      int filetypeValue = JOptionPane
+          .showOptionDialog(this, "Choose the file type to save as", "File Types",
+              JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+              optionsFileType,
+              null);
+      final JFileChooser fileChooser = new JFileChooser(".");
+      if (filetypeValue != -1) {
+        setFiletypeFilter(filetypeValue, fileChooser);
+        int retvalue = fileChooser.showOpenDialog(this);
 
-      if (typeSaveValue != -1) {
-        String[] optionsFileType = {"PPM", "PNG", "JPEG"};
-        int filetypeValue = JOptionPane
-            .showOptionDialog(this, "Choose the file type to save as", "File Types",
-                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-                optionsFileType,
-                null);
-        final JFileChooser fileChooser = new JFileChooser(".");
-        if (typeSaveValue == 0) {
-          if (filetypeValue != -1) {
-            if (filetypeValue == 0) {
-              FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                  "PPM", "ppm");
-              fileChooser.setFileFilter(filter);
-            } else if (filetypeValue == 1) {
-              FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                  "PNG", "png");
-              fileChooser.setFileFilter(filter);
-            } else if (filetypeValue == 2) {
-              FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                  "JPEG", "jpeg");
-              fileChooser.setFileFilter(filter);
-            }
-
-            int retvalue = fileChooser.showOpenDialog(this);
-
-            if (retvalue == JFileChooser.APPROVE_OPTION) {
-              File f = fileChooser.getSelectedFile();
-              listener.handleSaveLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue]);
-            }
-          }
-        } else {
-          if (filetypeValue != -1) {
-              FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                  "TXT", "txt");
-              fileChooser.setFileFilter(filter);
-            int retvalue = fileChooser.showOpenDialog(this);
-            if (retvalue == JFileChooser.APPROVE_OPTION) {
-              File f = fileChooser.getSelectedFile();
-              listener.handleSaveAllLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue]);
-            }
-          }
+        if (retvalue == JFileChooser.APPROVE_OPTION) {
+          File f = fileChooser.getSelectedFile();
+          listener.handleSaveLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue]);
         }
       }
     } else {
@@ -384,23 +406,59 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     }
   }
 
+  private void setFiletypeFilter(int filetypeValue, JFileChooser fileChooser) {
+    if (filetypeValue == 0) {
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          "PPM", "ppm");
+      fileChooser.setFileFilter(filter);
+    } else if (filetypeValue == 1) {
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          "PNG", "png");
+      fileChooser.setFileFilter(filter);
+    } else if (filetypeValue == 2) {
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          "JPEG", "jpeg");
+      fileChooser.setFileFilter(filter);
+    }
+
+
+  }
+
+  private void emitSaveAllEvent() {
+    String[] optionsFileType = {"PPM", "PNG", "JPEG"};
+    int filetypeValue = JOptionPane
+        .showOptionDialog(this, "Choose the file type to save as", "File Types",
+            JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+            optionsFileType,
+            null);
+    final JFileChooser fileChooser = new JFileChooser(".");
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "TXT", "txt");
+    fileChooser.setFileFilter(filter);
+    int retvalue = fileChooser.showOpenDialog(this);
+    if (retvalue == JFileChooser.APPROVE_OPTION) {
+      File f = fileChooser.getSelectedFile();
+      listener.handleSaveAllLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue]);
+    }
+  }
+
   private void emitBlurLayerEvent() {
-    listener.handleBlurEvent(listener.getCurrentLayerID());
+    listener.handleBlurEvent();
     this.updateImage();
   }
 
   private void emitSharpenLayerEvent() {
-    listener.handleSharpenEvent(listener.getCurrentLayerID());
+    listener.handleSharpenEvent();
     this.updateImage();
   }
 
   private void emitGrayscaleLayerEvent() {
-    listener.handleGrayscaleEvent(listener.getCurrentLayerID());
+    listener.handleGrayscaleEvent();
     this.updateImage();
   }
 
   private void emitSepiaLayerEvent() {
-    listener.handleSepiaEvent(listener.getCurrentLayerID());
+    listener.handleSepiaEvent();
     this.updateImage();
   }
 
@@ -457,88 +515,89 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   }
 
   private void emitLoadImageEvent() {
-    String[] optionsTypeImage = {"Add Image", "Generate Checkerboard"};
-    int typeImageValue = JOptionPane
-        .showOptionDialog(this, "Choose Type of Image to Add", "Add Layer",
-            JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsTypeImage,
+
+    String[] optionsFileType = {"PPM", "PNG", "JPEG"};
+    int filetypeValue = JOptionPane
+        .showOptionDialog(this, "Please choose the file type to import", "File Types",
+            JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsFileType,
             null);
 
-    if (typeImageValue == 0) {
-      String[] optionsFileType = {"PPM", "PNG", "JPEG"};
-      int filetypeValue = JOptionPane
-          .showOptionDialog(this, "Please choose the file type to import", "File Types",
-              JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, optionsFileType,
-              null);
+    if (filetypeValue != -1) {
+      String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
 
-      if (filetypeValue != -1) {
-        String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
+      if (layerName != null) {
+        final JFileChooser fileChooser = new JFileChooser(".");
 
-        if (layerName != null) {
-          final JFileChooser fileChooser = new JFileChooser(".");
+        setFiletypeFilter(filetypeValue, fileChooser);
+        int retvalue = fileChooser.showOpenDialog(this);
+        if (retvalue == JFileChooser.APPROVE_OPTION) {
+          File f = fileChooser.getSelectedFile();
+          listener
+              .handleLoadLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue],
+                  layerName);
 
-          if (filetypeValue == 0) {
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "PPM", "ppm");
-            fileChooser.setFileFilter(filter);
-          } else if (filetypeValue == 1) {
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "PNG", "png");
-            fileChooser.setFileFilter(filter);
-          } else if (filetypeValue == 2) {
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPEG", "jpeg");
-            fileChooser.setFileFilter(filter);
-          }
+          this.updateImage();
 
-          int retvalue = fileChooser.showOpenDialog(this);
-
-          if (retvalue == JFileChooser.APPROVE_OPTION) {
-            File f = fileChooser.getSelectedFile();
-            listener
-                .handleLoadLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue],
-                    layerName);
-
-            this.updateImage();
-
-            JTextField layerLabel = new JTextField();
-            layerLabel.setText(layerName);
-            layerLabel.setPreferredSize(new Dimension(150, 50));
-            layerLabel.setHorizontalAlignment(JLabel.CENTER);
-            layerLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            layerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            layerLabel.setEditable(false);
-
-            this.layers.add(layerLabel);
-            selectLayer.setEnabled(true);
-
-
-            layerLabel.addMouseListener(new MouseAdapter() {
-              @Override
-              public void mousePressed(MouseEvent e) {
-                listener.setCurrentLayerEvent(layerName);
-                deleteLayer.setEnabled(true);
-                showLayer.setEnabled(true);
-                hideLayer.setEnabled(true);
-                filters.setEnabled(true);
-                transformations.setEnabled(true);
-
-                for (JTextField jtf : layers) {
-                  if (!jtf.equals(layerLabel)) {
-                    jtf.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                  } else {
-                    jtf.setBorder(BorderFactory.createLineBorder(Color.RED));
-                  }
-                }
-              }
-            });
-            labels.add(layerLabel, labels.getComponentCount() + 1, 0);
-            repaint();
-            revalidate();
-          }
+          updateLayers(layerName);
         }
       }
     }
-
   }
+
+  private void emitCheckerboardEvent() {
+    try {
+      String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
+      int rows = Integer
+          .parseInt(JOptionPane.showInputDialog("Please enter the amount of rows in the board."));
+      int columns = Integer
+          .parseInt(
+              JOptionPane.showInputDialog("Please enter the amount of columns in the board."));
+      Color color1 = JColorChooser.showDialog(this, "Choose a color", new Color(255, 0, 0));
+      Color color2 = JColorChooser.showDialog(this, "Choose a color", new Color(255, 0, 0));
+      this.listener.handleCheckerboardEvent(layerName, rows, columns, color1, color2);
+      this.updateImage();
+      this.updateLayers(layerName);
+    } catch (NumberFormatException e) {
+      this.renderMessage("Input must be an integer.");
+    }
+  }
+
+
+  private void updateLayers(String layerName) {
+    JTextField layerLabel = new JTextField();
+    layerLabel.setText(layerName);
+    layerLabel.setPreferredSize(new Dimension(150, 50));
+    layerLabel.setHorizontalAlignment(JLabel.CENTER);
+    layerLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    layerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    layerLabel.setEditable(false);
+
+    this.layers.add(layerLabel);
+    selectLayer.setEnabled(true);
+
+    layerLabel.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mousePressed(MouseEvent e) {
+        listener.setCurrentLayerEvent(layerName);
+        deleteLayer.setEnabled(true);
+        showLayer.setEnabled(true);
+        hideLayer.setEnabled(true);
+        filters.setEnabled(true);
+        transformations.setEnabled(true);
+
+        for (JTextField jtf : layers) {
+          if (!jtf.equals(layerLabel)) {
+            jtf.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+          } else {
+            jtf.setBorder(BorderFactory.createLineBorder(Color.RED));
+          }
+        }
+      }
+    });
+    labels.add(layerLabel, labels.getComponentCount() + 1, 0);
+    repaint();
+    revalidate();
+  }
+
 
 }

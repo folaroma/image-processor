@@ -57,10 +57,10 @@ public class MultiLayerFileReader implements IMultiLayerReader {
 
     while (sc.hasNextLine()) {
       token = sc.nextLine();
-      String[] line = token.split(" ");
+      String[] line = token.split("(?<!\\\\)\\s+");
 
       ImageInterface image = null;
-      switch (type) {
+      switch (type.toLowerCase()) {
         case "png":
         case "jpeg":
           image = new ImageIOFileReader().readImageFromFile(line[0]);

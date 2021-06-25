@@ -1,6 +1,8 @@
 package cs3500.imageprocessor.view;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public interface IViewListener {
 
@@ -12,17 +14,19 @@ public interface IViewListener {
 
   void handleLoadLayerEvent(String fileName, String fileType, String layerName);
 
+  void handleCheckerboardEvent(String layerName, int rows, int columns, Color color1, Color color2);
+
   void handleSaveAllLayerEvent(String fileName, String fileType);
 
-  void handleLoadAllLayerEvent();
+  List<String> handleLoadAllLayerEvent(String filename);
 
-  void handleBlurEvent(String current);
+  void handleBlurEvent();
 
-  void handleSharpenEvent(String current);
+  void handleSharpenEvent();
 
-  void handleGrayscaleEvent(String current);
+  void handleGrayscaleEvent();
 
-  void handleSepiaEvent(String current);
+  void handleSepiaEvent();
 
   void showEvent();
 
@@ -32,12 +36,9 @@ public interface IViewListener {
 
   void setCurrentLayerEvent(String layerID);
 
-  void runScriptEvent();
-
-  boolean noneHidden();
+  void runScriptEvent(String filename);
 
   String getTopmostVisibleLayerID();
 
-  boolean layerExists(String layerID);
 
 }
