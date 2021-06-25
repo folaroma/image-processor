@@ -1,5 +1,6 @@
 import cs3500.imageprocessor.view.IViewListener;
 import cs3500.imageprocessor.view.ImageProcessorGUIView;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class ViewMock implements ImageProcessorGUIView {
   }
 
   public void emitLoadScriptEvent() {
-    listener.runScriptEvent();
+    listener.runScriptEvent("");
   }
 
   public void emitSaveEvent() {
@@ -66,19 +67,19 @@ public class ViewMock implements ImageProcessorGUIView {
   }
 
   public void emitBlurLayerEvent() {
-    listener.handleBlurEvent(listener.getCurrentLayerID());
+    listener.handleBlurEvent();
   }
 
   public void emitSharpenLayerEvent() {
-    listener.handleSharpenEvent(listener.getCurrentLayerID());
+    listener.handleSharpenEvent();
   }
 
   public void emitGrayscaleLayerEvent() {
-    listener.handleGrayscaleEvent(listener.getCurrentLayerID());
+    listener.handleGrayscaleEvent();
   }
 
   public void emitSepiaLayerEvent() {
-    listener.handleSepiaEvent(listener.getCurrentLayerID());
+    listener.handleSepiaEvent();
   }
 
   public void emitDeleteLayerEvent() {
@@ -99,6 +100,15 @@ public class ViewMock implements ImageProcessorGUIView {
 
   public void emitLoadImageEvent() {
     listener.handleLoadLayerEvent("", "", "");
+
+  }
+
+  public void emitLoadAllLayerEvent() {
+    listener.handleLoadAllLayerEvent("");
+  }
+
+  public void emitCheckerboardEvent() {
+    listener.handleCheckerboardEvent("", 1, 1, Color.RED, Color.RED);
   }
 
 }

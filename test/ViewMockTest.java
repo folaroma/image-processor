@@ -142,9 +142,20 @@ public class ViewMockTest {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
     ViewMock mockView = new ViewMock(controller);
-    mockView.emitLoadImageEvent();
+    mockView.emitLoadAllLayerEvent();
 
-    assertEquals(out.toString(), "handleLoadLayerEvent");
+    assertEquals(out.toString(), "handleLoadAllLayerEvent");
+
+  }
+
+  @Test
+  public void testCheckerboardClick() {
+    Appendable out = new StringBuilder();
+    IViewListener controller = new ControllerMock(out);
+    ViewMock mockView = new ViewMock(controller);
+    mockView.emitCheckerboardEvent();
+
+    assertEquals(out.toString(), "handleCheckerboardEvent");
 
   }
 

@@ -1,10 +1,13 @@
 import cs3500.imageprocessor.controller.ImageProcessorController;
 import cs3500.imageprocessor.view.IViewListener;
 import cs3500.imageprocessor.view.ImageProcessorGUIView;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ControllerMock implements ImageProcessorController, IViewListener, ActionListener {
@@ -45,6 +48,16 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
   }
 
   @Override
+  public void handleCheckerboardEvent(String layerName, int rows, int columns, Color color1,
+      Color color2) {
+    try {
+      this.log.append("handleCheckerboardEvent");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
   public void handleSaveAllLayerEvent(String fileName, String fileType) {
     try {
       this.log.append("handleSaveAllLayerEvent");
@@ -54,16 +67,17 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
   }
 
   @Override
-  public void handleLoadAllLayerEvent() {
+  public List<String> handleLoadAllLayerEvent(String filename) {
     try {
       this.log.append("handleLoadAllLayerEvent");
     } catch (IOException e) {
       e.printStackTrace();
     }
+    return new ArrayList<>();
   }
 
   @Override
-  public void handleBlurEvent(String current) {
+  public void handleBlurEvent() {
     try {
       this.log.append("handleBlurEvent");
     } catch (IOException e) {
@@ -72,7 +86,7 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
   }
 
   @Override
-  public void handleSharpenEvent(String current) {
+  public void handleSharpenEvent() {
     try {
       this.log.append("handleSharpenEvent");
     } catch (IOException e) {
@@ -81,7 +95,7 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
   }
 
   @Override
-  public void handleGrayscaleEvent(String current) {
+  public void handleGrayscaleEvent() {
     try {
       this.log.append("handleGrayscaleEvent");
     } catch (IOException e) {
@@ -90,7 +104,7 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
   }
 
   @Override
-  public void handleSepiaEvent(String current) {
+  public void handleSepiaEvent() {
     try {
       this.log.append("handleSepiaEvent");
     } catch (IOException e) {
@@ -135,7 +149,7 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
   }
 
   @Override
-  public void runScriptEvent() {
+  public void runScriptEvent(String filename) {
     try {
       this.log.append("runScriptEvent");
     } catch (IOException e) {
@@ -144,27 +158,15 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
   }
 
   @Override
-  public boolean noneHidden() {
-    return false;
-  }
-
-  @Override
   public String getTopmostVisibleLayerID() {
     return null;
   }
 
   @Override
-  public boolean layerExists(String layerID) {
-    return false;
-  }
-
-  @Override
   public void startEditor() throws IllegalStateException {
-
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
-
   }
 }
