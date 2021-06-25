@@ -3,6 +3,7 @@ package cs3500.imageprocessor.controller;
 import static org.junit.Assert.*;
 
 import cs3500.imageprocessor.controller.filereading.ImageIOFileReader;
+import cs3500.imageprocessor.controller.filereading.MultiLayerFileReader;
 import cs3500.imageprocessor.controller.filereading.PPMFileReader;
 import cs3500.imageprocessor.model.ImageProcessorModel;
 import cs3500.imageprocessor.model.MultiLayerProcessorModelImpl;
@@ -148,50 +149,147 @@ public class ImageProcessorGUIControllerTest {
   }
 
   @Test
-  public void handleCheckerboardEvent() {
+  public void handleCheckerboardEventFunctionalityTest() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+
+    assertEquals(this.controller.getTopVisibleLayer().getHeight(), 5);
+    assertEquals(this.controller.getTopVisibleLayer().getWidth(), 5);
+    assertEquals(this.controller.getTopVisibleLayer().getRGB(0, 0), -16777216);
+    assertEquals(this.controller.getTopVisibleLayer().getRGB(1, 0), -1);
   }
 
   @Test
-  public void handleSaveAllLayerEvent() {
+  public void handleSaveAllLayerEventFunctionality() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.handleCheckerboardEvent("b", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.handleSaveAllLayerEvent("res/checkerboardMulti", "JPEG");
+
+    assertEquals(new MultiLayerFileReader().readImages("res\\checkerboardMulti\\res\\checkerboardMulti.txt").get("a"), new ImageIOFileReader().readImageFromFile("res/checkerboardMulti/a.jpeg"));
   }
 
+  /*
   @Test
   public void handleLoadAllLayerEvent() {
+    this.controller.startEditor();
+    this.controller.handleLoadAllLayerEvent("res/bugs/bugs.txt");
+
+    assertEquals(this.model.getLayers().size(), 2);
   }
+   */
 
   @Test
   public void handleBlurEvent() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.setCurrentLayerEvent("a");
+    this.controller.handleBlurEvent();
+
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getRed(), 62);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getGreen(), 62);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getBlue(), 62);
+
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getRed(), 93);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getGreen(), 93);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getBlue(), 93);
   }
 
   @Test
   public void handleSharpenEvent() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.setCurrentLayerEvent("a");
+    this.controller.handleSharpenEvent();
+
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getRed(), 64);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getGreen(), 64);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getBlue(), 64);
+
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getRed(), 255);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getGreen(), 255);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getBlue(), 255);
   }
 
   @Test
   public void handleGrayscaleEvent() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.setCurrentLayerEvent("a");
+    this.controller.handleGrayscaleEvent();
+
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getRed(), 0);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getGreen(), 0);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getBlue(), 0);
+
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getRed(), 254);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getGreen(), 254);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getBlue(), 254);
   }
 
   @Test
   public void handleSepiaEvent() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.setCurrentLayerEvent("a");
+    this.controller.handleSepiaEvent();
+
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getRed(), 0);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getGreen(), 0);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(0).getColor().getBlue(), 0);
+
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getRed(), 255);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getGreen(), 255);
+    assertEquals(this.model.getImage("a").getPixels().get(0).get(1).getColor().getBlue(), 238);
   }
 
   @Test
-  public void showEvent() {
+  public void showEventFunctionalityTest() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.setCurrentLayerEvent("a");
+    this.controller.hideEvent();
+    this.controller.showEvent();
+    assertEquals(this.controller.getTopmostVisibleLayerID(), "a");
   }
 
   @Test
-  public void hideEvent() {
+  public void hideEventFunctionalityTest() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.setCurrentLayerEvent("a");
+    this.controller.hideEvent();
+
+    assertEquals(this.model.getVisibility().size(), 1);
   }
 
   @Test
-  public void removeLayerEvent() {
+  public void removeLayerEventFunctionality() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+
+    assertEquals(this.model.getLayers().size(), 1);
+
+    this.controller.setCurrentLayerEvent("a");
+    this.controller.removeLayerEvent();
+
+    assertEquals(this.model.getLayers().size(), 0);
   }
 
   @Test
-  public void setCurrentLayerEvent() {
+  public void setCurrentLayerEventFunctionality() {
+    this.controller.startEditor();
+    this.controller.handleCheckerboardEvent("a", 5, 5, Color.BLACK, Color.WHITE);
+    this.controller.setCurrentLayerEvent("a");
+
+    assertEquals(this.controller.getCurrentLayerID(), "a");
   }
 
   @Test
-  public void runScriptEvent() {
+  public void runScriptEventFunctionality() {
+    this.controller.startEditor();
+    this.controller.runScriptEvent("res/script1.txt");
+
+    assertEquals(new PPMFileReader().readImageFromFile("grayboard.ppm").getPixels().size(), 5);
   }
 }
