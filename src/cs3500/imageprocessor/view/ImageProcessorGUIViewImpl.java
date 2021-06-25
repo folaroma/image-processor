@@ -394,7 +394,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
       final JFileChooser fileChooser = new JFileChooser(".");
       if (filetypeValue != -1) {
         setFiletypeFilter(filetypeValue, fileChooser);
-        int retvalue = fileChooser.showOpenDialog(this);
+        int retvalue = fileChooser.showSaveDialog(this);
 
         if (retvalue == JFileChooser.APPROVE_OPTION) {
           File f = fileChooser.getSelectedFile();
@@ -435,7 +435,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
         "TXT", "txt");
     fileChooser.setFileFilter(filter);
-    int retvalue = fileChooser.showOpenDialog(this);
+    int retvalue = fileChooser.showSaveDialog(this);
     if (retvalue == JFileChooser.APPROVE_OPTION) {
       File f = fileChooser.getSelectedFile();
       listener.handleSaveAllLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue]);
