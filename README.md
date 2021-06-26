@@ -30,14 +30,18 @@ The Model and Controller are now complete.
 The controller added uses a multi layer image model that allows the creation, editing, and exporting
 of multi layer images with all of the same functionality from the last version of the model.
 
+Then a GUI view was added that exposes all of the features of the controller and the original text based view to the user through buttons and inputs. 
+
 &nbsp;
 
 ## Design Changes
 
-Only design change made was the addition of a `remove` method to the original Model.
+One design change made was the addition of a `remove` method to the original Model.
 
 This is to add support for removing images in a Multi-Layer Model, so we could then remove layers
 for when a new multi layer image is added.
+
+The next design change that needed to be made was to adjust the filepaths used for writing a multi layered image. Previously, we used the whole filepath, which would create some bugs when generating the text file. Now the filepath is split along the separators so only the final path of the name is used to make a folder to contain the image.
 
 &nbsp;
 
@@ -164,6 +168,7 @@ Generating an image, with support only for creating a basic checkerboard.
     - [PixelImpl](#pixelimpl)
 - [ImageProcessorController](#imageprocessorcontroller)
 - [ImageProcessorControllerImpl](#imageprocessorcontrollerimpl)
+- [ImageProcessorGUIController](#imageprocessorguicontroller)
 - [fileReading]
     - [IFileReader](#ifilereader)
     - [IMultiLayerReader](#imultilayerreader)
@@ -180,6 +185,9 @@ Generating an image, with support only for creating a basic checkerboard.
     - [PPMFileWriter](#ppmfilewriter)
 - [ImageProcessorView](#imageprocessorview)
 - [ImageProcessorTextView](#imageprocessortextview)
+- [ImageProcessorGUIView](#imageprocessorguiview)
+- [ImageProcessorGUIViewImpl](#imageprocessorguiviewimpl)
+- [IViewListener](#iviewlistener)
 
 &nbsp;
 
@@ -398,6 +406,12 @@ The implementation of the ImageProcessorController interface. This handles all t
 into the program, determining whether they are valid or not. If valid, it executes the change on the
 model.
 
+### ImageProcessorGUIController
+Class representing a controller for an image processing program that uses a GUI view. This
+controller supports the multi layer model and uses the ImageProcessorGUIView in order to display
+the required information. This also implements the IViewListener, allowing the controller to
+receive high level events from the view and act on them.
+
 &nbsp;
 
 ### ImageProcessorView
@@ -409,6 +423,20 @@ the program.
 
 The implementation of the ImageProcessorView interface in text form. Handles all the text
 visualizations that are shown to the user.
+
+### ImageProcessorGUIView
+Interface to represent the view for an image processing programs that uses an interactive GUI to
+receive user inputs. GUI exposes all features of the program to the user, which can be activated
+using these buttons. GUI also allows the ability to load scripts that are accepted by the text view.
+
+### ImageProcessorGUIViewImpl
+Class to represent the implementation of a GUI view for and image processing program. The view
+uses a listener to handle the high level events that are received from hitting buttons. Any
+errors are represented as pop up boxes that the user sees.
+
+### IViewListener
+Interface to represent a listener to the GUI view for an image processing program that can react
+to high level events received by the view.
 
 &nbsp;
 
