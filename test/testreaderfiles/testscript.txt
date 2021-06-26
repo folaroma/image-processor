@@ -1,0 +1,4 @@
+create first checkerboard 4 4 255 0 0 0 0 0
+current first
+grayscale
+save png test\\testreaderfiles\\grayboard

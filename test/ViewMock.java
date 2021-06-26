@@ -1,6 +1,7 @@
 import cs3500.imageprocessor.view.IViewListener;
 import cs3500.imageprocessor.view.ImageProcessorGUIView;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,44 +15,40 @@ import javax.swing.JTextField;
 public class ViewMock implements ImageProcessorGUIView {
 
   private final IViewListener listener;
-  private final JFrame guiView;
-  private final List<JTextField> layers;
-  private final JLayeredPane labels;
-  private final JMenuItem deleteLayer;
-  private final JMenuItem showLayer;
-  private final JMenuItem hideLayer;
-  private final JMenuItem selectLayer;
-  private final JMenu filters;
-  private final JMenu transformations;
+  private final Appendable ap;
 
 
-  public ViewMock(IViewListener listener) {
+  public ViewMock(IViewListener listener, Appendable ap) {
     this.listener = Objects.requireNonNull(listener);
-    this.guiView = new JFrame();
-    this.layers = new ArrayList<>();
-    this.labels = new JLayeredPane();
-    this.deleteLayer = new JMenuItem();
-    this.showLayer = new JMenuItem();
-    this.hideLayer = new JMenuItem();
-    this.selectLayer = new JMenuItem();
-    this.filters = new JMenu();
-    this.transformations = new JMenu();
+    this.ap = ap;
 
   }
 
   @Override
   public void runGUI() {
-
   }
 
   @Override
-  public void updateImage() {
+  public void updateImage(BufferedImage image){
+    try {
+      ap.append("updated image ");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
+  @Override
+  public void updateLayers(String layerName){
+    try {
+      ap.append("updated layers ");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
   public void renderMessage(String msg) throws IllegalArgumentException, IOException {
-
+    ap.append("rendered msg ");
   }
 
   public void emitLoadScriptEvent() {
@@ -100,7 +97,6 @@ public class ViewMock implements ImageProcessorGUIView {
 
   public void emitLoadImageEvent() {
     listener.handleLoadLayerEvent("", "", "");
-
   }
 
   public void emitLoadAllLayerEvent() {

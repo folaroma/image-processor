@@ -814,11 +814,11 @@ public class ImageProcessorControllerImplTest {
     generalImageController.startEditor();
 
     assertEquals(new MultiLayerFileReader()
-            .readImages("test\\testreaderfiles\\desert3\\test\\testreaderfiles\\desert3.txt")
+            .readImages("test\\testreaderfiles\\desert3\\desert3.txt")
             .get("first"),
         new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert3\\first.jpeg"));
     assertEquals(new MultiLayerFileReader()
-            .readImages("test\\testreaderfiles\\desert3\\test\\testreaderfiles\\desert3.txt")
+            .readImages("test\\testreaderfiles\\desert3\\desert3.txt")
             .get("second"),
         new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert3\\second.jpeg"));
   }
@@ -833,17 +833,17 @@ public class ImageProcessorControllerImplTest {
   */
   // general add multi test
   @Test
-  public void generatAddMultiTest() {
+  public void generalAddMultiTest() {
     Readable generalImage = new StringReader(
-        "addmulti test\\testreaderfiles\\bugs\\bugs.txt");
+        "addmulti test\\testreaderfiles\\desert3\\desert3.txt");
     ImageProcessorController addMultiController = new ImageProcessorControllerImpl(
         this.model, generalImage, this.out);
     addMultiController.startEditor();
 
     assertEquals(this.model.getImage("first"),
-        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\bugs\\first.png"));
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert3\\first.jpeg"));
     assertEquals(this.model.getImage("second"),
-        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\bugs\\second.png"));
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert3\\second.jpeg"));
     assertEquals(this.model.getVisibility().size(), 0);
   }
 

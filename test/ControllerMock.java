@@ -10,19 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Mock controller for testing GUI.
+ */
 public class ControllerMock implements ImageProcessorController, IViewListener, ActionListener {
 
   private final Appendable log;
 
+  /**
+   * Constructs mock controller.
+   * @param log
+   */
   public ControllerMock(Appendable log) {
     this.log = Objects.requireNonNull(log);
 
   }
 
-  @Override
-  public BufferedImage getTopVisibleLayer() {
-    return null;
-  }
 
   @Override
   public String getCurrentLayerID() {
@@ -67,13 +70,12 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
   }
 
   @Override
-  public List<String> handleLoadAllLayerEvent(String filename) {
+  public void handleLoadAllLayerEvent(String filename) {
     try {
       this.log.append("handleLoadAllLayerEvent");
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return new ArrayList<>();
   }
 
   @Override
@@ -157,10 +159,6 @@ public class ControllerMock implements ImageProcessorController, IViewListener, 
     }
   }
 
-  @Override
-  public String getTopmostVisibleLayerID() {
-    return null;
-  }
 
   @Override
   public void startEditor() throws IllegalStateException {

@@ -32,8 +32,12 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import swingdemo.SwingFeaturesFrame;
 
+/**
+ * Class to represent the implementation og a GUI view for and image processing program. The view
+ * uses a listener to handle the high level events that are received from hitting buttons. Any
+ * errors are represented as pop up boxes that the user sees.
+ */
 public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorGUIView,
     ActionListener {
 
@@ -73,10 +77,18 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   private final JLayeredPane labels;
   private BufferedImage topImage;
 
+  /**
+   * Constructs the initial instance of the GUI.
+   *
+   * @param listener Listener for this GUI
+   */
   public ImageProcessorGUIViewImpl(IViewListener listener) {
     super();
+    if (listener == null) {
+      throw new IllegalArgumentException("Null parameter.");
+    }
     this.listener = listener;
-    this.topImage = listener.getTopVisibleLayer();
+    this.topImage = null;
     setTitle("Image Processor");
     setSize(1200, 800);
     this.layers = new ArrayList<>();
@@ -224,7 +236,6 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     mainPanel.add(imagePanel, BorderLayout.CENTER);
 
     imageLabel = new JLabel();
-    imageLabel.setIcon(new ImageIcon(this.topImage));
     imageScrollPane = new JScrollPane(imageLabel);
     imageScrollPane.setPreferredSize(new Dimension(100, 600));
     imageLabel.setHorizontalAlignment(imageScrollPane.getWidth() / 2);
@@ -293,17 +304,55 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
   }
 
   @Override
-  public void updateImage() {
-    this.topImage = listener.getTopVisibleLayer();
+  public void renderMessage(String msg) throws IllegalArgumentException {
+    JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
+  }
+
+  @Override
+  public void updateImage(BufferedImage image) {
+    this.topImage = image;
     this.imageLabel.setIcon(new ImageIcon(this.topImage));
     save.setEnabled(true);
     repaint();
     revalidate();
   }
 
+
   @Override
-  public void renderMessage(String msg) throws IllegalArgumentException {
-    JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
+  public void updateLayers(String layerName) {
+    JTextField layerLabel = new JTextField();
+    layerLabel.setText(layerName);
+    layerLabel.setPreferredSize(new Dimension(150, 50));
+    layerLabel.setHorizontalAlignment(JLabel.CENTER);
+    layerLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    layerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    layerLabel.setEditable(false);
+
+    this.layers.add(layerLabel);
+    selectLayer.setEnabled(true);
+
+    layerLabel.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mousePressed(MouseEvent e) {
+        listener.setCurrentLayerEvent(layerName);
+        deleteLayer.setEnabled(true);
+        showLayer.setEnabled(true);
+        hideLayer.setEnabled(true);
+        filters.setEnabled(true);
+        transformations.setEnabled(true);
+
+        for (JTextField jtf : layers) {
+          if (!jtf.equals(layerLabel)) {
+            jtf.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+          } else {
+            jtf.setBorder(BorderFactory.createLineBorder(Color.RED));
+          }
+        }
+      }
+    });
+    labels.add(layerLabel, labels.getComponentCount() + 1, 0);
+    repaint();
+    revalidate();
   }
 
   @Override
@@ -353,6 +402,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     }
   }
 
+  /**
+   * Emits a load all event and tells the listener to load in the multi layer image at the selected
+   * file path.
+   */
   private void emitLoadAllEvent() {
     final JFileChooser fileChooser = new JFileChooser(".");
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -361,16 +414,15 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     int retvalue = fileChooser.showOpenDialog(this);
     if (retvalue == JFileChooser.APPROVE_OPTION) {
       File f = fileChooser.getSelectedFile();
-      List<String> layers = listener.handleLoadAllLayerEvent(f.getAbsolutePath());
       this.layers.clear();
       this.labels.removeAll();
-      this.updateImage();
-      for (String layer : layers) {
-        this.updateLayers(layer);
-      }
+      listener.handleLoadAllLayerEvent(f.getAbsolutePath());
     }
   }
 
+  /**
+   * Tells the listener to run the script located and the selected filepath.
+   */
   private void emitLoadScriptEvent() {
     final JFileChooser fileChooser = new JFileChooser(".");
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -383,6 +435,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     }
   }
 
+  /**
+   * Tells the listener to save the top most visible layer image with the given file type at the
+   * selected file path.
+   */
   private void emitSaveEvent() {
     if (!this.layers.isEmpty()) {
       String[] optionsFileType = {"PPM", "PNG", "JPEG"};
@@ -406,6 +462,12 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     }
   }
 
+  /**
+   * Sets the filter for a file chooser based on the 3 values of either ppm. png. or jpeg.
+   *
+   * @param filetypeValue Value of the array to use for the filter.
+   * @param fileChooser   File chooser to filter.
+   */
   private void setFiletypeFilter(int filetypeValue, JFileChooser fileChooser) {
     if (filetypeValue == 0) {
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -424,6 +486,10 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
 
   }
 
+  /**
+   * Tells the listener to save the whole image with the specified type from the user and the
+   * selected path from the user.
+   */
   private void emitSaveAllEvent() {
     String[] optionsFileType = {"PPM", "PNG", "JPEG"};
     int filetypeValue = JOptionPane
@@ -442,26 +508,38 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     }
   }
 
+  /**
+   * Tells the listener to blur the current layer in the image.
+   */
   private void emitBlurLayerEvent() {
     listener.handleBlurEvent();
-    this.updateImage();
   }
 
+  /**
+   * Tells the listener to sharpen the current layer in the image.
+   */
   private void emitSharpenLayerEvent() {
     listener.handleSharpenEvent();
-    this.updateImage();
   }
 
+  /**
+   * Tells the listener to grayscale the current layer in the image.
+   */
   private void emitGrayscaleLayerEvent() {
     listener.handleGrayscaleEvent();
-    this.updateImage();
   }
 
+  /**
+   * Tells the listener to sepia the current layer in the image.
+   */
   private void emitSepiaLayerEvent() {
     listener.handleSepiaEvent();
-    this.updateImage();
   }
 
+  /**
+   * Tells the listener to remove the current layer. It then updates the list of layers in the GUI
+   * with the new list of layers.
+   */
   private void emitDeleteLayerEvent() {
     listener.removeLayerEvent();
     this.layers.removeIf(jtf -> jtf.getText().equals(this.listener.getCurrentLayerID()));
@@ -480,11 +558,14 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     if (this.layers.isEmpty()) {
       this.selectLayer.setEnabled(false);
     }
-
-    this.updateImage();
-
+    repaint();
+    revalidate();
   }
 
+  /**
+   * Tells the layer to set the layer with the given id from the user as the current layer. Also
+   * sets the board of the layer in the list to red if it has been selected as the current.
+   */
   private void emitSelectLayerEvent() {
     String layerName = JOptionPane.showInputDialog("Layer Name");
     if (!layerName.equals("")) {
@@ -504,16 +585,24 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     this.hideLayer.setEnabled(true);
   }
 
+  /**
+   * Tells the listener to set the current layer to visible.
+   */
   private void emitShowLayerEvent() {
     listener.showEvent();
-    this.updateImage();
   }
 
+  /**
+   * Tells the listener to make the current layer invisible.
+   */
   private void emitHideLayerEvent() {
     listener.hideEvent();
-    this.updateImage();
   }
 
+  /**
+   * Tells the listener to load in the image with the user selected file type and at the selected
+   * file path as a layer in the program. The name of the layer is also taken from the user.
+   */
   private void emitLoadImageEvent() {
 
     String[] optionsFileType = {"PPM", "PNG", "JPEG"};
@@ -535,15 +624,15 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
           listener
               .handleLoadLayerEvent(f.getAbsolutePath(), optionsFileType[filetypeValue],
                   layerName);
-
-          this.updateImage();
-
-          updateLayers(layerName);
         }
       }
     }
   }
 
+  /**
+   * Tells the listener to add a generated checkerboard to the program with the user inputted name,
+   * number of rows, columns, and 2 colors for the board.
+   */
   private void emitCheckerboardEvent() {
     try {
       String layerName = JOptionPane.showInputDialog("Please enter the name of the layer.");
@@ -555,49 +644,9 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
       Color color1 = JColorChooser.showDialog(this, "Choose a color", new Color(255, 0, 0));
       Color color2 = JColorChooser.showDialog(this, "Choose a color", new Color(255, 0, 0));
       this.listener.handleCheckerboardEvent(layerName, rows, columns, color1, color2);
-      this.updateImage();
-      this.updateLayers(layerName);
     } catch (NumberFormatException e) {
       this.renderMessage("Input must be an integer.");
     }
   }
-
-
-  private void updateLayers(String layerName) {
-    JTextField layerLabel = new JTextField();
-    layerLabel.setText(layerName);
-    layerLabel.setPreferredSize(new Dimension(150, 50));
-    layerLabel.setHorizontalAlignment(JLabel.CENTER);
-    layerLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-    layerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    layerLabel.setEditable(false);
-
-    this.layers.add(layerLabel);
-    selectLayer.setEnabled(true);
-
-    layerLabel.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent e) {
-        listener.setCurrentLayerEvent(layerName);
-        deleteLayer.setEnabled(true);
-        showLayer.setEnabled(true);
-        hideLayer.setEnabled(true);
-        filters.setEnabled(true);
-        transformations.setEnabled(true);
-
-        for (JTextField jtf : layers) {
-          if (!jtf.equals(layerLabel)) {
-            jtf.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-          } else {
-            jtf.setBorder(BorderFactory.createLineBorder(Color.RED));
-          }
-        }
-      }
-    });
-    labels.add(layerLabel, labels.getComponentCount() + 1, 0);
-    repaint();
-    revalidate();
-  }
-
 
 }

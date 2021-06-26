@@ -73,6 +73,6 @@ public class MultiLayerImageWriterTest {
     assertEquals(testCheckerboard,
         new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\checkerboard\\1.png"));
     assertEquals("png\ntest\\testreaderfiles\\checkerboard\\1.png 1 invisible\n", Files.readString(
-        Path.of("test\\testreaderfiles\\checkerboard\\test\\testreaderfiles\\checkerboard.txt")));
+        Path.of("test\\testreaderfiles\\checkerboard\\checkerboard.txt")));
   }
 }

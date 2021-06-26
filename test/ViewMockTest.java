@@ -9,7 +9,7 @@ public class ViewMockTest {
   public void testLoadButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitLoadImageEvent();
 
     assertEquals(out.toString(), "handleLoadLayerEvent");
@@ -20,7 +20,7 @@ public class ViewMockTest {
   public void testSaveButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitSaveEvent();
 
     assertEquals(out.toString(), "handleSaveLayerEvent");
@@ -31,7 +31,7 @@ public class ViewMockTest {
   public void testSaveAllButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitSaveAllEvent();
 
     assertEquals(out.toString(), "handleSaveAllLayerEvent");
@@ -42,7 +42,7 @@ public class ViewMockTest {
   public void testBlurButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitBlurLayerEvent();
 
     assertEquals(out.toString(), "handleBlurEvent");
@@ -53,7 +53,7 @@ public class ViewMockTest {
   public void testSharpenButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitSharpenLayerEvent();
 
     assertEquals(out.toString(), "handleSharpenEvent");
@@ -64,7 +64,7 @@ public class ViewMockTest {
   public void testGrayscaleButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitGrayscaleLayerEvent();
 
     assertEquals(out.toString(), "handleGrayscaleEvent");
@@ -75,7 +75,7 @@ public class ViewMockTest {
   public void testSepiaButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitSepiaLayerEvent();
 
     assertEquals(out.toString(), "handleSepiaEvent");
@@ -86,7 +86,7 @@ public class ViewMockTest {
   public void testDeleteLayerButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitDeleteLayerEvent();
 
     assertEquals(out.toString(), "removeLayerEvent");
@@ -97,7 +97,7 @@ public class ViewMockTest {
   public void testSelectLayerButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitSelectLayerEvent();
 
     assertEquals(out.toString(), "setCurrentLayerEvent");
@@ -108,7 +108,7 @@ public class ViewMockTest {
   public void testShowLayerButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitShowLayerEvent();
 
     assertEquals(out.toString(), "showEvent");
@@ -119,7 +119,7 @@ public class ViewMockTest {
   public void testHideLayerButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitHideLayerEvent();
 
     assertEquals(out.toString(), "hideEvent");
@@ -130,7 +130,7 @@ public class ViewMockTest {
   public void testLoadScriptButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitLoadScriptEvent();
 
     assertEquals(out.toString(), "runScriptEvent");
@@ -141,7 +141,7 @@ public class ViewMockTest {
   public void testLoadMultiImageButtonClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitLoadAllLayerEvent();
 
     assertEquals(out.toString(), "handleLoadAllLayerEvent");
@@ -152,7 +152,7 @@ public class ViewMockTest {
   public void testCheckerboardClick() {
     Appendable out = new StringBuilder();
     IViewListener controller = new ControllerMock(out);
-    ViewMock mockView = new ViewMock(controller);
+    ViewMock mockView = new ViewMock(controller, new StringBuilder());
     mockView.emitCheckerboardEvent();
 
     assertEquals(out.toString(), "handleCheckerboardEvent");

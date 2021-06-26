@@ -42,11 +42,11 @@ public class MultiLayerFileReaderTest {
   // tests importing a valid multi layer image
   @Test
   public void goodMultiImageFile() {
-    Map<String, ImageInterface> layers = reader.readImages("test\\testreaderfiles\\bugs\\bugs.txt");
+    Map<String, ImageInterface> layers = reader.readImages("test\\testreaderfiles\\desert3\\desert3.txt");
     assertEquals(layers.get("first"),
-        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\bugs\\first.png"));
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert3\\first.jpeg"));
     assertEquals(layers.get("second"),
-        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\bugs\\second.png"));
+        new ImageIOFileReader().readImageFromFile("test\\testreaderfiles\\desert3\\second.jpeg"));
 
     List<String> visibility = reader.readVisibility();
     assertEquals(visibility.size(), 0);
