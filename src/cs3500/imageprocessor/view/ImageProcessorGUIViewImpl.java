@@ -245,7 +245,7 @@ public class ImageProcessorGUIViewImpl extends JFrame implements ImageProcessorG
     operationsPanel.setBorder(BorderFactory.createTitledBorder("Image Operations"));
     mainPanel.add(operationsPanel, BorderLayout.PAGE_END);
 
-    // Panel for import/export commands.
+    // Panel for image operation commands.
     ioPanel = new JPanel();
     ioPanel.setLayout(new GridLayout(1, 6, 10, 10));
     operationsPanel.add(ioPanel);

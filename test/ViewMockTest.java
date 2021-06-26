@@ -3,6 +3,9 @@ import static org.junit.Assert.assertEquals;
 import cs3500.imageprocessor.view.IViewListener;
 import org.junit.Test;
 
+/**
+ * Testing class for the view mock.
+ */
 public class ViewMockTest {
 
   @Test
@@ -158,8 +161,6 @@ public class ViewMockTest {
     assertEquals(out.toString(), "handleCheckerboardEvent");
 
   }
-
-
 
 
 }

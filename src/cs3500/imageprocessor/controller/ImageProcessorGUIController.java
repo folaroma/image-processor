@@ -286,6 +286,10 @@ public class ImageProcessorGUIController implements ImageProcessorController, IV
     try {
       new ImageProcessorControllerImpl(this.model, new FileReader(filename), System.out)
           .startEditor();
+      this.view.updateImage(this.getTopVisibleLayer());
+      for (String layer : this.model.getLayers().keySet()) {
+        this.view.updateLayers(layer);
+      }
     } catch (IOException e) {
       renderHandler("Running the script failed.");
     }

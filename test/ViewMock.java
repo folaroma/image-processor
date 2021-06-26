@@ -12,6 +12,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
+/**
+ * Mock view that can be used to test how events are received by the listener.
+ */
 public class ViewMock implements ImageProcessorGUIView {
 
   private final IViewListener listener;

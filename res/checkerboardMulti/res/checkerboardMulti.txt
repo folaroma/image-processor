@@ -1,3 +1,0 @@
-JPEG
-res/checkerboardMulti\a.jpeg a visible
-res/checkerboardMulti\b.jpeg b visible
